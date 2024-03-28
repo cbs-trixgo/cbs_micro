@@ -11,24 +11,24 @@ let { infoDocrePcm } = require('./content_info_docre_task')
  * @param content
  */
 exports.sendNoticeToMemberDocrePcm = function (stringify) {
-    // console.log({ email, title, content })
-    let { email, title, content } = JSON.parse(stringify) // convert for worker_threads
+  // console.log({ email, title, content })
+  let { email, title, content } = JSON.parse(stringify) // convert for worker_threads
 
-    // Nội dung email
-    let emailContent = infoDocrePcm({ content })
+  // Nội dung email
+  let emailContent = infoDocrePcm({ content })
 
-    /**
-     * Gửi email
-     * - Người nhận
-     * - Tiêu đề
-     * - Nội dung
-     */
-    mailer(
-        email,
-        `${title.toUpperCase()}_TRIXGO.COM_${Date.now()}`,
-        emailContent,
-        function (cb) {
-            console.log(cb)
-        }
-    )
+  /**
+   * Gửi email
+   * - Người nhận
+   * - Tiêu đề
+   * - Nội dung
+   */
+  mailer(
+    email,
+    `${title.toUpperCase()}_TRIXGO.COM_${Date.now()}`,
+    emailContent,
+    function (cb) {
+      console.log(cb)
+    }
+  )
 }

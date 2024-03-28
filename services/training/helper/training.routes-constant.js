@@ -6,11 +6,11 @@ const SUBJECT = '/subjects'
 const SUBJECT_RATING = '/subject_ratings'
 
 const CF_ROUTINGS_TRAINING = {
-    ORIGIN_APP: BASE_ROUTE,
+  ORIGIN_APP: BASE_ROUTE,
 
-    // ================================CONTRACT BILL JOB=======================================//
-    TRAINING__SUBJECT: `${BASE_ROUTE}${SUBJECT}`,
-    TRAINING__SUBJECT_RATING: `${BASE_ROUTE}${SUBJECT_RATING}`,
+  // ================================CONTRACT BILL JOB=======================================//
+  TRAINING__SUBJECT: `${BASE_ROUTE}${SUBJECT}`,
+  TRAINING__SUBJECT_RATING: `${BASE_ROUTE}${SUBJECT_RATING}`,
 }
 
 exports.CF_ROUTINGS_TRAINING = CF_ROUTINGS_TRAINING

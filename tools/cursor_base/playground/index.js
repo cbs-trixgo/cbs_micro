@@ -78,117 +78,113 @@ let _ = require('lodash')
  * @returns { find: findObject, sort: sortObject }
  */
 const RANGE_BASE_PAGINATION = ({ nextInfo, keys }) => {
-    return new Promise(async (resolve) => {
-        let find = {}
-        let sort = {}
-        let keysParse = keys.map((key) => {
-            let [prop, sort] = key.split('__')
-            return { prop, sort }
-        })
-
-        const KEYWORD_RECOGNITE_VALID = '_' //EXM: `2021-05-06T10:13:15.000Z_6093ca895ad4a270bce7234d`
-        if (nextInfo && nextInfo.includes(KEYWORD_RECOGNITE_VALID)) {
-            // other first page
-            const listParamsFind = nextInfo.split('_') //['2021-05-06T10:13:15.000Z', '6093ca895ad4a270bce7234d']
-            if (listParamsFind.length == 0) {
-                //* !!listParamsFind == true
-                return resolve({
-                    error: true,
-                    message: 'param_invalid',
-                    valid_example: {
-                        nextInfo: {
-                            ['_id']: `6093ca895ad4a270bce7234d`,
-                            ['-createAt-_id']: `2021-05-06T10:13:15.000Z_6093ca895ad4a270bce7234d`,
-                        },
-                        keys: ['createAt__-1', '_id__-1'],
-                    },
-                })
-            } else {
-                //* !!listParamsFind  == false -> có tồn tại phần tử từ listParamsFind
-
-                if (listParamsFind.length != keys.length)
-                    return resolve({
-                        error: true,
-                        message: 'param_invalid',
-                        valid_example: {
-                            nextInfo: `2021-05-06T10:13:15.000Z_6093ca895ad4a270bce7234d`,
-                            keys: [`createAt__-1`, '_id__-1'],
-                        },
-                    })
-
-                let listParmsAssignWithKey = listParamsFind.map(
-                    (itemValue, index) => {
-                        return {
-                            key: keysParse[index].prop,
-                            value: itemValue, // key: createAt, value: 2021-05-06T10:13:15.000z
-                        }
-                    }
-                )
-                /**
-                 * expected result:
-                 *  listParmsAssignWithKey:
-                 *    key: createAt, value: '2021-05-06T10:13:15.000Z'
-                 *    key: _id, value: '6093ca895ad4a270bce7234d'
-                 *
-                 */
-
-                const ARRAY_HAVE_ONE_ITEM = 1
-                if (listParmsAssignWithKey.length == ARRAY_HAVE_ONE_ITEM) {
-                    //nếu mảng chỉ có 1 item -> đang phân trang theo _id
-                } else {
-                    //nếu mảng có nhiều item, có thể rơi vào phân trang theo 1 trường bất kỳ (ví dụ: createAt)
-                    let [firstItemInParam, ...rest] = listParmsAssignWithKey
-
-                    let firstItemInParmAfterFormatDate = new Date(
-                        firstItemInParam.value
-                    )
-
-                    let secondObjInFindMethod = {
-                        [firstItemInParam.key]: firstItemInParmAfterFormatDate,
-                    }
-                    rest.forEach((itemExcludeFirstItem) => {
-                        secondObjInFindMethod = {
-                            ...secondObjInFindMethod,
-                            [itemExcludeFirstItem.key]: {
-                                $lt: itemExcludeFirstItem.value,
-                            },
-                        }
-                    })
-                    //---------------------------------FIND Workspace -------------------//
-                    find['$or'] = [
-                        {
-                            [firstItemInParam.key]: {
-                                $lt: firstItemInParmAfterFormatDate,
-                            }, //⚠️ cần check lại mốc thời gian
-                        },
-                        {
-                            ...secondObjInFindMethod,
-                        },
-                    ]
-                }
-            }
-        } else {
-            // first page
-        }
-
-        //---------------------------------SORT Workspace -------------------//
-        let objectSort = {}
-        keysParse.forEach((itemExcludeFirstItem) => {
-            objectSort = {
-                ...objectSort,
-                [itemExcludeFirstItem.prop]: [itemExcludeFirstItem.sort][0],
-            }
-        })
-        sort = {
-            ...objectSort,
-        }
-
-        return resolve({
-            error: false,
-            data: { find, sort },
-            params: { nextInfo, keys },
-        })
+  return new Promise(async (resolve) => {
+    let find = {}
+    let sort = {}
+    let keysParse = keys.map((key) => {
+      let [prop, sort] = key.split('__')
+      return { prop, sort }
     })
+
+    const KEYWORD_RECOGNITE_VALID = '_' //EXM: `2021-05-06T10:13:15.000Z_6093ca895ad4a270bce7234d`
+    if (nextInfo && nextInfo.includes(KEYWORD_RECOGNITE_VALID)) {
+      // other first page
+      const listParamsFind = nextInfo.split('_') //['2021-05-06T10:13:15.000Z', '6093ca895ad4a270bce7234d']
+      if (listParamsFind.length == 0) {
+        //* !!listParamsFind == true
+        return resolve({
+          error: true,
+          message: 'param_invalid',
+          valid_example: {
+            nextInfo: {
+              ['_id']: `6093ca895ad4a270bce7234d`,
+              ['-createAt-_id']: `2021-05-06T10:13:15.000Z_6093ca895ad4a270bce7234d`,
+            },
+            keys: ['createAt__-1', '_id__-1'],
+          },
+        })
+      } else {
+        //* !!listParamsFind  == false -> có tồn tại phần tử từ listParamsFind
+
+        if (listParamsFind.length != keys.length)
+          return resolve({
+            error: true,
+            message: 'param_invalid',
+            valid_example: {
+              nextInfo: `2021-05-06T10:13:15.000Z_6093ca895ad4a270bce7234d`,
+              keys: [`createAt__-1`, '_id__-1'],
+            },
+          })
+
+        let listParmsAssignWithKey = listParamsFind.map((itemValue, index) => {
+          return {
+            key: keysParse[index].prop,
+            value: itemValue, // key: createAt, value: 2021-05-06T10:13:15.000z
+          }
+        })
+        /**
+         * expected result:
+         *  listParmsAssignWithKey:
+         *    key: createAt, value: '2021-05-06T10:13:15.000Z'
+         *    key: _id, value: '6093ca895ad4a270bce7234d'
+         *
+         */
+
+        const ARRAY_HAVE_ONE_ITEM = 1
+        if (listParmsAssignWithKey.length == ARRAY_HAVE_ONE_ITEM) {
+          //nếu mảng chỉ có 1 item -> đang phân trang theo _id
+        } else {
+          //nếu mảng có nhiều item, có thể rơi vào phân trang theo 1 trường bất kỳ (ví dụ: createAt)
+          let [firstItemInParam, ...rest] = listParmsAssignWithKey
+
+          let firstItemInParmAfterFormatDate = new Date(firstItemInParam.value)
+
+          let secondObjInFindMethod = {
+            [firstItemInParam.key]: firstItemInParmAfterFormatDate,
+          }
+          rest.forEach((itemExcludeFirstItem) => {
+            secondObjInFindMethod = {
+              ...secondObjInFindMethod,
+              [itemExcludeFirstItem.key]: {
+                $lt: itemExcludeFirstItem.value,
+              },
+            }
+          })
+          //---------------------------------FIND Workspace -------------------//
+          find['$or'] = [
+            {
+              [firstItemInParam.key]: {
+                $lt: firstItemInParmAfterFormatDate,
+              }, //⚠️ cần check lại mốc thời gian
+            },
+            {
+              ...secondObjInFindMethod,
+            },
+          ]
+        }
+      }
+    } else {
+      // first page
+    }
+
+    //---------------------------------SORT Workspace -------------------//
+    let objectSort = {}
+    keysParse.forEach((itemExcludeFirstItem) => {
+      objectSort = {
+        ...objectSort,
+        [itemExcludeFirstItem.prop]: [itemExcludeFirstItem.sort][0],
+      }
+    })
+    sort = {
+      ...objectSort,
+    }
+
+    return resolve({
+      error: false,
+      data: { find, sort },
+      params: { nextInfo, keys },
+    })
+  })
 }
 
 // RANGE_BASE_PAGINATION({ nextInfo: `2021-05-06T10:13:15.000Z`, keys: ['createAt__-1'] })
@@ -202,17 +198,17 @@ const RANGE_BASE_PAGINATION = ({ nextInfo, keys }) => {
  *  sortValue: -1 -> $lt
  */
 const _getOperationWithSort = ({ sortValue }) => {
-    if (!Number.isNaN(Number(sortValue))) {
-        if (sortValue == 1) {
-            return '$gt'
-        } else if (sortValue == -1) {
-            return '$lt'
-        } else {
-            return ''
-        }
+  if (!Number.isNaN(Number(sortValue))) {
+    if (sortValue == 1) {
+      return '$gt'
+    } else if (sortValue == -1) {
+      return '$lt'
     } else {
-        return ''
+      return ''
     }
+  } else {
+    return ''
+  }
 }
 
 /**
@@ -223,15 +219,15 @@ const _getOperationWithSort = ({ sortValue }) => {
  *     }
  */
 const _getObjSearchByKeys = ({ keysParse }) => {
-    let objectSort = {}
-    keysParse.forEach((itemExcludeFirstItem) => {
-        objectSort = {
-            ...objectSort,
-            [itemExcludeFirstItem.prop]: [itemExcludeFirstItem.sort][0],
-        }
-    })
+  let objectSort = {}
+  keysParse.forEach((itemExcludeFirstItem) => {
+    objectSort = {
+      ...objectSort,
+      [itemExcludeFirstItem.prop]: [itemExcludeFirstItem.sort][0],
+    }
+  })
 
-    return objectSort
+  return objectSort
 }
 
 /**
@@ -257,149 +253,143 @@ const _getObjSearchByKeys = ({ keysParse }) => {
  */
 
 const RANGE_BASE_PAGINATION_V2 = ({ keys, latestRecord, objectQuery }) => {
-    // console.log("🚀 ~ file: index.js ~ line 241 ~ latestRecord")
-    let resultForReturn = {
-        find: {},
-        sort: {},
-    }
-    /**
-     * Kiểm tra keys có bao nhiêu phần tử
-     *  - 1: là unique field
-     *  - 2 || n: là non-unique field
-     */
+  // console.log("🚀 ~ file: index.js ~ line 241 ~ latestRecord")
+  let resultForReturn = {
+    find: {},
+    sort: {},
+  }
+  /**
+   * Kiểm tra keys có bao nhiêu phần tử
+   *  - 1: là unique field
+   *  - 2 || n: là non-unique field
+   */
 
-    const LENGTH_PARAMS_PAGINATION = keys && keys.length
-    const IS_UNIQUE_FIELD = LENGTH_PARAMS_PAGINATION == 1 ? true : false
-    const IS_FIRST_PAGE =
-        latestRecord && _.get(latestRecord, '_id', 0) != 0 ? false : true
-    // console.log("🚀 ~ file: index.js ~ line 255 ~ IS_FIRST_PAGE", IS_FIRST_PAGE)
-    const IS_EXISTS_QUERY = objectQuery && typeof objectQuery ? true : false
+  const LENGTH_PARAMS_PAGINATION = keys && keys.length
+  const IS_UNIQUE_FIELD = LENGTH_PARAMS_PAGINATION == 1 ? true : false
+  const IS_FIRST_PAGE =
+    latestRecord && _.get(latestRecord, '_id', 0) != 0 ? false : true
+  // console.log("🚀 ~ file: index.js ~ line 255 ~ IS_FIRST_PAGE", IS_FIRST_PAGE)
+  const IS_EXISTS_QUERY = objectQuery && typeof objectQuery ? true : false
 
-    /**
-     * tokenzation keys: là tách objectQuery
-     */
-    let keysParse = keys.map((key) => {
-        let [prop, sort] = key.split('__')
-        return { prop, sort }
-    })
+  /**
+   * tokenzation keys: là tách objectQuery
+   */
+  let keysParse = keys.map((key) => {
+    let [prop, sort] = key.split('__')
+    return { prop, sort }
+  })
 
-    if (IS_UNIQUE_FIELD) {
-        // là unique field
-        if (IS_FIRST_PAGE) {
-            /**
-             * vì nếu là IS_UNIQUE_FIELD -> keysParse luôn luôn là 1 item, VD:
-             *   { username: -1 } hoặc { _id: -1 }
-             */
-            resultForReturn.sort = {
-                ...resultForReturn.sort,
-                [keysParse[0]['prop']]: keysParse[0]['sort'],
-            }
-            resultForReturn.find = {
-                ...resultForReturn.find,
-            }
-        } else {
-            resultForReturn.sort = {
-                ...resultForReturn.sort,
-                [keysParse[0]['prop']]: keysParse[0]['sort'],
-            }
-
-            //---------------CONVERT -> FIND (begin)--------//
-            /**
-             * keysParse: ['_id__-1']
-             * fieldNameKeysParse: '_id'
-             *  -> valueOfLatestRecordWithFieldName: 60b5114ce27803187c3e1b3e
-             */
-            let fieldNameOfKeysParse = keysParse[0]['prop'] //_id, hoặc unique_field khác
-            let ValueOfKeysParse = keysParse[0]['sort'] // value của unique_field
-            let valueOfLatestRecordWithFieldName =
-                latestRecord[fieldNameOfKeysParse]
-            let operationWithConditionSort = _getOperationWithSort({
-                sortValue: ValueOfKeysParse,
-            })
-
-            resultForReturn.find = {
-                ...resultForReturn.find,
-                [keysParse[0]['prop']]: {
-                    [operationWithConditionSort]:
-                        valueOfLatestRecordWithFieldName,
-                },
-            }
-        }
+  if (IS_UNIQUE_FIELD) {
+    // là unique field
+    if (IS_FIRST_PAGE) {
+      /**
+       * vì nếu là IS_UNIQUE_FIELD -> keysParse luôn luôn là 1 item, VD:
+       *   { username: -1 } hoặc { _id: -1 }
+       */
+      resultForReturn.sort = {
+        ...resultForReturn.sort,
+        [keysParse[0]['prop']]: keysParse[0]['sort'],
+      }
+      resultForReturn.find = {
+        ...resultForReturn.find,
+      }
     } else {
-        //là non-unique field
-        //------convert string -> object sort
-        resultForReturn.sort = {
-            ...resultForReturn.sort,
-            ..._getObjSearchByKeys({ keysParse }),
-        }
-        if (IS_FIRST_PAGE) {
-            //------(end)convert string -> object sort
-            resultForReturn.find = {
-                ...resultForReturn.find,
-            }
-        } else {
-            //---------------CONVERT -> FIND (begin)--------//
-            /**
-             * keysParse: ['_id__-1']
-             * fieldNameKeysParse: '_id'
-             *  -> valueOfLatestRecordWithFieldName: 60b5114ce27803187c3e1b3e
-             */
-            let fieldNameOfKeysParse = keysParse[0]['prop'] //_id, hoặc unique_field khác
-            let ValueOfKeysParse = keysParse[0]['sort'] // value của unique_field
-            let valueOfLatestRecordWithFieldName =
-                latestRecord[fieldNameOfKeysParse]
-            let operationWithConditionSort = _getOperationWithSort({
-                sortValue: ValueOfKeysParse,
-            })
+      resultForReturn.sort = {
+        ...resultForReturn.sort,
+        [keysParse[0]['prop']]: keysParse[0]['sort'],
+      }
 
-            resultForReturn.find = {
-                ...resultForReturn.find,
-                $or: [
-                    {
-                        [fieldNameOfKeysParse]: {
-                            [operationWithConditionSort]:
-                                valueOfLatestRecordWithFieldName,
-                        },
-                    },
-                    {
-                        [fieldNameOfKeysParse]:
-                            valueOfLatestRecordWithFieldName,
+      //---------------CONVERT -> FIND (begin)--------//
+      /**
+       * keysParse: ['_id__-1']
+       * fieldNameKeysParse: '_id'
+       *  -> valueOfLatestRecordWithFieldName: 60b5114ce27803187c3e1b3e
+       */
+      let fieldNameOfKeysParse = keysParse[0]['prop'] //_id, hoặc unique_field khác
+      let ValueOfKeysParse = keysParse[0]['sort'] // value của unique_field
+      let valueOfLatestRecordWithFieldName = latestRecord[fieldNameOfKeysParse]
+      let operationWithConditionSort = _getOperationWithSort({
+        sortValue: ValueOfKeysParse,
+      })
 
-                        // keysParse[1]['prop']: luôn luôn là _id
-                        [keysParse[1]['prop']]: {
-                            [operationWithConditionSort]:
-                                latestRecord[keysParse[1]['prop']], // <-- hard code
-                        },
-                    },
-                ],
-            }
-        }
+      resultForReturn.find = {
+        ...resultForReturn.find,
+        [keysParse[0]['prop']]: {
+          [operationWithConditionSort]: valueOfLatestRecordWithFieldName,
+        },
+      }
     }
-
-    // TODO objectQuery: vì cả 2 đều dùng func này cho $and: []
-    if (IS_EXISTS_QUERY) {
-        let objectPaginationBefore = resultForReturn.find
-
-        let objFindAfterAddQuery = {
-            $and: [
-                {
-                    ...objectQuery,
-                },
-                {
-                    ...objectPaginationBefore,
-                },
-            ],
-        }
-        return {
-            error: false,
-            data: { find: objFindAfterAddQuery, sort: resultForReturn.sort },
-        }
+  } else {
+    //là non-unique field
+    //------convert string -> object sort
+    resultForReturn.sort = {
+      ...resultForReturn.sort,
+      ..._getObjSearchByKeys({ keysParse }),
+    }
+    if (IS_FIRST_PAGE) {
+      //------(end)convert string -> object sort
+      resultForReturn.find = {
+        ...resultForReturn.find,
+      }
     } else {
-        return {
-            error: false,
-            data: { find: resultForReturn.find, sort: resultForReturn.sort },
-        }
+      //---------------CONVERT -> FIND (begin)--------//
+      /**
+       * keysParse: ['_id__-1']
+       * fieldNameKeysParse: '_id'
+       *  -> valueOfLatestRecordWithFieldName: 60b5114ce27803187c3e1b3e
+       */
+      let fieldNameOfKeysParse = keysParse[0]['prop'] //_id, hoặc unique_field khác
+      let ValueOfKeysParse = keysParse[0]['sort'] // value của unique_field
+      let valueOfLatestRecordWithFieldName = latestRecord[fieldNameOfKeysParse]
+      let operationWithConditionSort = _getOperationWithSort({
+        sortValue: ValueOfKeysParse,
+      })
+
+      resultForReturn.find = {
+        ...resultForReturn.find,
+        $or: [
+          {
+            [fieldNameOfKeysParse]: {
+              [operationWithConditionSort]: valueOfLatestRecordWithFieldName,
+            },
+          },
+          {
+            [fieldNameOfKeysParse]: valueOfLatestRecordWithFieldName,
+
+            // keysParse[1]['prop']: luôn luôn là _id
+            [keysParse[1]['prop']]: {
+              [operationWithConditionSort]: latestRecord[keysParse[1]['prop']], // <-- hard code
+            },
+          },
+        ],
+      }
     }
+  }
+
+  // TODO objectQuery: vì cả 2 đều dùng func này cho $and: []
+  if (IS_EXISTS_QUERY) {
+    let objectPaginationBefore = resultForReturn.find
+
+    let objFindAfterAddQuery = {
+      $and: [
+        {
+          ...objectQuery,
+        },
+        {
+          ...objectPaginationBefore,
+        },
+      ],
+    }
+    return {
+      error: false,
+      data: { find: objFindAfterAddQuery, sort: resultForReturn.sort },
+    }
+  } else {
+    return {
+      error: false,
+      data: { find: resultForReturn.find, sort: resultForReturn.sort },
+    }
+  }
 }
 
 exports.RANGE_BASE_PAGINATION = RANGE_BASE_PAGINATION

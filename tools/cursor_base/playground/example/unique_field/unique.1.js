@@ -4,11 +4,11 @@
  */
 // -------------PAGE 1--------------//
 let listRecordSortByNonUnique = await ABC_COLL.find({})
-    .sort({
-        _id: 1,
-    })
-    .limit(5)
-    .lean()
+  .sort({
+    _id: 1,
+  })
+  .limit(5)
+  .lean()
 // -------------PAGE 2 or More--------------//
 /**
  * DISCUSS
@@ -19,12 +19,12 @@ let listRecordSortByNonUnique = await ABC_COLL.find({})
  *              |Page2
  */
 let listRecordSortByNonUnique = await ABC_COLL.find({
-    _id: {
-        $gt: latestObj._id,
-    },
+  _id: {
+    $gt: latestObj._id,
+  },
 })
-    .sort({
-        _id: 1,
-    })
-    .limit(5)
-    .lean()
+  .sort({
+    _id: 1,
+  })
+  .limit(5)
+  .lean()

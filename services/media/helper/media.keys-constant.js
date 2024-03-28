@@ -9,11 +9,11 @@
  */
 // exports.MEDIA_TYPES = [1,2,3,4,5];
 exports.MEDIA_TYPES = [
-    'company',
-    'department',
-    'digital-conversion',
-    'system',
-    'just-me',
+  'company',
+  'department',
+  'digital-conversion',
+  'system',
+  'just-me',
 ]
 
 exports.REACTION_TYPES = [1, 2, 3, 4, 5, 6, 7]

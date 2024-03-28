@@ -1,5 +1,5 @@
 exports.templateNewAccount = (fullName, pwd) => {
-    return `
+  return `
         Chào ${fullName}, Mật Khẩu mặc định của bạn là <b>${pwd}</b>
         <p><a href="https://app.trixgo.com/">Truy cập hệ thống</a></p>
         <p><a href="https://app.trixgo.com/files/guidance/guidance.zip">File hướng dẫn sử dụng</a></p>

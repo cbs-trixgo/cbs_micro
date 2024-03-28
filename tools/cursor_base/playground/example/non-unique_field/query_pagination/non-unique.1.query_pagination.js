@@ -8,12 +8,12 @@
  */
 // -------------PAGE 1--------------//
 let listRecordSortByNonUnique = await ABC_COLL.find({ author: 'cbs_author' })
-    .sort({
-        createAt: -1,
-        _id: -1,
-    })
-    .limit(5)
-    .lean()
+  .sort({
+    createAt: -1,
+    _id: -1,
+  })
+  .limit(5)
+  .lean()
 // -------------PAGE 2 or More--------------//
 /**
  * DISCUSS
@@ -24,18 +24,18 @@ let listRecordSortByNonUnique = await ABC_COLL.find({ author: 'cbs_author' })
  *              |Page2
  */
 let listRecordSortByNonUnique = await ABC_COLL.find({
-    $and: [
-        {
-            author: 'cbs_author',
+  $and: [
+    {
+      author: 'cbs_author',
 
-            /**
-             * giả sử CONDITION là:
-             *  - author: 'cbs_author'
-             *          HOẶC
-             *  - age: [10;20]
-             */
+      /**
+       * giả sử CONDITION là:
+       *  - author: 'cbs_author'
+       *          HOẶC
+       *  - age: [10;20]
+       */
 
-            /**
+      /**
                  *$or: [
                         { author: 'cbs_author'  },
                         {
@@ -48,25 +48,25 @@ let listRecordSortByNonUnique = await ABC_COLL.find({
                         }
                     ]
                  */
+    },
+    {
+      $or: [
+        {
+          createAt: { $gt: latestObj.createAt },
         },
         {
-            $or: [
-                {
-                    createAt: { $gt: latestObj.createAt },
-                },
-                {
-                    createAt: latestObj.createAt,
-                    _id: {
-                        $gt: latestObj._id,
-                    },
-                },
-            ],
+          createAt: latestObj.createAt,
+          _id: {
+            $gt: latestObj._id,
+          },
         },
-    ],
+      ],
+    },
+  ],
 })
-    .sort({
-        createAt: -1,
-        _id: -1,
-    })
-    .limit(5)
-    .lean()
+  .sort({
+    createAt: -1,
+    _id: -1,
+  })
+  .limit(5)
+  .lean()

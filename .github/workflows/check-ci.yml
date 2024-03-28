@@ -1,35 +1,56 @@
 name: Check CI
 
 on:
-    push:
-        branches:
-            - '**'
-    pull_request:
-        branches:
-            - '**'
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-        strategy:
-            matrix:
-                node-version: [16.x]
+    env:
+      - cache-key: ${{ github.repository }}
 
-        steps:
-            - uses: actions/checkout@v4
+    strategy:
+      matrix:
+        node-version: [16.x]
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: ${{ matrix.node-version }}
-                  cache: 'yarn'
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Install dependencies
-              run: yarn install --frozen-lockfile --prefer-offline
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
 
-            # - name: Run linter
-            #   run: yarn lint
+      - name: Extract branch name
+        shell: bash
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        id: extract_branch
 
-            # - name: Run tests
-            #   run: yarn test
+      - name: Cache Docker layers
+        id: cache-npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ steps.extract_branch.outputs.branch }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-${{ steps.extract_branch.outputs.branch }}
+            ${{ runner.os }}-npm-
+            ${{ runner.os }}-
+
+      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+        name: List the state of node modules
+        continue-on-error: true
+        run: npm list
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile --prefer-offline
+
+      - name: Run format
+        run: yarn format:check

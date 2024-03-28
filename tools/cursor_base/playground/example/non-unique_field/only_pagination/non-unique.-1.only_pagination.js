@@ -6,12 +6,12 @@
  */
 // -------------PAGE 1--------------//
 let listRecordSortByNonUnique = await ABC_COLL.find({})
-    .sort({
-        createAt: -1,
-        _id: -1,
-    })
-    .limit(5)
-    .lean()
+  .sort({
+    createAt: -1,
+    _id: -1,
+  })
+  .limit(5)
+  .lean()
 // -------------PAGE 2 or More--------------//
 /**
  * DISCUSS
@@ -22,21 +22,21 @@ let listRecordSortByNonUnique = await ABC_COLL.find({})
  *              |Page2
  */
 let listRecordSortByNonUnique = await ABC_COLL.find({
-    $or: [
-        {
-            createAt: { $lt: latestObj.createAt },
-        },
-        {
-            createAt: latestObj.createAt,
-            _id: {
-                $lt: latestObj._id,
-            },
-        },
-    ],
+  $or: [
+    {
+      createAt: { $lt: latestObj.createAt },
+    },
+    {
+      createAt: latestObj.createAt,
+      _id: {
+        $lt: latestObj._id,
+      },
+    },
+  ],
 })
-    .sort({
-        createAt: -1,
-        _id: -1,
-    })
-    .limit(5)
-    .lean()
+  .sort({
+    createAt: -1,
+    _id: -1,
+  })
+  .limit(5)
+  .lean()

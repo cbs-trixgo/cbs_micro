@@ -6,13 +6,13 @@ const REACTION_CORE = '/reaction_cores'
 const COMMENT_CORES = '/comment_cores'
 
 const CF_ROUTINGS_REACTION = {
-    ORIGIN_APP: BASE_ROUTE,
+  ORIGIN_APP: BASE_ROUTE,
 
-    // ================================COMMENT CORE=======================================//
-    COMMENT_CORES: `${BASE_ROUTE}${COMMENT_CORES}`,
+  // ================================COMMENT CORE=======================================//
+  COMMENT_CORES: `${BASE_ROUTE}${COMMENT_CORES}`,
 
-    // ================================REACTION CORE=======================================//
-    REACTION_CORE: `${BASE_ROUTE}${REACTION_CORE}`,
+  // ================================REACTION CORE=======================================//
+  REACTION_CORE: `${BASE_ROUTE}${REACTION_CORE}`,
 }
 
 exports.CF_ROUTINGS_REACTION = CF_ROUTINGS_REACTION

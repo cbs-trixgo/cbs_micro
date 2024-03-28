@@ -1,142 +1,142 @@
 exports.FNB_ACC = {
-    bod: [
-        'adwgo.winggo@gmail.com',
-        'hiepnh.winggo@gmail.com',
-        'chinhnv.winggo@gmail.com',
-        'huongnt.winggo@gmail.com',
-        'hoangnh.winggo@gmail.com',
-        'toannd.winggo@gmail.com',
-        'kiemthuvien.dcop.trx@gmail.com',
-        'hiepnh.pmi@gmail.com',
-    ],
-    taichinh: [
-        'thaobnbp.winggo@gmail.com',
-        'quynhntd.winggo@gmail.com',
-        'kiemthuvien.dcop.trx@gmail.com',
-        'hiepnh.pmi@gmail.com',
-        'hiepnh.winggo@gmail.com',
-        'chinhnv.winggo@gmail.com',
-        'toannd.winggo@gmail.com',
-    ],
-    cskh: [
-        'vund.winggo@gmail.com',
-        'quynhntd.winggo@gmail.com',
-        'nhungvth.winggo@gmail.com',
-        'huongnt.winggo@gmail.com',
-        'kiemthuvien.dcop.trx@gmail.com',
-        'hiepnh.pmi@gmail.com',
-        'hiepnh.winggo@gmail.com',
-        'chinhnv.winggo@gmail.com',
-        'toannd.winggo@gmail.com',
-    ],
-    man: [
-        'thupt1.winggo@gmail.com',
-        'hapt.winggo@gmail.com',
-        'hienpd.winggo@gmail.com',
-        'vyhth.winggo@gmail.com',
-        'toannd.winggo@gmail.com',
-        'nhungvth.winggo@gmail.com',
-        'anhml.winggo@gmail.com',
-        'kiemthuvien.dcop.trx@gmail.com',
-        'hiepnh.pmi@gmail.com',
-        'hiepnh.winggo@gmail.com',
-        'chinhnv.winggo@gmail.com',
-    ],
+  bod: [
+    'adwgo.winggo@gmail.com',
+    'hiepnh.winggo@gmail.com',
+    'chinhnv.winggo@gmail.com',
+    'huongnt.winggo@gmail.com',
+    'hoangnh.winggo@gmail.com',
+    'toannd.winggo@gmail.com',
+    'kiemthuvien.dcop.trx@gmail.com',
+    'hiepnh.pmi@gmail.com',
+  ],
+  taichinh: [
+    'thaobnbp.winggo@gmail.com',
+    'quynhntd.winggo@gmail.com',
+    'kiemthuvien.dcop.trx@gmail.com',
+    'hiepnh.pmi@gmail.com',
+    'hiepnh.winggo@gmail.com',
+    'chinhnv.winggo@gmail.com',
+    'toannd.winggo@gmail.com',
+  ],
+  cskh: [
+    'vund.winggo@gmail.com',
+    'quynhntd.winggo@gmail.com',
+    'nhungvth.winggo@gmail.com',
+    'huongnt.winggo@gmail.com',
+    'kiemthuvien.dcop.trx@gmail.com',
+    'hiepnh.pmi@gmail.com',
+    'hiepnh.winggo@gmail.com',
+    'chinhnv.winggo@gmail.com',
+    'toannd.winggo@gmail.com',
+  ],
+  man: [
+    'thupt1.winggo@gmail.com',
+    'hapt.winggo@gmail.com',
+    'hienpd.winggo@gmail.com',
+    'vyhth.winggo@gmail.com',
+    'toannd.winggo@gmail.com',
+    'nhungvth.winggo@gmail.com',
+    'anhml.winggo@gmail.com',
+    'kiemthuvien.dcop.trx@gmail.com',
+    'hiepnh.pmi@gmail.com',
+    'hiepnh.winggo@gmail.com',
+    'chinhnv.winggo@gmail.com',
+  ],
 }
 
 exports.FNB_FACTOR = {
-    // Tỷ lệ tích điểm cho đơn off (%)
-    credit: {
-        level1: { purchasedOffValue: 0, factor: 3 }, // Thông thường
-        level2: { purchasedOffValue: 1000000, factor: 3 }, // Bạc (tuần mua 1 lần/mua trong 6 tháng)
-        level3: { purchasedOffValue: 2000000, factor: 3 }, // Vàng (tuần mua 2 lần/mua trong 6 tháng)
-        level4: { purchasedOffValue: 5000000, factor: 3 }, // Kim Cương (ngày mua 1 lần/mua trong 6 tháng)
-    },
-    vatRate: 10, // Thuế VAT (%)
+  // Tỷ lệ tích điểm cho đơn off (%)
+  credit: {
+    level1: { purchasedOffValue: 0, factor: 3 }, // Thông thường
+    level2: { purchasedOffValue: 1000000, factor: 3 }, // Bạc (tuần mua 1 lần/mua trong 6 tháng)
+    level3: { purchasedOffValue: 2000000, factor: 3 }, // Vàng (tuần mua 2 lần/mua trong 6 tháng)
+    level4: { purchasedOffValue: 5000000, factor: 3 }, // Kim Cương (ngày mua 1 lần/mua trong 6 tháng)
+  },
+  vatRate: 10, // Thuế VAT (%)
 }
 
 exports.FNB_NEW = [
-    { value: 1, text: 'Mới' },
-    { value: 2, text: 'Cũ' },
+  { value: 1, text: 'Mới' },
+  { value: 2, text: 'Cũ' },
 ]
 
 exports.FNB_NON_RESIDENT = [
-    { value: 1, text: 'Biết tên' },
-    { value: 2, text: 'Vãng lai' },
+  { value: 1, text: 'Biết tên' },
+  { value: 2, text: 'Vãng lai' },
 ]
 
 exports.FNB_INTERNAL = [
-    { value: 1, text: 'Trong hệ thống' },
-    { value: 2, text: 'Nhượng quyền' },
+  { value: 1, text: 'Trong hệ thống' },
+  { value: 2, text: 'Nhượng quyền' },
 ]
 
 exports.FNB_SHIFT_TYPES = [
-    { value: 1, text: 'Sáng' },
-    { value: 2, text: 'Chiều' },
-    { value: 3, text: 'Tối' },
+  { value: 1, text: 'Sáng' },
+  { value: 2, text: 'Chiều' },
+  { value: 3, text: 'Tối' },
 ]
 
 exports.FNB_SEASONS = [
-    { value: 1, text: 'Xuân' },
-    { value: 2, text: 'Hạ' },
-    { value: 3, text: 'Thu' },
-    { value: 4, text: 'Đông' },
+  { value: 1, text: 'Xuân' },
+  { value: 2, text: 'Hạ' },
+  { value: 3, text: 'Thu' },
+  { value: 4, text: 'Đông' },
 ]
 
 exports.FNB_SALES_CHANNEL = [
-    { value: 1, text: 'Offline' },
-    { value: 2, text: 'Grab Food' },
-    { value: 3, text: 'Shopee Food' },
-    { value: 4, text: 'Gojek' },
-    { value: 5, text: 'Baemin' },
-    { value: 6, text: 'Loship' },
-    { value: 7, text: 'Bee' },
-    { value: 8, text: 'TikTok Shop' },
-    { value: 9, text: 'Shopee' },
-    { value: 10, text: 'Lazada' },
-    { value: 11, text: 'FB Reels' },
-    { value: 12, text: 'Khác' },
+  { value: 1, text: 'Offline' },
+  { value: 2, text: 'Grab Food' },
+  { value: 3, text: 'Shopee Food' },
+  { value: 4, text: 'Gojek' },
+  { value: 5, text: 'Baemin' },
+  { value: 6, text: 'Loship' },
+  { value: 7, text: 'Bee' },
+  { value: 8, text: 'TikTok Shop' },
+  { value: 9, text: 'Shopee' },
+  { value: 10, text: 'Lazada' },
+  { value: 11, text: 'FB Reels' },
+  { value: 12, text: 'Khác' },
 ]
 
 exports.FNB_PAYMENT_METHOD = [
-    { value: 1, text: 'Tiền mặt' },
-    { value: 2, text: 'Chuyển khoản' },
+  { value: 1, text: 'Tiền mặt' },
+  { value: 2, text: 'Chuyển khoản' },
 ]
 
 exports.FNB_SERVICE = [
-    { value: 1, text: 'Tại quán' },
-    { value: 2, text: 'Giao hàng (App)' },
-    { value: 3, text: 'Mang đi (Mua mang đi)' },
+  { value: 1, text: 'Tại quán' },
+  { value: 2, text: 'Giao hàng (App)' },
+  { value: 3, text: 'Mang đi (Mua mang đi)' },
 ]
 
 exports.FNB_STATUS = [
-    { value: 1, text: 'Đang giao hàng/Phục vụ' },
-    { value: 2, text: 'Hoàn tiền một phần' },
-    { value: 3, text: 'Hoàn tiền toàn bộ' },
-    { value: 4, text: 'Đã hủy' },
-    { value: 5, text: 'Hoàn thành' },
+  { value: 1, text: 'Đang giao hàng/Phục vụ' },
+  { value: 2, text: 'Hoàn tiền một phần' },
+  { value: 3, text: 'Hoàn tiền toàn bộ' },
+  { value: 4, text: 'Đã hủy' },
+  { value: 5, text: 'Hoàn thành' },
 ]
 
 // Cơ chế trả hoa hồng Affiliate
 exports.FNB_AFFILIATE_COM = [
-    { amount: 1000000, rate: 16 }, // Sale trực tiếp
-    { amount: 1000000, rate: 2.75 }, // Cấp 1
-    { amount: 2000000, rate: 2.25 }, // Cấp 2
-    { amount: 5000000, rate: 2.2 }, // Cấp ...
-    { amount: 5000000, rate: 1.75 },
-    { amount: 5000000, rate: 1.5 },
-    { amount: 5000000, rate: 1.25 },
-    { amount: 5000000, rate: 1.0 },
-    { amount: 5000000, rate: 0.75 },
-    { amount: 5000000, rate: 0.5 },
+  { amount: 1000000, rate: 16 }, // Sale trực tiếp
+  { amount: 1000000, rate: 2.75 }, // Cấp 1
+  { amount: 2000000, rate: 2.25 }, // Cấp 2
+  { amount: 5000000, rate: 2.2 }, // Cấp ...
+  { amount: 5000000, rate: 1.75 },
+  { amount: 5000000, rate: 1.5 },
+  { amount: 5000000, rate: 1.25 },
+  { amount: 5000000, rate: 1.0 },
+  { amount: 5000000, rate: 0.75 },
+  { amount: 5000000, rate: 0.5 },
 ]
 
 exports.CRM_STATUS = [
-    { value: 1, text: 'Chưa xử lý' },
-    { value: 2, text: 'Hoàn thành' },
+  { value: 1, text: 'Chưa xử lý' },
+  { value: 2, text: 'Hoàn thành' },
 ]
 
 exports.CRM_TYPES = [
-    { value: 1, text: 'Lỗi chủ quan' },
-    { value: 2, text: 'Lỗi khách quan' },
+  { value: 1, text: 'Lỗi chủ quan' },
+  { value: 2, text: 'Lỗi khách quan' },
 ]

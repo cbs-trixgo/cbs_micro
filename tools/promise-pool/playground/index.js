@@ -8,20 +8,20 @@ const PromisePool = require('@supercharge/promise-pool')
  */
 
 const users = [
-    { id: 1, name: 'Marcus', timer: 1000 },
-    { id: 2, name: 'Norman', timer: 2000 },
-    { id: 3, name: 'Christian', timer: 1000 },
-    { id: 4, name: 'Marcus 2', timer: 2000 },
-    { id: 5, name: 'Norman 2', timer: 1000 },
-    { id: 6, name: 'Christian 2', timer: 2000 },
+  { id: 1, name: 'Marcus', timer: 1000 },
+  { id: 2, name: 'Norman', timer: 2000 },
+  { id: 3, name: 'Christian', timer: 1000 },
+  { id: 4, name: 'Marcus 2', timer: 2000 },
+  { id: 5, name: 'Norman 2', timer: 1000 },
+  { id: 6, name: 'Christian 2', timer: 2000 },
 ]
 
 const fakePromise = (user, timeer) => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            return resolve({ ...user, timer: user.timer })
-        }, user.timer)
-    })
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      return resolve({ ...user, timer: user.timer })
+    }, user.timer)
+  })
 }
 
 /**
@@ -30,17 +30,17 @@ const fakePromise = (user, timeer) => {
  * as one of the active tasks in the pool finishes.
  */
 async function run(users) {
-    const { results, errors } = await PromisePool.for(users)
-        .withConcurrency(2)
-        .process(async (data) => {
-            const newData = await fakePromise(data)
-            console.log({ newData })
-            return newData
-        })
+  const { results, errors } = await PromisePool.for(users)
+    .withConcurrency(2)
+    .process(async (data) => {
+      const newData = await fakePromise(data)
+      console.log({ newData })
+      return newData
+    })
 
-    console.log({ results, errors })
+  console.log({ results, errors })
 }
 
 run(users)
-    .then((result) => console.log({ result }))
-    .catch((err) => console.log({ err }))
+  .then((result) => console.log({ result }))
+  .catch((err) => console.log({ err }))

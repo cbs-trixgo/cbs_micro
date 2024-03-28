@@ -18,67 +18,67 @@ const REACTION__REACTION_CORE_COLL = require('./database/reaction.reaction_core-
 const REACTION__COMMENT_CORE_COLL = require('./database/reaction.comment_core-coll')
 
 module.exports = {
-    name: CF_DOMAIN_SERVICES.REACTION,
-    mixins: [
-        // gọi tất cả các function dùng ở đây
-        DbService(REACTION__REACTION_CORE_COLL),
-        DbService(REACTION__COMMENT_CORE_COLL),
-        CacheCleaner([CF_DOMAIN_SERVICES.REACTION]),
-    ],
+  name: CF_DOMAIN_SERVICES.REACTION,
+  mixins: [
+    // gọi tất cả các function dùng ở đây
+    DbService(REACTION__REACTION_CORE_COLL),
+    DbService(REACTION__COMMENT_CORE_COLL),
+    CacheCleaner([CF_DOMAIN_SERVICES.REACTION]),
+  ],
 
-    /**
-     * Service metadata
-     */
-    metadata: {},
+  /**
+   * Service metadata
+   */
+  metadata: {},
 
-    /**
-     * Service dependencies
-     */
-    dependencies: [],
+  /**
+   * Service dependencies
+   */
+  dependencies: [],
 
-    /**
-     * Actions
-     */
-    actions: {
-        //==========================================   COMMENT_CORE   =====================================
-        [CF_ACTIONS_REACTION.COMMENT_CORE_INSERT]:
-            REACTION__COMMENT_CORE_HANDLER.insert,
-        [CF_ACTIONS_REACTION.COMMENT_CORE_UPDATE]:
-            REACTION__COMMENT_CORE_HANDLER.update,
-        [CF_ACTIONS_REACTION.COMMENT_CORE_GET_INFO_AND_GET_LIST]:
-            REACTION__COMMENT_CORE_HANDLER.getInfoAndGetList,
+  /**
+   * Actions
+   */
+  actions: {
+    //==========================================   COMMENT_CORE   =====================================
+    [CF_ACTIONS_REACTION.COMMENT_CORE_INSERT]:
+      REACTION__COMMENT_CORE_HANDLER.insert,
+    [CF_ACTIONS_REACTION.COMMENT_CORE_UPDATE]:
+      REACTION__COMMENT_CORE_HANDLER.update,
+    [CF_ACTIONS_REACTION.COMMENT_CORE_GET_INFO_AND_GET_LIST]:
+      REACTION__COMMENT_CORE_HANDLER.getInfoAndGetList,
 
-        //==========================================   REACTION_CORE   =====================================
-        [CF_ACTIONS_REACTION.REACTION_CORE_INSERT]:
-            REACTION__REACTION_CORE_HANDLER.insert,
-        [CF_ACTIONS_REACTION.REACTION_CORE_UPDATE]:
-            REACTION__REACTION_CORE_HANDLER.update,
-        [CF_ACTIONS_REACTION.REACTION__GET_INFO_AND_GET_LIST]:
-            REACTION__REACTION_CORE_HANDLER.getInfoAndGetList,
-    },
+    //==========================================   REACTION_CORE   =====================================
+    [CF_ACTIONS_REACTION.REACTION_CORE_INSERT]:
+      REACTION__REACTION_CORE_HANDLER.insert,
+    [CF_ACTIONS_REACTION.REACTION_CORE_UPDATE]:
+      REACTION__REACTION_CORE_HANDLER.update,
+    [CF_ACTIONS_REACTION.REACTION__GET_INFO_AND_GET_LIST]:
+      REACTION__REACTION_CORE_HANDLER.getInfoAndGetList,
+  },
 
-    /**
-     * Events
-     */
-    events: {},
+  /**
+   * Events
+   */
+  events: {},
 
-    /**
-     * Methods
-     */
-    methods: {},
+  /**
+   * Methods
+   */
+  methods: {},
 
-    /**
-     * Service created lifecycle event handler
-     */
-    created() {},
+  /**
+   * Service created lifecycle event handler
+   */
+  created() {},
 
-    /**
-     * Service started lifecycle event handler
-     */
-    async started() {},
+  /**
+   * Service started lifecycle event handler
+   */
+  async started() {},
 
-    /**
-     * Service stopped lifecycle event handler
-     */
-    async stopped() {},
+  /**
+   * Service stopped lifecycle event handler
+   */
+  async stopped() {},
 }

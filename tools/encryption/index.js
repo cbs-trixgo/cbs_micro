@@ -3,8 +3,8 @@ let unencryptedSecret = JSON.stringify(listUser)
 
 // Mã hóa
 let listUserEncryted = await crypto.AES.encrypt(
-    unencryptedSecret,
-    process.env.SECRET_KEY_CRYPTO
+  unencryptedSecret,
+  process.env.SECRET_KEY_CRYPTO
 ).toString()
 
 // Xử lí mã hóa data bên phía client

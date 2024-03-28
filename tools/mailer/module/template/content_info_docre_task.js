@@ -5,21 +5,21 @@ let { socket_product } = require('../../config/cf_mode')
 
 // Thông báo công việc
 exports.infoDocrePcm = ({ content }) => {
-    let taskName = content.infoTask.name
-    let taskAuthorName = content.infoTask.author.fullname
-    let taskAuthorImage = content.infoTask.author.image
+  let taskName = content.infoTask.name
+  let taskAuthorName = content.infoTask.author.fullname
+  let taskAuthorImage = content.infoTask.author.image
 
-    let taskProjectImage = content.infoTask.project.name
+  let taskProjectImage = content.infoTask.project.name
 
-    let linkServerS3 = 'https://trx-demo-003.s3-ap-southeast-1.amazonaws.com'
+  let linkServerS3 = 'https://trx-demo-003.s3-ap-southeast-1.amazonaws.com'
 
-    if (String(socket_product) == 'true') {
-        linkServerS3 = 'https://dntdurzwr12tp.cloudfront.net'
-    } else {
-        linkServerS3 = 'https://trx-demo-003.s3-ap-southeast-1.amazonaws.com'
-    }
+  if (String(socket_product) == 'true') {
+    linkServerS3 = 'https://dntdurzwr12tp.cloudfront.net'
+  } else {
+    linkServerS3 = 'https://trx-demo-003.s3-ap-southeast-1.amazonaws.com'
+  }
 
-    return `<td>
+  return `<td>
         <p>Sender/Người gửi: <b>${content.sender.fullname} (${content.sender.email})</b></p>
         <p>Notice/Nội dung lưu ý: <b style="color:#0066ff;">${nl2p(content.notice)}</b></p>
         <p>==============================================</p>

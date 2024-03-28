@@ -8,103 +8,103 @@ const Schema = require('mongoose').Schema
  */
 
 module.exports = DATABASE_MIDDLEWARE('contract_expense', {
-    /**
-     * START THÔNG TIN LẤY TỪ HỢP ĐỒNG
-     */
-    //_________Phân loại (1-Tạm ứng/2-Thanh toán/3-Quyết toán )(*)
-    type: { type: Number, default: 1 },
+  /**
+   * START THÔNG TIN LẤY TỪ HỢP ĐỒNG
+   */
+  //_________Phân loại (1-Tạm ứng/2-Thanh toán/3-Quyết toán )(*)
+  type: { type: Number, default: 1 },
 
-    //_________Phân loại vào ra (1-Hợp đồng bán ra/2-Hợp đồng mua vào) (CONTRACT_OUTIN in cf_constant)
-    outin: { type: Number, default: 1 },
+  //_________Phân loại vào ra (1-Hợp đồng bán ra/2-Hợp đồng mua vào) (CONTRACT_OUTIN in cf_constant)
+  outin: { type: Number, default: 1 },
 
-    //_________Phân loại NA (Thực/Gửi dấu) (CONTRACT_TA in cf_constant)
-    real: { type: Number, default: 1 },
+  //_________Phân loại NA (Thực/Gửi dấu) (CONTRACT_TA in cf_constant)
+  real: { type: Number, default: 1 },
 
-    //_________Phân loại theo lĩnh vực (type = 3) (POSTMAN -> ITEM - > DOCTYPE)
-    field: {
-        type: Schema.Types.ObjectId,
-        ref: 'doctype',
-    },
+  //_________Phân loại theo lĩnh vực (type = 3) (POSTMAN -> ITEM - > DOCTYPE)
+  field: {
+    type: Schema.Types.ObjectId,
+    ref: 'doctype',
+  },
 
-    //_________Phân loại theo Đơn vị (POSTMAN ITEM -> CONTACT)
-    dependentUnit: {
-        type: Schema.Types.ObjectId,
-        ref: 'contact',
-    },
+  //_________Phân loại theo Đơn vị (POSTMAN ITEM -> CONTACT)
+  dependentUnit: {
+    type: Schema.Types.ObjectId,
+    ref: 'contact',
+  },
 
-    //_________Phân loại theo Phụ trách (POSTMAN ITEM -> CONTACT)
-    personInCharge: {
-        type: Schema.Types.ObjectId,
-        ref: 'contact',
-    },
+  //_________Phân loại theo Phụ trách (POSTMAN ITEM -> CONTACT)
+  personInCharge: {
+    type: Schema.Types.ObjectId,
+    ref: 'contact',
+  },
 
-    //_________Phân loại theo Chủ trì (POSTMAN ITEM -> CONTACT)
-    chair: {
-        type: Schema.Types.ObjectId,
-        ref: 'contact',
-    },
+  //_________Phân loại theo Chủ trì (POSTMAN ITEM -> CONTACT)
+  chair: {
+    type: Schema.Types.ObjectId,
+    ref: 'contact',
+  },
 
-    //_________Bên mua (POSTMAN ITEM > CONTACT)
-    buyerInfo: {
-        type: Schema.Types.ObjectId,
-        ref: 'contact',
-    },
+  //_________Bên mua (POSTMAN ITEM > CONTACT)
+  buyerInfo: {
+    type: Schema.Types.ObjectId,
+    ref: 'contact',
+  },
 
-    //_________Bên bán (POSTMAN ITEM > CONTACT)
-    sellerInfo: {
-        type: Schema.Types.ObjectId,
-        ref: 'contact',
-    },
+  //_________Bên bán (POSTMAN ITEM > CONTACT)
+  sellerInfo: {
+    type: Schema.Types.ObjectId,
+    ref: 'contact',
+  },
 
-    //_________Công ty-Được xác định theo IPC(*)
-    company: {
-        type: Schema.Types.ObjectId,
-        ref: 'company',
-    },
+  //_________Công ty-Được xác định theo IPC(*)
+  company: {
+    type: Schema.Types.ObjectId,
+    ref: 'company',
+  },
 
-    //_________Dự án-Được xác định theo IPC(*)
-    project: {
-        type: Schema.Types.ObjectId,
-        ref: 'department',
-    },
+  //_________Dự án-Được xác định theo IPC(*)
+  project: {
+    type: Schema.Types.ObjectId,
+    ref: 'department',
+  },
 
-    //_________Hợp đồng-Được xác định theo IPC(*)
-    contract: {
-        type: Schema.Types.ObjectId,
-        ref: 'contract',
-    },
+  //_________Hợp đồng-Được xác định theo IPC(*)
+  contract: {
+    type: Schema.Types.ObjectId,
+    ref: 'contract',
+  },
 
-    /**
-     * END THÔNG TIN LẤY TỪ HỢP ĐỒNG
-     */
-    /**
-     * Phân loại chi phí
-     * 1-Chi phí trực tiếp
-     * 2-Chi phí quản lý
-     */
-    subtype: { type: Number, default: 1 },
+  /**
+   * END THÔNG TIN LẤY TỪ HỢP ĐỒNG
+   */
+  /**
+   * Phân loại chi phí
+   * 1-Chi phí trực tiếp
+   * 2-Chi phí quản lý
+   */
+  subtype: { type: Number, default: 1 },
 
-    //_________Ngày chi tiền (*)
-    date: { type: Date, default: Date.now },
+  //_________Ngày chi tiền (*)
+  date: { type: Date, default: Date.now },
 
-    //_________Nội dung chi tiền (*)
-    name: String,
+  //_________Nội dung chi tiền (*)
+  name: String,
 
-    //_________Ghi chú
-    note: String,
+  //_________Ghi chú
+  note: String,
 
-    //_________Giá trị chi tiền
-    value: { type: Number, default: 0 },
+  //_________Giá trị chi tiền
+  value: { type: Number, default: 0 },
 
-    /**
-     * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
-     */
-    userCreate: {
-        type: Schema.Types.ObjectId,
-        ref: 'user',
-    },
-    userUpdate: {
-        type: Schema.Types.ObjectId,
-        ref: 'user',
-    },
+  /**
+   * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
+   */
+  userCreate: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+  },
+  userUpdate: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+  },
 })

@@ -8,134 +8,134 @@ const mkdirP = require('mkdirp')
 const PROJECT_PATH = `${process.cwd()}/storage/`
 
 exports.uploadFile = function (file, path, args, callback) {
-    file.mv(path, function (err) {
-        if (err) {
-            callback(false, args)
-        } else {
-            callback(true, args)
-        }
-    })
+  file.mv(path, function (err) {
+    if (err) {
+      callback(false, args)
+    } else {
+      callback(true, args)
+    }
+  })
 }
 
 exports.baseUploadImageCode = function (code, path) {
-    return new promise(function (resolve, reject) {
-        fs.writeFile(
-            path,
-            code.replace(/^data:image\/\w+;base64,/, ''),
-            { encoding: 'base64' },
-            function (err) {
-                fs.chmod(path, '0777')
-                return resolve({ error: false, message: 'Upload success' })
-            }
-        )
-    })
+  return new promise(function (resolve, reject) {
+    fs.writeFile(
+      path,
+      code.replace(/^data:image\/\w+;base64,/, ''),
+      { encoding: 'base64' },
+      function (err) {
+        fs.chmod(path, '0777')
+        return resolve({ error: false, message: 'Upload success' })
+      }
+    )
+  })
 }
 
 exports.baseUploadImageFile = function (file, path) {
-    return new promise(function (resolve, reject) {
-        if (file == null) {
-            return resolve({ error: true, message: 'File not found' })
+  return new promise(function (resolve, reject) {
+    if (file == null) {
+      return resolve({ error: true, message: 'File not found' })
+    } else {
+      file.mv(path, function (err) {
+        if (err) {
+          return resolve({
+            error: true,
+            message: 'File does not upload',
+          })
         } else {
-            file.mv(path, function (err) {
-                if (err) {
-                    return resolve({
-                        error: true,
-                        message: 'File does not upload',
-                    })
-                } else {
-                    return resolve({ error: false, message: 'Upload success' })
-                }
-            })
+          return resolve({ error: false, message: 'Upload success' })
         }
-    })
+      })
+    }
+  })
 }
 
 exports.checkAndCreateFolder = function (path) {
-    let incs = path.split('/')
-    let baseBath = ''
-    incs.forEach(function (inc, index) {
-        if (inc.trim() != '') {
-            baseBath = baseBath + '/' + inc.trim()
-            if (!fs.existsSync(baseBath)) {
-                fs.mkdirSync(baseBath, '0777')
-            }
-        }
-    })
-    return baseBath
+  let incs = path.split('/')
+  let baseBath = ''
+  incs.forEach(function (inc, index) {
+    if (inc.trim() != '') {
+      baseBath = baseBath + '/' + inc.trim()
+      if (!fs.existsSync(baseBath)) {
+        fs.mkdirSync(baseBath, '0777')
+      }
+    }
+  })
+  return baseBath
 }
 
 const checkAndCreateFolder__WINDOWS = (path) => {
-    let madePath = mkdirP.sync(path)
+  let madePath = mkdirP.sync(path)
 }
 
 const checkExistFolder = function (folderPath) {
-    return fs.existsSync(folderPath)
+  return fs.existsSync(folderPath)
 }
 
 const deleteFolderRecursive = function (path) {
-    if (fs.existsSync(Path.normalize(path))) {
-        fs.readdirSync(path).forEach((file, index) => {
-            const curPath = Path.join(path, file)
-            if (fs.lstatSync(curPath).isDirectory()) {
-                // recurse
-                deleteFolderRecursive(curPath)
-            } else {
-                // delete file
-                fs.unlinkSync(Path.normalize(curPath))
-            }
-        })
-        fs.rmdirSync(Path.normalize(path))
-    }
+  if (fs.existsSync(Path.normalize(path))) {
+    fs.readdirSync(path).forEach((file, index) => {
+      const curPath = Path.join(path, file)
+      if (fs.lstatSync(curPath).isDirectory()) {
+        // recurse
+        deleteFolderRecursive(curPath)
+      } else {
+        // delete file
+        fs.unlinkSync(Path.normalize(curPath))
+      }
+    })
+    fs.rmdirSync(Path.normalize(path))
+  }
 }
 
 const deleteFile = function (path) {
-    fs.exists(path, function (exists) {
-        if (exists) {
-            fs.unlinkSync(path)
-        }
-    })
+  fs.exists(path, function (exists) {
+    if (exists) {
+      fs.unlinkSync(path)
+    }
+  })
 }
 
 function deleteFiles() {
-    let directory = path.resolve(__dirname, '../../files/temp/users/')
-    fs.readdir(directory, (err, files) => {
-        if (err) console.log({ err })
-        for (const file of files) {
-            let pathImage = path.join(directory, file)
-            if (fs.existsSync(pathImage)) {
-                fs.unlink(pathImage, (err) => {
-                    if (err) console.log({ err })
-                })
-            }
-        }
-    })
+  let directory = path.resolve(__dirname, '../../files/temp/users/')
+  fs.readdir(directory, (err, files) => {
+    if (err) console.log({ err })
+    for (const file of files) {
+      let pathImage = path.join(directory, file)
+      if (fs.existsSync(pathImage)) {
+        fs.unlink(pathImage, (err) => {
+          if (err) console.log({ err })
+        })
+      }
+    }
+  })
 }
 
 // Chỉ cho phép upload images, audios, files (zip)
 exports.uploadFilter = function (req, file, cb) {
-    const message = 'cannot_upload_file'
-    //Kiểm tra đuôi file
-    if (
-        !file.originalname.match(
-            /\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|mp3|MP3|mp4|MP4|wav|WAV|zip|ZIP|xls|XLS|xlsx|XLSX|xlsm|XLSM|doc|DOC|docx|DOCX|dwg|DWG|txt|TXT)$/
-        )
-    ) {
-        // req.fileValidationError = true;
-        // return cb(message, false);
-        req.fileValidationError = true
-        return cb(null, false, req.fileValidationError)
-    }
+  const message = 'cannot_upload_file'
+  //Kiểm tra đuôi file
+  if (
+    !file.originalname.match(
+      /\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF|mp3|MP3|mp4|MP4|wav|WAV|zip|ZIP|xls|XLS|xlsx|XLSX|xlsm|XLSM|doc|DOC|docx|DOCX|dwg|DWG|txt|TXT)$/
+    )
+  ) {
+    // req.fileValidationError = true;
+    // return cb(message, false);
+    req.fileValidationError = true
+    return cb(null, false, req.fileValidationError)
+  }
 
-    //Kiểm tra mime type
-    // let mimetypeSuccess = ['image/jpeg', 'image/pjpeg', 'image/png', 'application/zip', 'application/x-rar-compressed'
-    //                             ,'audio/mp4', 'video/mp4', 'application/mp4', 'audio/mpeg', 'application/x-zip-compressed'];
-    // if(!mimetypeSuccess.includes(file.mimetype)) {
-    //     // req.fileValidationError = true;
-    //     // return cb(message, false);
-    //     req.fileValidationError = true;
-    //     return cb(null, false, req.fileValidationError);
-    // }
-    cb(null, true)
+  //Kiểm tra mime type
+  // let mimetypeSuccess = ['image/jpeg', 'image/pjpeg', 'image/png', 'application/zip', 'application/x-rar-compressed'
+  //                             ,'audio/mp4', 'video/mp4', 'application/mp4', 'audio/mpeg', 'application/x-zip-compressed'];
+  // if(!mimetypeSuccess.includes(file.mimetype)) {
+  //     // req.fileValidationError = true;
+  //     // return cb(message, false);
+  //     req.fileValidationError = true;
+  //     return cb(null, false, req.fileValidationError);
+  // }
+  cb(null, true)
 }
 
 // let COMPRESS_IMAGE = (imagePathTemp, outputPath) => {
@@ -173,18 +173,18 @@ exports.uploadFilter = function (req, file, cb) {
 // }
 
 function deleteFiles() {
-    let directory = path.resolve(__dirname, '../../files/temp/users/')
-    fs.readdir(directory, (err, files) => {
-        if (err) console.log({ err })
-        for (const file of files) {
-            let pathImage = path.join(directory, file)
-            if (fs.existsSync(pathImage)) {
-                fs.unlink(pathImage, (err) => {
-                    if (err) console.log({ err })
-                })
-            }
-        }
-    })
+  let directory = path.resolve(__dirname, '../../files/temp/users/')
+  fs.readdir(directory, (err, files) => {
+    if (err) console.log({ err })
+    for (const file of files) {
+      let pathImage = path.join(directory, file)
+      if (fs.existsSync(pathImage)) {
+        fs.unlink(pathImage, (err) => {
+          if (err) console.log({ err })
+        })
+      }
+    }
+  })
 }
 
 // exports.COMPRESS_MULTI_IMAGES = (inputFolderPath, outputPath) => {
@@ -200,9 +200,9 @@ function deleteFiles() {
 // }
 
 module.exports = {
-    checkAndCreateFolder__WINDOWS,
-    checkExistFolder,
-    deleteFolderRecursive,
-    deleteFile,
-    // COMPRESS_IMAGE: _COMPRESS_IMAGE
+  checkAndCreateFolder__WINDOWS,
+  checkExistFolder,
+  deleteFolderRecursive,
+  deleteFile,
+  // COMPRESS_IMAGE: _COMPRESS_IMAGE
 }

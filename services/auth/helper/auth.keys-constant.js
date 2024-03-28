@@ -14,20 +14,20 @@ exports.STATUS_BLOCK = 0
  * Danh sách mapping DOMAIN - PLATFORM
  */
 exports.validateDomainAndPlatform = [
-    {
-        domain: 'https://app.trixgo.com',
-        platform: 1,
-    },
-    {
-        domain: 'https://staging.cbs.trixgo.com',
-        platform: 1,
-    },
-    {
-        domain: 'https://staging.wdx.trixgo.com',
-        platform: 2,
-    },
-    {
-        domain: 'https://staging.fnb.trixgo.com',
-        platform: 3,
-    },
+  {
+    domain: 'https://app.trixgo.com',
+    platform: 1,
+  },
+  {
+    domain: 'https://staging.cbs.trixgo.com',
+    platform: 1,
+  },
+  {
+    domain: 'https://staging.wdx.trixgo.com',
+    platform: 2,
+  },
+  {
+    domain: 'https://staging.fnb.trixgo.com',
+    platform: 3,
+  },
 ]

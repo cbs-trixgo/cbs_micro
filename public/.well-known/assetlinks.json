@@ -1,12 +1,12 @@
 [
-    {
-        "relation": ["delegate_permission/common.handle_all_urls"],
-        "target": {
-            "namespace": "android_app",
-            "package_name": "com.trixgo.trixgoapp",
-            "sha256_cert_fingerprints": [
-                "AC:CB:C2:48:D0:32:21:CE:8B:65:38:10:C4:11:6C:EB:82:9C:EE:A4:4A:07:80:0D:EF:F4:5E:72:26:FF:0B:3D"
-            ]
-        }
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.trixgo.trixgoapp",
+      "sha256_cert_fingerprints": [
+        "AC:CB:C2:48:D0:32:21:CE:8B:65:38:10:C4:11:6C:EB:82:9C:EE:A4:4A:07:80:0D:EF:F4:5E:72:26:FF:0B:3D"
+      ]
     }
+  }
 ]

@@ -1,5 +1,5 @@
 exports.templateInfoAccount = (fullName, pwd) => {
-    return `
+  return `
         Chào ${fullName}, Mật Khẩu mặc định của bạn là <b>${pwd}</b>
         <p><a href="https://app.trixgo.com/login/">Truy cập hệ thống</a></p>
         <p>Hi ${fullName}, Your default password is <b>${pwd}</b></p>
