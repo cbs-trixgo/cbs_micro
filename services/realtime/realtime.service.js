@@ -88,9 +88,9 @@ module.exports = {
                     events: {
                         'call': {
                             whitelist: [
-                                // 'users.*',
-                                // 'rooms.*',
-                                // 'io.*'
+                                'users.*',
+                                'rooms.*',
+                                'io.*'
                             ],
                             aliases: {
                                 // 'login': 'users.login'
