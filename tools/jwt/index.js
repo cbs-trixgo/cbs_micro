@@ -1,7 +1,7 @@
-require('dotenv').config();
-const jwt           = require('jsonwebtoken');
+require('dotenv').config()
+const jwt = require('jsonwebtoken')
 
-const SECRET_KEY    = require('./cf_jwt').JWT_SECRET_KEY;
+const SECRET_KEY = require('./cf_jwt').JWT_SECRET_KEY
 
 function sign(obj) {
     return new Promise((resolve, reject) => {

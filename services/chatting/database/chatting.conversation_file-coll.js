@@ -1,37 +1,37 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("message_conversation_file", {
+module.exports = DATABASE_MIDDLEWARE('message_conversation_file', {
     conversation: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'message_conversation'
+        type: Schema.Types.ObjectId,
+        ref: 'message_conversation',
     },
     file: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'file'
+        type: Schema.Types.ObjectId,
+        ref: 'file',
     },
 
     /**
      * FILE_CORE
      */
-     //______Ứng dụng
+    //______Ứng dụng
     app: {
         type: Schema.Types.ObjectId,
-        ref: 'app'
+        ref: 'app',
     },
     //________Công ty
     company: {
-        type:  Schema.Types.ObjectId,
-        ref : 'company'
+        type: Schema.Types.ObjectId,
+        ref: 'company',
     },
     //______Tên gốc
-    nameOrg     : { type: String, require: true },
+    nameOrg: { type: String, require: true },
     //______Tên uuidv1
-    name        : { type: String, require: true },
+    name: { type: String, require: true },
     //______Mô tả file
-    description : { type: String },
+    description: { type: String },
     //_____Đường dẫn đến file s3 (root/test/image.png)
     path: { type: String, require: true },
     //____Kích thước file
@@ -46,10 +46,10 @@ module.exports  = DATABASE_MIDDLEWARE("message_conversation_file", {
      */
     type: {
         type: Number,
-        default: 1
+        default: 1,
     },
     author: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'user'
+        type: Schema.Types.ObjectId,
+        ref: 'user',
     },
 })

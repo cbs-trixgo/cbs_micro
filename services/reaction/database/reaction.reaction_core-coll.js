@@ -1,9 +1,9 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("reaction", {
+module.exports = DATABASE_MIDDLEWARE('reaction', {
     /**
      * Loại tương tác, like, tim, haha ...
      * { value: 1, text: 'Thích', image: '1f44d.png' },
@@ -15,11 +15,11 @@ module.exports  = DATABASE_MIDDLEWARE("reaction", {
      */
     type: {
         type: Number,
-        default: 1
+        default: 1,
     },
 
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : "user"                  
+        ref: 'user',
     },
 })

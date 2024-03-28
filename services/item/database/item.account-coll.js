@@ -1,13 +1,13 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
 /**
  * TÀI KHOẢN KẾ TOÁN
  */
 
-module.exports  = DATABASE_MIDDLEWARE("account", { 
+module.exports = DATABASE_MIDDLEWARE('account', {
     /**
      * Trạng thái sử dụng
      * - 1: Đang sử dụng
@@ -15,12 +15,12 @@ module.exports  = DATABASE_MIDDLEWARE("account", {
      */
     status: {
         type: Number,
-        default: 1
-    },  
+        default: 1,
+    },
     //_________Thuộc về công ty nào
     company: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     //_________Tên
     name: String,
@@ -34,7 +34,7 @@ module.exports  = DATABASE_MIDDLEWARE("account", {
      */
     type: {
         type: Number,
-        default: 1
+        default: 1,
     },
     //_________Cấu hình hiển thị cho báo cáo quản trị (Đang phát triển)
     showInReportMonth: {
@@ -45,43 +45,49 @@ module.exports  = DATABASE_MIDDLEWARE("account", {
      */
     parent: {
         type: Schema.Types.ObjectId,
-        ref: "account"
+        ref: 'account',
     },
-    childs: [{
-        type: Schema.Types.ObjectId,
-        ref: "account"
-    }],
+    childs: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'account',
+        },
+    ],
     level: {
         type: Number,
-        default: 1 
+        default: 1,
     },
     //_________Số lượng phần tử con
     amountChilds: {
         type: Number,
-        default: 0 
+        default: 0,
     },
     /**
      * ĐỆ QUY ĐỂ XỬ LÝ SỐ LIỆU
      */
     //_________Toàn bộ các cấp cha bên trên => Dùng để tạo được nestedChilds
-    nestedParents: [{
-        type: Schema.Types.ObjectId,
-        ref: "account"
-    }],
+    nestedParents: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'account',
+        },
+    ],
     //_________Toàn bộ các cấp con bên dưới
-    nestedChilds: [{
-        type: Schema.Types.ObjectId,
-        ref: "account"
-    }],
+    nestedChilds: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'account',
+        },
+    ],
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

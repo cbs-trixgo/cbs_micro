@@ -1,15 +1,15 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("pcm_comment_reaction", {
+module.exports = DATABASE_MIDDLEWARE('pcm_comment_reaction', {
     /**
      * Bình luận
      */
     comment: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'pcm_comment'
+        type: Schema.Types.ObjectId,
+        ref: 'pcm_comment',
     },
 
     /**
@@ -23,14 +23,14 @@ module.exports  = DATABASE_MIDDLEWARE("pcm_comment_reaction", {
      */
     type: {
         type: Number,
-        default: 1
+        default: 1,
     },
 
     /**
      *  Người tạo
      */
     author: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'user'
-    }
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+    },
 })

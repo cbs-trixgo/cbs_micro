@@ -1,11 +1,10 @@
-__FILE NAME__ | __DESCRIPTION__
-----------|-------------
-1/ __*.service.js__ | định nghĩa service (map ___ROUTES___ -> ___ACTIONS___)
-2/ __handler__/*.-handler.js  | các function thực hiện call vào server
-3/ __model__/*.-model.js | các method model
-4/ __database__/*.-model.js | các method model
-5/ __helper__/*.routes-constant.js | Danh sách ROUTES của service
-   __helper__/*.actions-constant.js | Danh sách các ACTIONS từ hệ thống
-   __helper__/*.events-constant.js | Danh sách EVENT BUS(implement RabbitMQ)
-   __helper__/*.keys-constant.js  | Danh sách variable config || constant của service
-
+| **FILE NAME**                       | **DESCRIPTION**                                        |
+| ----------------------------------- | ------------------------------------------------------ | --- | -------------------- |
+| 1/ **\*.service.js**                | định nghĩa service (map **_ROUTES_** -> **_ACTIONS_**) |
+| 2/ **handler**/\*.-handler.js       | các function thực hiện call vào server                 |
+| 3/ **model**/\*.-model.js           | các method model                                       |
+| 4/ **database**/\*.-model.js        | các method model                                       |
+| 5/ **helper**/\*.routes-constant.js | Danh sách ROUTES của service                           |
+| **helper**/\*.actions-constant.js   | Danh sách các ACTIONS từ hệ thống                      |
+| **helper**/\*.events-constant.js    | Danh sách EVENT BUS(implement RabbitMQ)                |
+| **helper**/\*.keys-constant.js      | Danh sách variable config                              |     | constant của service |

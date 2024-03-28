@@ -1,16 +1,16 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * NGUỒN LỰC CHUẨN CỦA HỆ THỐNG
  * - Áp dụng cho lập ngân sách thi công của nhà thầu
  * - Áp dụng cho lập ngân sách gói thầu
  */
-module.exports  = DATABASE_MIDDLEWARE("datahub_product", { 
+module.exports = DATABASE_MIDDLEWARE('datahub_product', {
     parent: {
         type: Schema.Types.ObjectId,
-        ref: "datahub_product"
+        ref: 'datahub_product',
     },
     /**
      * Phân loại
@@ -20,19 +20,19 @@ module.exports  = DATABASE_MIDDLEWARE("datahub_product", {
      */
     type: { type: Number, default: 1 },
     //_________Mã hiệu/mã hệ thống
-    sign : {
-        type   : String,
-        require:  true,
-        unique : true
+    sign: {
+        type: String,
+        require: true,
+        unique: true,
     },
     //_________Tên
     name: String,
     //_________Mô tả
-    description: String,   
+    description: String,
     //_________Đơn vị
-    unit: String,   
+    unit: String,
     //_________Ghi chú
-    note: String, 
+    note: String,
     //_________Đơn giá
     unitprice: { type: Number, default: 0 },
     /**
@@ -40,10 +40,10 @@ module.exports  = DATABASE_MIDDLEWARE("datahub_product", {
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

@@ -1,50 +1,54 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
 
-const Schema    = require('mongoose').Schema;
+const Schema = require('mongoose').Schema
 /**
  * HỢP ĐỒNG KINH TẾ
  * NGÂN SÁCH DỰ ÁN => VỚI CHỦ ĐẦU TƯ (HỢP ĐỒNG MUA VÀO)
  * NGÂN SÁCH HỢP ĐỒNG/THẦU PHỤ => VỚI NHÀ THẦU (HỢP ĐỒNG BÁN RA)
  */
-module.exports  = DATABASE_MIDDLEWARE("contract", {
+module.exports = DATABASE_MIDDLEWARE('contract', {
     //_________Công ty
     company: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     //_________Dự án/phòng ban (Thuộc dự án)
     project: {
         type: Schema.Types.ObjectId,
-        ref : "department",
+        ref: 'department',
         require: true,
     },
     //_________Thuộc gói thầu nào
     package: {
         type: Schema.Types.ObjectId,
-        ref : "document_package",
+        ref: 'document_package',
     },
     //_________Phần tử cha
     parent: {
         type: Schema.Types.ObjectId,
-        ref: "contract"
+        ref: 'contract',
     },
     //_________Level
     level: {
         type: Number,
-        default: 1
+        default: 1,
     },
     //_________Quản trị
-    admins: [{
-        type: Schema.Types.ObjectId,
-        ref : "user"
-    }],
+    admins: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     //_________Thành viên
-    members: [{
-        type: Schema.Types.ObjectId,
-        ref : "user"
-    }],
+    members: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     /**
      * Phân loại chính thức/nháp
      * 1-Chính thức (đã chuyển thành hợp đồng)
@@ -86,32 +90,32 @@ module.exports  = DATABASE_MIDDLEWARE("contract", {
     //_________Phân loại theo lĩnh vực (type = 3) (POSTMAN -> ITEM - > DOCTYPE)
     field: {
         type: Schema.Types.ObjectId,
-        ref : "doctype"
+        ref: 'doctype',
     },
     //_________Phân loại theo Đơn vị (POSTMAN ITEM -> CONTACT)
     dependentUnit: {
         type: Schema.Types.ObjectId,
-        ref : 'contact'
+        ref: 'contact',
     },
     //_________Phân loại theo Phụ trách (POSTMAN ITEM -> CONTACT)
     personInCharge: {
         type: Schema.Types.ObjectId,
-        ref : 'contact'
+        ref: 'contact',
     },
     //_________Phân loại theo chủ trì (POSTMAN ITEM -> CONTACT)
     chair: {
         type: Schema.Types.ObjectId,
-        ref : 'contact'
+        ref: 'contact',
     },
     //_________Phân loại theo trạng thái công nợ (POSTMAN ITEM -> DOCTYPE (type = 16))
     debtStatus: {
         type: Schema.Types.ObjectId,
-        ref : "doctype"
+        ref: 'doctype',
     },
     //_________Phân loại theo kho(POSTMAN ITEM -> WAREHOUSE)
     warehouse: {
         type: Schema.Types.ObjectId,
-        ref : 'warehouse'
+        ref: 'warehouse',
     },
     /**
      * THÔNG TIN KHÁC
@@ -137,14 +141,14 @@ module.exports  = DATABASE_MIDDLEWARE("contract", {
     //_________Bên mua (POSTMAN ITEM > CONTACT)
     buyerInfo: {
         type: Schema.Types.ObjectId,
-        ref: "contact"
+        ref: 'contact',
     },
     //_________Ngân hàng bên mua
     buyerBank: String,
     //_________Bên bán (POSTMAN ITEM > CONTACT)
     sellerInfo: {
         type: Schema.Types.ObjectId,
-        ref: "contact"
+        ref: 'contact',
     },
     //_________Ngân hàng bên bán
     sellerBank: String,
@@ -182,7 +186,7 @@ module.exports  = DATABASE_MIDDLEWARE("contract", {
 
     /**
      * NGHIỆM THU HOÀN THÀNH
-    */
+     */
     //_________(10)Giá trị nghiệm thu trước VAT
     acceptance: { type: Number, default: 0 },
     //_________(11)Giá trị nghiệm thu phần VAT
@@ -214,7 +218,7 @@ module.exports  = DATABASE_MIDDLEWARE("contract", {
 
     /**
      * XUẤT HOÁ ĐƠN
-    */
+     */
     //_________(1) Giá trị trước VAT
     revenue: { type: Number, default: 0 },
     //_________(2) Giá trị VAT
@@ -242,33 +246,33 @@ module.exports  = DATABASE_MIDDLEWARE("contract", {
      */
     //_________Ngân sách/Tổng mức đầu tư/Chi phí
     budget: {
-        type   : Number,
-        default: 0
+        type: Number,
+        default: 0,
     },
     //_________VAT
     vatBudget: {
-        type   : Number,
-        default: 0
+        type: Number,
+        default: 0,
     },
     //______Dự báo ngân sách
     forecastBudget: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______VAT
     forecastVatBudget: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Ngân sách thực tế
     finalBudget: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______VAT
     finalVatBudget: {
         type: Number,
-        default : 0
+        default: 0,
     },
     /**
      * BẢO LÃNH
@@ -285,7 +289,7 @@ module.exports  = DATABASE_MIDDLEWARE("contract", {
     //_________Thời hạn bảo lãnh hợp đồng
     expiredCg: { type: Date, default: null },
     //_________Thông báo trước thời hạn (h)
-    alertCg: { type: Number, default: 0 },   
+    alertCg: { type: Number, default: 0 },
 
     //_________Bảo lãnh bảo hành
     insuranceValue: { type: Number, default: 0 },
@@ -293,38 +297,44 @@ module.exports  = DATABASE_MIDDLEWARE("contract", {
     expiredInsurance: { type: Date, default: null },
     //_________Thông báo trước thời hạn (h)
     alertInsurance: { type: Number, default: 0 },
-    
+
     //_________Ảnh đại diện
     image: {
         type: String,
-        defautl: 'contract_default.png'
+        defautl: 'contract_default.png',
     },
     //_________Hình ảnh gần đây
-    photos: [{
-        type: Schema.Types.ObjectId,
-        ref: 'file',
-    }],
+    photos: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'file',
+        },
+    ],
     /**
      * HỒ SƠ
      */
     //________ Tổng số hồ sơ trong hợp đồng
     numberOfDocs: {
         type: Number,
-        default: 0
+        default: 0,
     },
     /**
      * THÔNG TIN TRUY CẬP
      */
     //_________Chi tiết các công ty đã view
-    companyViews: [{
-        type: Schema.Types.ObjectId,
-        ref: "user"
-    }],     
+    companyViews: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     //_________Chi tiết các user đã view
-    userViews: [{
-        type: Schema.Types.ObjectId,
-        ref: "user"
-    }],  
+    userViews: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     //_________Số lượng views
     numberOfViews: { type: Number, default: 0 },
     /**
@@ -332,20 +342,20 @@ module.exports  = DATABASE_MIDDLEWARE("contract", {
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     //_________Phòng ban của người tạo việc
     departmentOfAuthor: {
         type: Schema.Types.ObjectId,
-        ref: 'department'
+        ref: 'department',
     },
     //_________Công ty của người tạo việc
     companyOfAuthor: {
         type: Schema.Types.ObjectId,
-        ref: 'company'
+        ref: 'company',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

@@ -1,23 +1,23 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("contract_bill_item", {
+module.exports = DATABASE_MIDDLEWARE('contract_bill_item', {
     //_________ Công ty
     company: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     //_________Dự án
     project: {
         type: Schema.Types.ObjectId,
-        ref : "department"
-    },    
+        ref: 'department',
+    },
     //_________Hợp đồng
     contract: {
         type: Schema.Types.ObjectId,
-        ref : "contract"
+        ref: 'contract',
     },
     /**
      * THÔNG TIN CĂN BẢN
@@ -42,7 +42,7 @@ module.exports  = DATABASE_MIDDLEWARE("contract_bill_item", {
      * KHỐI LƯỢNG
      */
     //_________Khối lượng
-    quantity: { type: Number, default: 0 }, 
+    quantity: { type: Number, default: 0 },
     /**
      * ĐƠN GIÁ (KHÔNG GỒM VAT)
      */
@@ -57,16 +57,16 @@ module.exports  = DATABASE_MIDDLEWARE("contract_bill_item", {
     estimateAmount: { type: Number, default: 0 },
     //_________Giá trị đã nghiệm thu hoàn thành
     inspecAmount: { type: Number, default: 0 },
-    
+
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

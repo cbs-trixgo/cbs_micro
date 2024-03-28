@@ -1,46 +1,50 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * SỔ QUỸ
  */
-module.exports  = DATABASE_MIDDLEWARE("cash_book", {
+module.exports = DATABASE_MIDDLEWARE('cash_book', {
     //_________Công ty
     company: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     //_________Phần tử cha
     parent: {
         type: Schema.Types.ObjectId,
-        ref : "cash_book"
+        ref: 'cash_book',
     },
     //_________Tài khoản kế toán
     account: {
         type: Schema.Types.ObjectId,
-        ref: 'account'
+        ref: 'account',
     },
     //_________Mã khách
     customer: {
         type: Schema.Types.ObjectId,
-        ref: 'contact'
+        ref: 'contact',
     },
     //_________Hợp đồng
     contract: {
         type: Schema.Types.ObjectId,
-        ref : "contract"
+        ref: 'contract',
     },
     //_________Admin (được quyền xem, sửa)
-    admins : [{
-        type   : Schema.Types.ObjectId,
-        ref: 'user'
-    }],
+    admins: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     //_________Thành viên (được quyền xem)
-    members : [{
-        type   : Schema.Types.ObjectId,
-        ref: 'user'
-    }],
+    members: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     //_________Tên
     name: String,
     //_________Ngày tháng
@@ -70,10 +74,10 @@ module.exports  = DATABASE_MIDDLEWARE("cash_book", {
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

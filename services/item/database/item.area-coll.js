@@ -1,17 +1,17 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
 /**
  * KHU VỰC ĐỊA LÝ
  */
 
-module.exports  = DATABASE_MIDDLEWARE("area", {
+module.exports = DATABASE_MIDDLEWARE('area', {
     //_________Phần tử cha
     parent: {
         type: Schema.Types.ObjectId,
-        ref: "area"
+        ref: 'area',
     },
     //_________Level (1/2/3)
     level: { type: Number, default: 1 },
@@ -24,10 +24,10 @@ module.exports  = DATABASE_MIDDLEWARE("area", {
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

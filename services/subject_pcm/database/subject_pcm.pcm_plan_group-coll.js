@@ -1,33 +1,35 @@
-"use strict";
+'use strict'
 
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("pcm_plan_group", {
+module.exports = DATABASE_MIDDLEWARE('pcm_plan_group', {
     company: {
         type: Schema.Types.ObjectId,
-        ref: 'company'
+        ref: 'company',
     },
     project: {
         type: Schema.Types.ObjectId,
-        ref : "department"
+        ref: 'department',
     },
     contract: {
         type: Schema.Types.ObjectId,
-        ref : "contract"
+        ref: 'contract',
     },
     /**
      * Công việc
      */
-    tasks: [{
-        type: Schema.Types.ObjectId,
-        ref: "pcm_plan_task"
-    }],
+    tasks: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'pcm_plan_task',
+        },
+    ],
     author: {
         type: Schema.Types.ObjectId,
-        ref : "user"
+        ref: 'user',
     },
     //_________Phân loại công việc/trình duyệt
     //_________Phục vụ để gán type/subtype tự động cho task khi khởi tạo trong thư mục này
@@ -35,7 +37,7 @@ module.exports  = DATABASE_MIDDLEWARE("pcm_plan_group", {
     //_________Phân loại tính chất
     property: {
         type: Schema.Types.ObjectId,
-        ref : "doctype"
+        ref: 'doctype',
     },
     /**
      * Tên
@@ -54,38 +56,42 @@ module.exports  = DATABASE_MIDDLEWARE("pcm_plan_group", {
      */
     parent: {
         type: Schema.Types.ObjectId,
-        ref: "pcm_plan_group"
+        ref: 'pcm_plan_group',
     },
     level: {
         type: Number,
-        default: 1
+        default: 1,
     },
     /**
      * Admin nhóm
      */
-    admins: [{
-        type: Schema.Types.ObjectId,
-        ref : "user"
-    }],
+    admins: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     /**
      * Member nhóm
      */
-    members: [{
-        type: Schema.Types.ObjectId,
-        ref : "user"
-    }],
+    members: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     //_________Hình ảnh đại diện
     image: {
         type: Schema.Types.ObjectId,
-        ref : "file"
+        ref: 'file',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : "user"
+        ref: 'user',
     },
     //______Số lượng công việc
     amountTasks: {
         type: Number,
-        default: 0
+        default: 0,
     },
-});
+})

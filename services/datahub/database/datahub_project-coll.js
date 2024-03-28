@@ -1,15 +1,15 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * DATAHUB DỰ ÁN
  */
-module.exports  = DATABASE_MIDDLEWARE("datahub_project", {
+module.exports = DATABASE_MIDDLEWARE('datahub_project', {
     //_________Chủ đầu tư
     client: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     /**
      * Khu vực dự án
@@ -23,17 +23,17 @@ module.exports  = DATABASE_MIDDLEWARE("datahub_project", {
     //_________Tỉnh/Thành phố
     area1: {
         type: Schema.Types.ObjectId,
-        ref : "area"
+        ref: 'area',
     },
     //_________Huyện/Quận
     area2: {
         type: Schema.Types.ObjectId,
-        ref : "area"
+        ref: 'area',
     },
     //_________Xã/Phường
     area3: {
         type: Schema.Types.ObjectId,
-        ref : "area"
+        ref: 'area',
     },
     //_________Địa chỉ theo google map
     location: String,
@@ -56,23 +56,25 @@ module.exports  = DATABASE_MIDDLEWARE("datahub_project", {
     //_________Số tầng cao
     floorNumber: { type: Number, default: 0 },
     //_________Diện tích tầng cao
-    floorArea: { type: Number, default: 0 }, 
+    floorArea: { type: Number, default: 0 },
     //_________Tình trạng dự án
     status: { type: Number, default: 1 },
     //_________Tài liệu đính kèm
-    files: [{
-        type: Schema.Types.ObjectId,
-        ref: "file"
-    }],    
+    files: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'file',
+        },
+    ],
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

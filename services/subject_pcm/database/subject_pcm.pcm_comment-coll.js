@@ -1,14 +1,16 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("pcm_comment", {
+module.exports = DATABASE_MIDDLEWARE('pcm_comment', {
     //_________User có quyền truy cập
-    accessUsers: [{
-        type: Schema.Types.ObjectId,
-        ref: "user"
-    }],
+    accessUsers: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     /**
      * Người nhận (cải thiện năng suất)
      * 1-author (khi tạo việc xong thì add vào)
@@ -16,58 +18,62 @@ module.exports  = DATABASE_MIDDLEWARE("pcm_comment", {
      * 3-related (khi thêm người liên quan thì add vào)
      * 4-Người được gửi tới khi tạo phản hồi liên quan của chủ đề
      */
-    receivers: [{
-        type: Schema.Types.ObjectId,
-        ref : "user"
-    }], 
+    receivers: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     /**
      * Những user chưa xem comment
      * - Sẽ xóa user khi bấm xem công việc
      * - Sẽ thêm user khi có thông báo mới
      */
-    news: [{
-        type: Schema.Types.ObjectId,
-        ref: "user"
-    }],   
+    news: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     //_________Công ty của người tạo comment
     companyOfAuthor: {
         type: Schema.Types.ObjectId,
-        ref: 'company'
+        ref: 'company',
     },
     //_________Người tạo comment
     author: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'user'
-    },    
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+    },
     //________Dự án/phòng ban
     project: {
         type: Schema.Types.ObjectId,
-        ref: 'department'
+        ref: 'department',
     },
     //________Nhóm dữ liệu
     group: {
         type: Schema.Types.ObjectId,
-        ref: 'pcm_plan_group'
+        ref: 'pcm_plan_group',
     },
     //_________contractID
     contract: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'contract'
+        type: Schema.Types.ObjectId,
+        ref: 'contract',
     },
     //_________taskID
     task: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'pcm_plan_task'
+        type: Schema.Types.ObjectId,
+        ref: 'pcm_plan_task',
     },
     //_________ID comment cha
     parent: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'pcm_comment'
+        type: Schema.Types.ObjectId,
+        ref: 'pcm_comment',
     },
     //_________ID reply của comment reply cuối (Chi lưu cho comment cha)
     lastestReplyID: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'pcm_comment'
+        type: Schema.Types.ObjectId,
+        ref: 'pcm_comment',
     },
     //_________Nội dung
     content: String,
@@ -87,37 +93,41 @@ module.exports  = DATABASE_MIDDLEWARE("pcm_comment", {
      * Tham khảo Notification
      */
     languageKey: {
-        type: String 
+        type: String,
     },
     /**
      * Phân loại công việc(ispropsal) PCM_PROPOSAL_TASK trong cf_constant
      */
-    subType:{ type: Number, default: 0 },
+    subType: { type: Number, default: 0 },
     //_________Đánh dấu chính thức
     official: { type: Boolean, default: false },
     //_________File đính kèm
-    files: [{
-        type: Schema.Types.ObjectId,
-        ref : "file"
-    }],
+    files: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'file',
+        },
+    ],
     //_________Các ảnh được đính kèm trong bài viết
-    images: [{
-        type: Schema.Types.ObjectId,
-        ref: 'file'
-    }],
+    images: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'file',
+        },
+    ],
     //_________Số lượng comment con của comment cha
     amountCommentReply: {
-        type    :  Number,
-        default : 0
+        type: Number,
+        default: 0,
     },
     //_________Số lượng reaction con của comment cha
     amountReaction: {
-        type    :  Number,
-        default : 0
+        type: Number,
+        default: 0,
     },
     //_________Người cập nhật comment
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : "user"
-    }
+        ref: 'user',
+    },
 })

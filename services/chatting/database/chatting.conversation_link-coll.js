@@ -1,22 +1,22 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("message_conversation_link", {
+module.exports = DATABASE_MIDDLEWARE('message_conversation_link', {
     conversation: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'message_conversation'
+        type: Schema.Types.ObjectId,
+        ref: 'message_conversation',
     },
     message: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'message_message'
+        type: Schema.Types.ObjectId,
+        ref: 'message_message',
     },
     link: {
-        type: String
+        type: String,
     },
-	author: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'user'
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
     },
 })

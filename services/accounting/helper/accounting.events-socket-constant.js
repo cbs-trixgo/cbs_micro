@@ -1,4 +1,4 @@
-const ACCOUNTING = 'ACCOUNTING';
+const ACCOUNTING = 'ACCOUNTING'
 
 // danh sách events socket
 exports.EVENT_SOCKET_CONSTANT_ACCOUNTING = {

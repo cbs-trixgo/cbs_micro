@@ -1,11 +1,11 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * DATAHUB MẪU (BÁO CÁO,...)
  */
-module.exports  = DATABASE_MIDDLEWARE("datahub_template", {
+module.exports = DATABASE_MIDDLEWARE('datahub_template', {
     /**
      * Phân loại
      */
@@ -21,17 +21,17 @@ module.exports  = DATABASE_MIDDLEWARE("datahub_template", {
     //_________File đính kèm
     file: {
         type: Schema.Types.ObjectId,
-        ref: "file"
-    },    
+        ref: 'file',
+    },
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

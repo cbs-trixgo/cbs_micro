@@ -7,5 +7,5 @@ exports.templateInfoAccount = (fullName, pwd) => {
         <hr>
         <p><i>Email này được gửi từ hệ thống Trixgo. <span style="color: orange;">Vui lòng bấm Star (*)</span> để nhận được các email quan trọng khác liên quan tới bạn</i></p>
         <p><i>This email is sent from Trixgo. <span style="color: orange;">Please click Star (*)</span> to receive other important email relate to you</i></p>
-    `;
+    `
 }

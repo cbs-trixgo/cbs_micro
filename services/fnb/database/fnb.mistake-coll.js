@@ -1,4 +1,4 @@
-"use strict";
+'use strict'
 /**
  * QUẢN LÝ LỖI GẶP PHẢI CỦA CÁC ĐƠN HÀNG
  * 1-Lỗi do kiểm soát nội bộ phát hiện ra
@@ -6,34 +6,34 @@
  * 2.1-Nằm theo đơn hàng
  * 2.2-Nằm theo từng sản phẩm cụ thể
  */
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("fnb_mistake", {
+module.exports = DATABASE_MIDDLEWARE('fnb_mistake', {
     //_________Công ty (Lấy từ orderID)
     company: {
         type: Schema.Types.ObjectId,
-        ref: 'company'
+        ref: 'company',
     },
     //_________Đơn vị cơ sở/Cửa hàng (Lấy từ orderID)
     funda: {
         type: Schema.Types.ObjectId,
-        ref : "funda"
+        ref: 'funda',
     },
     //_________Đơn hàng gặp lỗi (add lỗi theo từng đơn hàng)
     order: {
         type: Schema.Types.ObjectId,
-        ref : "fnb_order"
+        ref: 'fnb_order',
     },
     //_________Mã khách (để biết các lỗi mà hay gặp ở khách để sau lưu ý)
     customer: {
         type: Schema.Types.ObjectId,
-        ref: "contact"
+        ref: 'contact',
     },
     //_________Người quản lý (lấy từ funda)
     manager: {
         type: Schema.Types.ObjectId,
-        ref : "user"
+        ref: 'user',
     },
     /**
      * Phân loại lỗi
@@ -42,22 +42,22 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_mistake", {
      */
     type: {
         type: Number,
-        default: 1
+        default: 1,
     },
     //_________Lỗi mắc phải
     mistake: {
         type: Schema.Types.ObjectId,
-        ref: "doctype"
+        ref: 'doctype',
     },
     //_________Người mắc lỗi
     executor: {
         type: Schema.Types.ObjectId,
-        ref : "user"
+        ref: 'user',
     },
     //_________Lần mắc lỗi/cùng một lỗi
     number: {
         type: Number,
-        default: 1
+        default: 1,
     },
     //_________Ghi chú xử lý lỗi
     note: String,
@@ -68,32 +68,34 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_mistake", {
      */
     status: {
         type: Number,
-        default: 1
+        default: 1,
     },
     //_________Giá trị phạt
     amount: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //_________Giá trị thưởng
     bonus: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //_________File/ảnh đính kèm
-    files: [{
-        type: Schema.Types.ObjectId,
-        ref: "file"
-    }],
+    files: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'file',
+        },
+    ],
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

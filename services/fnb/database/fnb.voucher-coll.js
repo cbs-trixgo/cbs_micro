@@ -1,21 +1,21 @@
-"use strict";
+'use strict'
 /**
  * VOUCHER-MÃ GIẢM GIÁ
  */
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("fnb_voucher", {
+module.exports = DATABASE_MIDDLEWARE('fnb_voucher', {
     //_________Mã hiệu voucher
-    suid : {
-        type   : String,
-        require:  true,
-        unique : true
+    suid: {
+        type: String,
+        require: true,
+        unique: true,
     },
     //_________Công ty
     company: {
         type: Schema.Types.ObjectId,
-        ref: 'company'
+        ref: 'company',
     },
     /**
      * Template
@@ -24,8 +24,8 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_voucher", {
      */
     template: {
         type: Number,
-        default: 1
-    }, 
+        default: 1,
+    },
     /**
      * Phân loại
      * 1-Thông thường/các dịp lễ tết
@@ -37,8 +37,8 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_voucher", {
      */
     type: {
         type: Number,
-        default: 1
-    }, 
+        default: 1,
+    },
     //_________Nội dung
     name: String,
     //_________Mã hiệu
@@ -48,37 +48,41 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_voucher", {
     //_________Người giới thiệu (BỎ)
     referrer: {
         type: Schema.Types.ObjectId,
-        ref : 'contact' 
+        ref: 'contact',
     },
     //_________Dành cho khách hàng (BỎ)
     customer: {
         type: Schema.Types.ObjectId,
-        ref: "contact"
+        ref: 'contact',
     },
     //_________Người nhận
-    receivers: [{
-        type: Schema.Types.ObjectId,
-        ref: "contact"
-    }],
+    receivers: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'contact',
+        },
+    ],
     //_________Người sử dụng
-    buyers: [{
-        type: Schema.Types.ObjectId,
-        ref: "contact"
-    }],
+    buyers: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'contact',
+        },
+    ],
     //_________Giá trị đơn hàng tối thiểu để được áp dụng voucher
     minOrderAmount: {
         type: Number,
-        default: 0
-    },  
+        default: 0,
+    },
     //______Giá trị giảm giá của voucher/amount đơn hàng
     salesoffAmount: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Tỷ lệ giảm giá (%)/amount đơn hàng
     salesoffRate: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //_________Thời hạn sử dụng Voucher
     expired: Date,
@@ -89,27 +93,29 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_voucher", {
      */
     status: {
         type: Number,
-        default: 1
+        default: 1,
     },
     //______Tỷ lệ chuyển đổi
     conversionRate: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //_________Thành viên truy cập
-    members: [{
-        type: Schema.Types.ObjectId,
-        ref: "user"
-    }],
+    members: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

@@ -1,28 +1,28 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("contract_bill_group", {
+module.exports = DATABASE_MIDDLEWARE('contract_bill_group', {
     //_________ Công ty
     company: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     //_________Dự án
     project: {
         type: Schema.Types.ObjectId,
-        ref : "department"
-    },    
+        ref: 'department',
+    },
     //_________Hợp đồng
     contract: {
         type: Schema.Types.ObjectId,
-        ref : "contract"
+        ref: 'contract',
     },
     //_________Hạng mục
     item: {
         type: Schema.Types.ObjectId,
-        ref : "contract_bill_item"
+        ref: 'contract_bill_item',
     },
     /**
      * THÔNG TIN CĂN BẢN
@@ -47,7 +47,7 @@ module.exports  = DATABASE_MIDDLEWARE("contract_bill_group", {
      * KHỐI LƯỢNG
      */
     //_________Khối lượng
-    quantity: { type: Number, default: 0 }, 
+    quantity: { type: Number, default: 0 },
     /**
      * ĐƠN GIÁ (KHÔNG GỒM VAT)
      */
@@ -61,16 +61,16 @@ module.exports  = DATABASE_MIDDLEWARE("contract_bill_group", {
     //_________Giá trị ước tính còn lại (chưa gồm VAT)
     estimateAmount: { type: Number, default: 0 },
     //_________Giá trị đã nghiệm thu hoàn thành
-    inspecAmount: { type: Number, default: 0 },   
+    inspecAmount: { type: Number, default: 0 },
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

@@ -1,9 +1,9 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("app_role", {
+module.exports = DATABASE_MIDDLEWARE('app_role', {
     /**
      * PHÂN LOẠI NHÓM CHỨC NĂNG
      * 1 - Nhóm chức năng ứng dụng
@@ -14,21 +14,21 @@ module.exports  = DATABASE_MIDDLEWARE("app_role", {
     /**
      * Công ty
      */
-    company: { 
+    company: {
         type: Schema.Types.ObjectId,
-        ref : 'company' 
+        ref: 'company',
     },
     /**
      * Ứng dụng
      */
     app: {
         type: Schema.Types.ObjectId,
-        ref: "app"
+        ref: 'app',
     },
-    
+
     /**
      * Tên nhóm
-     */    
+     */
     name: String,
     /**
      * Mô tả nhóm
@@ -40,15 +40,15 @@ module.exports  = DATABASE_MIDDLEWARE("app_role", {
     members: [
         {
             type: Schema.Types.ObjectId,
-            ref : "user"
-        }
+            ref: 'user',
+        },
     ],
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : "user"
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : "user"
-    }
-})   
+        ref: 'user',
+    },
+})

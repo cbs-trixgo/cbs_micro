@@ -1,15 +1,15 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("media_reaction", {
+module.exports = DATABASE_MIDDLEWARE('media_reaction', {
     /**
-     * Bài viết 
+     * Bài viết
      */
     media: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'media'
+        type: Schema.Types.ObjectId,
+        ref: 'media',
     },
 
     /**
@@ -23,14 +23,14 @@ module.exports  = DATABASE_MIDDLEWARE("media_reaction", {
      */
     type: {
         type: Number,
-        default: 1
+        default: 1,
     },
 
     /**
      *  Người tạo
      */
     author: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'user'
+        type: Schema.Types.ObjectId,
+        ref: 'user',
     },
 })

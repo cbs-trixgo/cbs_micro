@@ -1,8 +1,8 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
 
-const Schema    = require('mongoose').Schema;
+const Schema = require('mongoose').Schema
 /**
  *  ĐƠN VỊ CƠ SỞ
  * - Cập nhật khu vực
@@ -10,7 +10,7 @@ const Schema    = require('mongoose').Schema;
  * - Cập nhật member
  * - Cập nhật kế hoạch chi hàng tháng
  */
-module.exports  = DATABASE_MIDDLEWARE("funda", {
+module.exports = DATABASE_MIDDLEWARE('funda', {
     /**
      * Phân loại sàn
      * 1-Bán tại quán và Food App
@@ -18,22 +18,22 @@ module.exports  = DATABASE_MIDDLEWARE("funda", {
      */
     platform: {
         type: Number,
-        default: 1 
+        default: 1,
     },
     //_________Công ty
     company: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     //_________Thuộc dự án phòng ban
     project: {
         type: Schema.Types.ObjectId,
-        ref : "department"
+        ref: 'department',
     },
     //_________Ngày bắt đầu
     initialDay: {
         type: Date,
-        default: null
+        default: null,
     },
     //_________Tên
     name: String,
@@ -42,7 +42,7 @@ module.exports  = DATABASE_MIDDLEWARE("funda", {
     //_________Mã hiệu
     sign: {
         type: String,
-        default: 'Sign' 
+        default: 'Sign',
     },
     //_________Điện thoại
     phone: String,
@@ -51,7 +51,7 @@ module.exports  = DATABASE_MIDDLEWARE("funda", {
     //_________Ảnh đại diện tài khoản ngân hàng
     bankQrcode: {
         type: Schema.Types.ObjectId,
-        ref: "file"
+        ref: 'file',
     },
     /**
      * Khóa dữ liệu trước khoảng thời gian không cho phép can thiệp:
@@ -67,20 +67,20 @@ module.exports  = DATABASE_MIDDLEWARE("funda", {
      */
     timeAccountingLock: {
         type: Date,
-        default: null
+        default: null,
     },
     //_________Phần tử cha
     parent: {
         type: Schema.Types.ObjectId,
-        ref: "funda"
+        ref: 'funda',
     },
     level: {
         type: Number,
-        default: 1 
+        default: 1,
     },
     amountChilds: {
         type: Number,
-        default: 0
+        default: 0,
     },
     /**
      * Khu vực
@@ -90,35 +90,35 @@ module.exports  = DATABASE_MIDDLEWARE("funda", {
     //_________Tỉnh/Thành phố
     area1: {
         type: Schema.Types.ObjectId,
-        ref : "area"
+        ref: 'area',
     },
     //_________Huyện/Quận
     area2: {
         type: Schema.Types.ObjectId,
-        ref : "area"
+        ref: 'area',
     },
     //_________Xã/Phường
     area3: {
         type: Schema.Types.ObjectId,
-        ref : "area"
+        ref: 'area',
     },
     //_________Link Contact
     contact: {
         type: Schema.Types.ObjectId,
-        ref : "contact"
+        ref: 'contact',
     },
     //_________Link Warehouse
     warehouse: {
         type: Schema.Types.ObjectId,
-        ref : "warehouse"
+        ref: 'warehouse',
     },
-     /**
+    /**
      * LIÊN QUAN TỚI FNB
      */
     //_________Người quản lý
     manager: {
         type: Schema.Types.ObjectId,
-        ref : "user"
+        ref: 'user',
     },
     /**
      * Phân loại trong hệ thống hoặc nhượng quyền (cập nhật theo funda)
@@ -127,8 +127,8 @@ module.exports  = DATABASE_MIDDLEWARE("funda", {
      */
     internal: {
         type: Number,
-        default: 1
-    },  
+        default: 1,
+    },
     /**
      * Bật chiến dịch truyền thông/marketing
      * 1-Không bật
@@ -136,24 +136,26 @@ module.exports  = DATABASE_MIDDLEWARE("funda", {
      */
     campaign: {
         type: Number,
-        default: 1
-    },  
+        default: 1,
+    },
     /**
      * Tên chiến dịch (type=20)
      * - Gán chiến dịch đang hiện hành để đo lường
      */
-    activeCampaign: [{
-        type: Schema.Types.ObjectId,
-        ref : 'doctype'
-    }], 
+    activeCampaign: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'doctype',
+        },
+    ],
     //______Tỷ lệ tích lũy
     loyaltyPointsRate: {
-        type: Number
+        type: Number,
     },
     //______Điểm tích lũy
     loyaltyPoints: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //_________Số lượng lỗi
     numberOfMistakes: { type: Number, default: 0 },
@@ -174,124 +176,124 @@ module.exports  = DATABASE_MIDDLEWARE("funda", {
     //______Tổng doanh số
     total: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Thành tiền (đã trừ giảm giá, Chiết khấu)
     amount: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______VAT thành tiền
     vatAmount: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Số lượng sản phẩm (Không tính với product là Topping)
     numberOfProducts: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //______Số đơn hàng
     numberOfOrders: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //______Tiền mặt
     cash: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Số đơn Off
     numberOfOrders1: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //______Số đơn Grab Food
     numberOfOrders2: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //______Số đơn Shopee Food
     numberOfOrders3: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //______Số đơn Gojek
     numberOfOrders4: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //______Số đơn Baemin
     numberOfOrders5: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //______Số đơn Loship
     numberOfOrders6: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //______Số đơn Bee
     numberOfOrders7: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //______Số đơn TikTok Shop
     numberOfOrders8: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //______Số đơn Shopee
     numberOfOrders9: {
         type: Number,
-        default: 0
+        default: 0,
     },
     total1: {
         type: Number,
-        default : 0
+        default: 0,
     },
     total2: {
         type: Number,
-        default : 0
+        default: 0,
     },
     total3: {
         type: Number,
-        default : 0
+        default: 0,
     },
     total4: {
         type: Number,
-        default : 0
+        default: 0,
     },
     total5: {
         type: Number,
-        default : 0
+        default: 0,
     },
     total6: {
         type: Number,
-        default : 0
+        default: 0,
     },
     total7: {
         type: Number,
-        default : 0
+        default: 0,
     },
     total8: {
         type: Number,
-        default : 0
+        default: 0,
     },
     total9: {
         type: Number,
-        default : 0
+        default: 0,
     },
     /**
      * Số lượng Size M, L
      */
     numberOfOpeningSizeM: {
         type: Number,
-        default: 0
+        default: 0,
     },
     numberOfOpeningSizeL: {
         type: Number,
-        default: 0
+        default: 0,
     },
     /**
      * CẤU TRÚC CHI PHÍ DỰ TRÙ/THÁNG
@@ -323,33 +325,41 @@ module.exports  = DATABASE_MIDDLEWARE("funda", {
     /**
      * PHÂN QUYỀN TRUY CẬP
      */
-    admins: [{
-        type: Schema.Types.ObjectId,
-        ref : "user"
-    }],
-    members: [{
-        type: Schema.Types.ObjectId,
-        ref : "user"
-    }],
+    admins: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
+    members: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     //_________User đăng ký nhận thông báo
-    getNotification: [{
-        type: Schema.Types.ObjectId,
-        ref : "user"
-    }],
+    getNotification: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     //_________Ảnh đại diện
-    images: [{
-        type: Schema.Types.ObjectId,
-        ref: "file"
-    }],
+    images: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'file',
+        },
+    ],
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
 })

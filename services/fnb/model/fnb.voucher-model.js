@@ -1,38 +1,36 @@
-"use strict";
+'use strict'
 
-const BaseModel                         = require('../../../tools/db/base_model');
-const { checkObjectIDs, IsJsonString }
-                                        = require('../../../tools/utils/utils');
-const stringUtils					    = require('../../../tools/utils/string_utils');
-const { KEY_ERROR }			            = require('../../../tools/keys');
-const ObjectID                          = require('mongoose').Types.ObjectId;
+const BaseModel = require('../../../tools/db/base_model')
+const { checkObjectIDs, IsJsonString } = require('../../../tools/utils/utils')
+const stringUtils = require('../../../tools/utils/string_utils')
+const { KEY_ERROR } = require('../../../tools/keys')
+const ObjectID = require('mongoose').Types.ObjectId
 
-const { RANGE_BASE_PAGINATION_V2 } 	    = require('../../../tools/cursor_base/playground/index');
+const {
+    RANGE_BASE_PAGINATION_V2,
+} = require('../../../tools/cursor_base/playground/index')
 
-const XlsxPopulate                      = require('xlsx-populate');
-const fs                                = require('fs');
-const path                              = require('path');
-const { uploadFileS3 }                  = require('../../../tools/s3');
+const XlsxPopulate = require('xlsx-populate')
+const fs = require('fs')
+const path = require('path')
+const { uploadFileS3 } = require('../../../tools/s3')
 
 /**s
  * import inter-coll, exter-coll
  */
-const ITEM__FUNDA_COLL            		= require('../../item/database/item.funda-coll');
-const FNB_PRODUCT_COLL                  = require('../database/fnb.product-coll');
-const ITEM__CONTACT_COLL            	= require('../../item/database/item.contact-coll'); 
-const FNB_VOUCHER_COLL                  = require('../database/fnb.voucher-coll');
+const ITEM__FUNDA_COLL = require('../../item/database/item.funda-coll')
+const FNB_PRODUCT_COLL = require('../database/fnb.product-coll')
+const ITEM__CONTACT_COLL = require('../../item/database/item.contact-coll')
+const FNB_VOUCHER_COLL = require('../database/fnb.voucher-coll')
 
 /**
  * import inter-model, exter-model
  */
-const { 
-    FNB_ACC,
- } = require('../helper/fnb.keys-constant')
+const { FNB_ACC } = require('../helper/fnb.keys-constant')
 
 class Model extends BaseModel {
-
     constructor() {
-        super(FNB_VOUCHER_COLL);
+        super(FNB_VOUCHER_COLL)
     }
 
     /**
@@ -40,57 +38,86 @@ class Model extends BaseModel {
      * Author: HiepNH
      * Date: 21/3/2023
      */
-    insert({  userID, companyID, template, type, name, note, minOrderAmount, salesoffAmount, salesoffRate, expired, sign }) {
+    insert({
+        userID,
+        companyID,
+        template,
+        type,
+        name,
+        note,
+        minOrderAmount,
+        salesoffAmount,
+        salesoffRate,
+        expired,
+        sign,
+    }) {
         // console.log({ userID, companyID, template, type, name, note, minOrderAmount, salesoffAmount, salesoffRate, expired, sign })
-        return new Promise(async resolve => {
+        return new Promise(async (resolve) => {
             try {
-                if(!checkObjectIDs(companyID) || !name || !sign || !expired )
-                    return resolve({ error: true, message: 'companyID|name|expired invalid', keyError: KEY_ERROR.PARAMS_INVALID })
+                if (!checkObjectIDs(companyID) || !name || !sign || !expired)
+                    return resolve({
+                        error: true,
+                        message: 'companyID|name|expired invalid',
+                        keyError: KEY_ERROR.PARAMS_INVALID,
+                    })
 
-                let infoVoucher = await FNB_VOUCHER_COLL.findOne({ company: companyID, sign: sign })
-                if(infoVoucher)
-                    return resolve({ error: true, message: 'Mã hiệu đã tồn tại' })
+                let infoVoucher = await FNB_VOUCHER_COLL.findOne({
+                    company: companyID,
+                    sign: sign,
+                })
+                if (infoVoucher)
+                    return resolve({
+                        error: true,
+                        message: 'Mã hiệu đã tồn tại',
+                    })
 
-                let suid = await stringUtils.randomAndCheckExists(FNB_VOUCHER_COLL, 'suid')
+                let suid = await stringUtils.randomAndCheckExists(
+                    FNB_VOUCHER_COLL,
+                    'suid'
+                )
 
-                let dataInsert = { 
+                let dataInsert = {
                     suid,
                     company: companyID,
-                    template, 
+                    template,
                     type,
                     name,
-                    sign: sign.replace(/\s/g, ""),
-                    expired, 
+                    sign: sign.replace(/\s/g, ''),
+                    expired,
                     userCreate: userID,
-                    members: [userID]
+                    members: [userID],
                 }
 
-                if(note && note != ""){
+                if (note && note != '') {
                     dataInsert.note = note
                 }
 
-                if(!isNaN(minOrderAmount) && Number(minOrderAmount) >= 0){
+                if (!isNaN(minOrderAmount) && Number(minOrderAmount) >= 0) {
                     dataInsert.minOrderAmount = Number(minOrderAmount)
                 }
-                if(!isNaN(salesoffAmount) && Number(salesoffAmount) >= 0){
+                if (!isNaN(salesoffAmount) && Number(salesoffAmount) >= 0) {
                     dataInsert.salesoffAmount = Number(salesoffAmount)
                 }
-                if(!isNaN(salesoffRate) && Number(salesoffRate) >= 0){
+                if (!isNaN(salesoffRate) && Number(salesoffRate) >= 0) {
                     dataInsert.salesoffRate = Number(salesoffRate)
                 }
-                if(!isNaN(minOrderAmount) && Number(minOrderAmount) >= 0){
+                if (!isNaN(minOrderAmount) && Number(minOrderAmount) >= 0) {
                     dataInsert.minOrderAmount = Number(minOrderAmount)
                 }
 
                 let infoAfterInsert = await this.insertData(dataInsert)
                 if (!infoAfterInsert)
-                    return resolve({ error: true, message: 'Thêm thất bại', keyError: KEY_ERROR.INSERT_FAILED })       
+                    return resolve({
+                        error: true,
+                        message: 'Thêm thất bại',
+                        keyError: KEY_ERROR.INSERT_FAILED,
+                    })
 
                 return resolve({ error: false, data: infoAfterInsert })
             } catch (error) {
                 return resolve({ error: true, message: error.message })
             }
-        });
+        })
     }
 
     /**
@@ -98,172 +125,210 @@ class Model extends BaseModel {
      * Author: HiepNH
      * Date: 21/3/2023
      */
-    update({ option, companyID, userID, voucherID, template, type, name, note, minOrderAmount, salesoffAmount, salesoffRate, expired, sign, receivers, buyers, membersAdd, membersRemove }) {
+    update({
+        option,
+        companyID,
+        userID,
+        voucherID,
+        template,
+        type,
+        name,
+        note,
+        minOrderAmount,
+        salesoffAmount,
+        salesoffRate,
+        expired,
+        sign,
+        receivers,
+        buyers,
+        membersAdd,
+        membersRemove,
+    }) {
         // console.log({ companyID, userID, voucherID, template, type, name, note, minOrderAmount, salesoffAmount, salesoffRate, expired, sign, receivers, buyers, membersAdd, membersRemove })
-        return new Promise(async resolve => {
+        return new Promise(async (resolve) => {
             try {
-                if(!checkObjectIDs(voucherID))
-                    return resolve({ error: true, message: 'voucherID__invalid', keyError: KEY_ERROR.PARAMS_INVALID });
+                if (!checkObjectIDs(voucherID))
+                    return resolve({
+                        error: true,
+                        message: 'voucherID__invalid',
+                        keyError: KEY_ERROR.PARAMS_INVALID,
+                    })
 
-                    let dataUpdate = { userUpdate: userID, modifyAt: new Date() };
-                    let dataAddToset = {};
-                    let dataPullAll  = {};
+                let dataUpdate = { userUpdate: userID, modifyAt: new Date() }
+                let dataAddToset = {}
+                let dataPullAll = {}
 
-                    let infoCheck = await FNB_VOUCHER_COLL.findById(voucherID).select('_id type')
+                let infoCheck =
+                    await FNB_VOUCHER_COLL.findById(voucherID).select(
+                        '_id type'
+                    )
 
-                    if(name && name != ""){
-                        dataUpdate.name = name
-                    }
+                if (name && name != '') {
+                    dataUpdate.name = name
+                }
 
-                    if(sign && sign != ""){
-                        let infoVoucher = await FNB_VOUCHER_COLL.findOne({ 
-                            _id: { $ne: voucherID },
-                            company: companyID, 
-                            sign: sign.replace(/\s/g, "")
+                if (sign && sign != '') {
+                    let infoVoucher = await FNB_VOUCHER_COLL.findOne({
+                        _id: { $ne: voucherID },
+                        company: companyID,
+                        sign: sign.replace(/\s/g, ''),
+                    })
+                    if (infoVoucher)
+                        return resolve({
+                            error: true,
+                            message: 'Mã hiệu đã tồn tại',
                         })
-                        if(infoVoucher)
-                            return resolve({ error: true, message: 'Mã hiệu đã tồn tại' })
 
-                        dataUpdate.sign = sign.replace(/\s/g, "")
-                    }
+                    dataUpdate.sign = sign.replace(/\s/g, '')
+                }
 
-                    if(note && note != ""){
-                        dataUpdate.note = note
-                    }
-    
-                    if(expired && expired != ""){
-                        dataUpdate.expired = expired
-                    }
+                if (note && note != '') {
+                    dataUpdate.note = note
+                }
 
-                    if(!isNaN(template) && Number(template) > 0){
-                        dataUpdate.template = Number(template)
-                    }
+                if (expired && expired != '') {
+                    dataUpdate.expired = expired
+                }
 
-                    if(!isNaN(type) && Number(type) > 0){
-                        dataUpdate.type = Number(type)
-                    }
-    
-                    if(!isNaN(minOrderAmount) && Number(minOrderAmount) >= 0){
-                        dataUpdate.minOrderAmount = Number(minOrderAmount)
-                    }
-                    if(!isNaN(salesoffAmount) && Number(salesoffAmount) >= 0){
-                        dataUpdate.salesoffAmount = Number(salesoffAmount)
-                    }
-                    if(!isNaN(salesoffRate) && Number(salesoffRate) >= 0){
-                        dataUpdate.salesoffRate = Number(salesoffRate)
-                    }
-                    if(!isNaN(minOrderAmount) && Number(minOrderAmount) >= 0){
-                        dataUpdate.minOrderAmount = Number(minOrderAmount)
-                    }
+                if (!isNaN(template) && Number(template) > 0) {
+                    dataUpdate.template = Number(template)
+                }
 
-                    /**
-                     * QUẢN LÝ KHÁCH HÀNG
-                     */
-                    //_________Thêm người nhận voucher
-                    if(checkObjectIDs(receivers)){
-                        // console.log('=========1111111111111111111')
-                        if(option && option == 1){
-                            // console.log('=========222222222222222222')
-                            // Không cho phép Import excel với Voucher tặng người giới thiệu hoặc khách mới
-                            if(Number(infoCheck.type) != 2 && Number(infoCheck.type) != 3){
-                                dataAddToset = {
-                                    ...dataAddToset,
-                                    receivers
-                                }
-                            }
-                        }else{
-                            // console.log('=========333333333333333')
+                if (!isNaN(type) && Number(type) > 0) {
+                    dataUpdate.type = Number(type)
+                }
+
+                if (!isNaN(minOrderAmount) && Number(minOrderAmount) >= 0) {
+                    dataUpdate.minOrderAmount = Number(minOrderAmount)
+                }
+                if (!isNaN(salesoffAmount) && Number(salesoffAmount) >= 0) {
+                    dataUpdate.salesoffAmount = Number(salesoffAmount)
+                }
+                if (!isNaN(salesoffRate) && Number(salesoffRate) >= 0) {
+                    dataUpdate.salesoffRate = Number(salesoffRate)
+                }
+                if (!isNaN(minOrderAmount) && Number(minOrderAmount) >= 0) {
+                    dataUpdate.minOrderAmount = Number(minOrderAmount)
+                }
+
+                /**
+                 * QUẢN LÝ KHÁCH HÀNG
+                 */
+                //_________Thêm người nhận voucher
+                if (checkObjectIDs(receivers)) {
+                    // console.log('=========1111111111111111111')
+                    if (option && option == 1) {
+                        // console.log('=========222222222222222222')
+                        // Không cho phép Import excel với Voucher tặng người giới thiệu hoặc khách mới
+                        if (
+                            Number(infoCheck.type) != 2 &&
+                            Number(infoCheck.type) != 3
+                        ) {
                             dataAddToset = {
                                 ...dataAddToset,
-                                receivers
+                                receivers,
                             }
                         }
-                    }
-
-                    //_________Người đã sử dụng voucher
-                    if(checkObjectIDs(buyers)){
+                    } else {
+                        // console.log('=========333333333333333')
                         dataAddToset = {
                             ...dataAddToset,
-                            buyers
+                            receivers,
                         }
                     }
+                }
 
-                    //_________Thành viên truy cập
-                    if(checkObjectIDs(membersAdd)){
-                        dataAddToset = {
-                            ...dataAddToset,
-                            members: membersAdd
-                        }
+                //_________Người đã sử dụng voucher
+                if (checkObjectIDs(buyers)) {
+                    dataAddToset = {
+                        ...dataAddToset,
+                        buyers,
                     }
+                }
 
-                    //_________Xoá thành viên
-                    if(checkObjectIDs(membersRemove)){
-                        dataPullAll = {
-                            ...dataPullAll,
-                            members: membersRemove
-                        }
+                //_________Thành viên truy cập
+                if (checkObjectIDs(membersAdd)) {
+                    dataAddToset = {
+                        ...dataAddToset,
+                        members: membersAdd,
                     }
+                }
 
+                //_________Xoá thành viên
+                if (checkObjectIDs(membersRemove)) {
+                    dataPullAll = {
+                        ...dataPullAll,
+                        members: membersRemove,
+                    }
+                }
+
+                /**
+                 * Cập nhật nhiều dữ liệu addToSet cùng 1 lúc
+                 */
+                if (dataAddToset) {
+                    dataUpdate.$addToSet = dataAddToset
+                }
+                // console.log(dataUpdate)
+
+                /**
+                 * Xóa nhiều dữ liệu cùng 1 lúc
+                 */
+                if (dataPullAll) {
+                    dataUpdate.$pullAll = dataPullAll
+                }
+
+                let infoAfterUpdate = await FNB_VOUCHER_COLL.findByIdAndUpdate(
+                    voucherID,
+                    dataUpdate,
+                    { new: true }
+                )
+                if (!infoAfterUpdate)
+                    return resolve({
+                        error: true,
+                        message: 'Cập nhật thất bại',
+                        keyError: KEY_ERROR.UPDATE_FAILED,
+                    })
+
+                if (dataAddToset) {
                     /**
-                     * Cập nhật nhiều dữ liệu addToSet cùng 1 lúc
+                     * KIỂM TRA ĐỂ ĐẢM BẢO
+                     * 1-Khách hàng chỉ đc nhận và sử dụng VoucherID 1 lần
                      */
-                    if(dataAddToset){
-                        dataUpdate.$addToSet = dataAddToset;
-                    }
-                    // console.log(dataUpdate)
 
-                    /**
-                     * Xóa nhiều dữ liệu cùng 1 lúc
-                     */
-                    if(dataPullAll){
-                        dataUpdate.$pullAll = dataPullAll;
-                    }
+                    // Cập nhật vào Người nhận
+                    if (checkObjectIDs(receivers)) {
+                        // Cấp phát voucher
+                        await ITEM__CONTACT_COLL.updateMany(
+                            { _id: { $in: receivers } },
+                            { $addToSet: { getVouchers: voucherID } }
+                        )
 
-                    let infoAfterUpdate = await FNB_VOUCHER_COLL.findByIdAndUpdate(voucherID, dataUpdate, { new: true });
-                    if (!infoAfterUpdate)
-                        return resolve({ error: true, message: 'Cập nhật thất bại', keyError: KEY_ERROR.UPDATE_FAILED });
-
-                    if(dataAddToset){
-                        /**
-                         * KIỂM TRA ĐỂ ĐẢM BẢO
-                         * 1-Khách hàng chỉ đc nhận và sử dụng VoucherID 1 lần
-                         */
-
-                        // Cập nhật vào Người nhận
-                        if(checkObjectIDs(receivers)){
-                            // Cấp phát voucher
-                            await ITEM__CONTACT_COLL.updateMany(
-                                {_id: { $in: receivers }},
-                                { $addToSet:
-                                    { getVouchers: voucherID },
-                                },
-                            )
-
-                            // Đánh dấu phân loại chiến dịch
-                            await ITEM__CONTACT_COLL.updateMany(
-                                { _id: { $in: receivers }, campaignType: {$exists: false}},
-                                { 
-                                    $set: {campaignType: voucherID}
-                                },
-                            )
-                        }
-
-                        // Cập nhật vào Người sử dụng
-                        if(checkObjectIDs(buyers)){
-                            await ITEM__CONTACT_COLL.updateMany(
-                                {_id: { $in: buyers }},
-                                { $addToSet:
-                                    { usedVouchers: voucherID },
-                                },
-                            )
-                        }
+                        // Đánh dấu phân loại chiến dịch
+                        await ITEM__CONTACT_COLL.updateMany(
+                            {
+                                _id: { $in: receivers },
+                                campaignType: { $exists: false },
+                            },
+                            {
+                                $set: { campaignType: voucherID },
+                            }
+                        )
                     }
 
-                    return resolve({ error: false, data: infoAfterUpdate });
+                    // Cập nhật vào Người sử dụng
+                    if (checkObjectIDs(buyers)) {
+                        await ITEM__CONTACT_COLL.updateMany(
+                            { _id: { $in: buyers } },
+                            { $addToSet: { usedVouchers: voucherID } }
+                        )
+                    }
+                }
+
+                return resolve({ error: false, data: infoAfterUpdate })
             } catch (error) {
                 return resolve({ error: true, message: error.message })
             }
-        });
+        })
     }
 
     /**
@@ -271,58 +336,82 @@ class Model extends BaseModel {
      * Author: HiepNH
      * Date: 21/3/2023
      */
-    getInfo({ companyID, voucherID, sign, select, populates={} }) {
+    getInfo({ companyID, voucherID, sign, select, populates = {} }) {
         // console.log({ companyID, voucherID, sign, select })
         // console.log({ sign: sign.replace(/\s/g, "") })
-        return new Promise(async resolve => {
+        return new Promise(async (resolve) => {
             try {
-                if(voucherID){
-                    if(!checkObjectIDs(voucherID))
-                        return resolve({ error: true, message: 'param_invalid' });
+                if (voucherID) {
+                    if (!checkObjectIDs(voucherID))
+                        return resolve({
+                            error: true,
+                            message: 'param_invalid',
+                        })
 
                     // populate
-                    if(populates && typeof populates === 'string'){
-                        if(!IsJsonString(populates))
-                            return resolve({ error: true, message: 'Request params populates invalid', status: 400 });
+                    if (populates && typeof populates === 'string') {
+                        if (!IsJsonString(populates))
+                            return resolve({
+                                error: true,
+                                message: 'Request params populates invalid',
+                                status: 400,
+                            })
 
-                        populates = JSON.parse(populates);
-                    }else{
+                        populates = JSON.parse(populates)
+                    } else {
                         populates = {
-                            path: "",
-                            select: ""
+                            path: '',
+                            select: '',
                         }
                     }
 
                     let info = await FNB_VOUCHER_COLL.findById(voucherID)
-                                        .select(select)
-                                        .populate(populates)
-                    if (!info) return resolve({ error: true, message: 'cannot_get', keyError: KEY_ERROR.GET_INFO_FAILED })
+                        .select(select)
+                        .populate(populates)
+                    if (!info)
+                        return resolve({
+                            error: true,
+                            message: 'cannot_get',
+                            keyError: KEY_ERROR.GET_INFO_FAILED,
+                        })
 
                     return resolve({ error: false, data: info })
-                }else{
+                } else {
                     // populate
-                    if(populates && typeof populates === 'string'){
-                        if(!IsJsonString(populates))
-                            return resolve({ error: true, message: 'Request params populates invalid', status: 400 });
+                    if (populates && typeof populates === 'string') {
+                        if (!IsJsonString(populates))
+                            return resolve({
+                                error: true,
+                                message: 'Request params populates invalid',
+                                status: 400,
+                            })
 
-                        populates = JSON.parse(populates);
-                    }else{
+                        populates = JSON.parse(populates)
+                    } else {
                         populates = {
-                            path: "",
-                            select: ""
+                            path: '',
+                            select: '',
                         }
                     }
 
-                    let info = await FNB_VOUCHER_COLL.findOne({ company: companyID, sign: sign.replace(/\s/g, "") })
-                                        .select(select)
-                                        .populate(populates)
-                    if (!info) return resolve({ error: true, message: 'cannot_get', keyError: KEY_ERROR.GET_INFO_FAILED })
+                    let info = await FNB_VOUCHER_COLL.findOne({
+                        company: companyID,
+                        sign: sign.replace(/\s/g, ''),
+                    })
+                        .select(select)
+                        .populate(populates)
+                    if (!info)
+                        return resolve({
+                            error: true,
+                            message: 'cannot_get',
+                            keyError: KEY_ERROR.GET_INFO_FAILED,
+                        })
                     return resolve({ error: false, data: info })
                 }
             } catch (error) {
                 return resolve({ error: true, message: error.message })
             }
-        });
+        })
     }
 
     /**
@@ -330,42 +419,53 @@ class Model extends BaseModel {
      * Author: HiepNH
      * Date: 21/3/2023
      */
-    getList({ companyID, userID, customerID, template, type, keyword, limit=50, lastestID, select, populates, isMember }) {
+    getList({
+        companyID,
+        userID,
+        customerID,
+        template,
+        type,
+        keyword,
+        limit = 50,
+        lastestID,
+        select,
+        populates,
+        isMember,
+    }) {
         // console.log({ companyID, userID, customerID, template, type, keyword, limit, lastestID, select, populates })
         return new Promise(async (resolve) => {
             try {
-                if(Number(limit) > 50){
-                    limit = 50;
-                } else{
-                    limit = +Number(limit);
+                if (Number(limit) > 50) {
+                    limit = 50
+                } else {
+                    limit = +Number(limit)
                 }
 
-                let conditionObj = { }
-                let sortBy;
-                let keys	 = ['salesoffAmount__-1', 'createAt__-1'];
+                let conditionObj = {}
+                let sortBy
+                let keys = ['salesoffAmount__-1', 'createAt__-1']
                 // let keys	 = ['createAt__-1', '_id__-1'];
 
-                if(customerID && checkObjectIDs(customerID)){
-
+                if (customerID && checkObjectIDs(customerID)) {
                     // Danh sách các voucher của customerID chưa sử dụng và Còn thời hạn
                     conditionObj.expired = {
-                        $gt: new Date()
+                        $gt: new Date(),
                     }
-                    conditionObj.receivers = { $in: [customerID]}
-                    conditionObj.buyers = { $nin: [customerID]}
-                }else{
+                    conditionObj.receivers = { $in: [customerID] }
+                    conditionObj.buyers = { $nin: [customerID] }
+                } else {
                     conditionObj.company = ObjectID(companyID)
                 }
 
-                if(type && !isNaN(type)){
+                if (type && !isNaN(type)) {
                     conditionObj.type = Number(type)
                 }
 
-                if(template && !isNaN(template)){
+                if (template && !isNaN(template)) {
                     conditionObj.template = Number(template)
                 }
 
-                if(isMember && isMember == 1){
+                if (isMember && isMember == 1) {
                     conditionObj.members = { $in: [userID] }
                 }
                 // console.log(conditionObj)
@@ -373,22 +473,26 @@ class Model extends BaseModel {
                 /**
                  * ĐIỀU KIỆN KHÁC
                  */
-                if(populates && typeof populates === 'string'){
-                    if(!IsJsonString(populates))
-                        return resolve({ error: true, message: 'Request params populates invalid', status: 400 });
+                if (populates && typeof populates === 'string') {
+                    if (!IsJsonString(populates))
+                        return resolve({
+                            error: true,
+                            message: 'Request params populates invalid',
+                            status: 400,
+                        })
 
-                    populates = JSON.parse(populates);
-                } else{
+                    populates = JSON.parse(populates)
+                } else {
                     populates = {
-                        path: "",
-                        select: ""
+                        path: '',
+                        select: '',
                     }
                 }
 
-                if(keyword){
-                    keyword = keyword.split(" ");
-                    keyword = '.*' + keyword.join(".*") + '.*';
-                    let regExpSearch = RegExp(keyword, 'i');
+                if (keyword) {
+                    keyword = keyword.split(' ')
+                    keyword = '.*' + keyword.join('.*') + '.*'
+                    let regExpSearch = RegExp(keyword, 'i')
                     // conditionObj.name = regExpSearch;
                     conditionObj.$or = [
                         { name: regExpSearch },
@@ -396,265 +500,541 @@ class Model extends BaseModel {
                     ]
                 }
 
-                if(select && typeof select === 'string'){
-                    if(!IsJsonString(select))
-                        return resolve({ error: true, message: 'Request params select invalid', status: 400 });
+                if (select && typeof select === 'string') {
+                    if (!IsJsonString(select))
+                        return resolve({
+                            error: true,
+                            message: 'Request params select invalid',
+                            status: 400,
+                        })
 
-                    select = JSON.parse(select);
+                    select = JSON.parse(select)
                 }
 
                 // console.log(populates)
                 // console.log(conditionObj)
 
-                let conditionObjOrg = { ...conditionObj };
-                if(lastestID && checkObjectIDs(lastestID)){
-                    let infoData = await FNB_VOUCHER_COLL.findById(lastestID);
-                    if(!infoData)
-                        return resolve({ error: true, message: "Can't get info last message", status: 400 });
+                let conditionObjOrg = { ...conditionObj }
+                if (lastestID && checkObjectIDs(lastestID)) {
+                    let infoData = await FNB_VOUCHER_COLL.findById(lastestID)
+                    if (!infoData)
+                        return resolve({
+                            error: true,
+                            message: "Can't get info last message",
+                            status: 400,
+                        })
 
-                    let dataPagingAndSort = RANGE_BASE_PAGINATION_V2({ keys, latestRecord: infoData, objectQuery: conditionObjOrg });
-                    if(!dataPagingAndSort || dataPagingAndSort.error)
-                        return resolve({ error: true, message: "Can't get range pagination", status: 400 });
-                    conditionObj  = dataPagingAndSort.data.find;
-                    sortBy        = dataPagingAndSort.data.sort;
-                }else{
-                    let dataPagingAndSort = RANGE_BASE_PAGINATION_V2({ keys, latestRecord: null, objectQuery: conditionObjOrg });
-                    sortBy                = dataPagingAndSort.data.sort;
+                    let dataPagingAndSort = RANGE_BASE_PAGINATION_V2({
+                        keys,
+                        latestRecord: infoData,
+                        objectQuery: conditionObjOrg,
+                    })
+                    if (!dataPagingAndSort || dataPagingAndSort.error)
+                        return resolve({
+                            error: true,
+                            message: "Can't get range pagination",
+                            status: 400,
+                        })
+                    conditionObj = dataPagingAndSort.data.find
+                    sortBy = dataPagingAndSort.data.sort
+                } else {
+                    let dataPagingAndSort = RANGE_BASE_PAGINATION_V2({
+                        keys,
+                        latestRecord: null,
+                        objectQuery: conditionObjOrg,
+                    })
+                    sortBy = dataPagingAndSort.data.sort
                 }
 
                 let infoDataAfterGet = await FNB_VOUCHER_COLL.find(conditionObj)
-                    .limit(limit+1)
+                    .limit(limit + 1)
                     .sort(sortBy)
                     .select(select)
                     .populate(populates)
-                    .lean();
+                    .lean()
 
-                if(!infoDataAfterGet)
-                    return resolve({ error: true, message: "Can't get data", status: 403 });
+                if (!infoDataAfterGet)
+                    return resolve({
+                        error: true,
+                        message: "Can't get data",
+                        status: 403,
+                    })
 
-                let nextCursor	= null;
-                if(infoDataAfterGet && infoDataAfterGet.length){
-                    if(infoDataAfterGet.length > limit){
-                        nextCursor = infoDataAfterGet[limit - 1]?._id;
-                        infoDataAfterGet.length = limit;
+                let nextCursor = null
+                if (infoDataAfterGet && infoDataAfterGet.length) {
+                    if (infoDataAfterGet.length > limit) {
+                        nextCursor = infoDataAfterGet[limit - 1]?._id
+                        infoDataAfterGet.length = limit
                     }
                 }
-                let totalRecord = await FNB_VOUCHER_COLL.count(conditionObjOrg);
-                let totalPage   = Math.ceil(totalRecord/limit);
+                let totalRecord = await FNB_VOUCHER_COLL.count(conditionObjOrg)
+                let totalPage = Math.ceil(totalRecord / limit)
 
-                return resolve({ error: false, data: {
-                    listRecords: infoDataAfterGet,
-                    limit: limit,
-                    totalRecord,
-                    totalPage,
-                    nextCursor,
-                }, status: 200 });
+                return resolve({
+                    error: false,
+                    data: {
+                        listRecords: infoDataAfterGet,
+                        limit: limit,
+                        totalRecord,
+                        totalPage,
+                        nextCursor,
+                    },
+                    status: 200,
+                })
             } catch (error) {
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
 
-     /**
+    /**
      * Name: Download Template Excel
      * Author: HiepNH
      * Date: 21/3/2023
      */
     downloadTemplateExcel({ option, companyID, userID }) {
         // console.log({ option, companyID, userID })
-        return new Promise(async resolve => {
+        return new Promise(async (resolve) => {
             try {
                 /**
                  * TẢI DANH SÁCH KHÁCH HÀNG
                  */
-                if(!option){
+                if (!option) {
                     // Danh sách danh bạ
-                    let listData  = await ITEM__CONTACT_COLL.find({ company: companyID }).select('name phone address note')
-                    .sort({_id: -1})
-                    .limit(200)
+                    let listData = await ITEM__CONTACT_COLL.find({
+                        company: companyID,
+                    })
+                        .select('name phone address note')
+                        .sort({ _id: -1 })
+                        .limit(200)
                     // console.log(listData)
 
                     // Modify the workbook.
-                    XlsxPopulate.fromFileAsync(path.resolve(__dirname, ('../../../files/templates/excels/fnb_voucher_template_import.xlsx')))
-                    .then(async workbook => {
-
-                        var i = 3;
+                    XlsxPopulate.fromFileAsync(
+                        path.resolve(
+                            __dirname,
+                            '../../../files/templates/excels/fnb_voucher_template_import.xlsx'
+                        )
+                    ).then(async (workbook) => {
+                        var i = 3
                         listData?.forEach((item, index) => {
-                            workbook.sheet("ExportContact").row(i).cell(1).value(Number(index+1));
-                            workbook.sheet("ExportContact").row(i).cell(2).value(item.name);
-                            workbook.sheet("ExportContact").row(i).cell(3).value(item.phone);
-                            workbook.sheet("ExportContact").row(i).cell(4).value(item.note);
-                            workbook.sheet("ExportContact").row(i).cell(5).value(`${item._id}`);
-                            workbook.sheet("ExportContact").row(i).cell(6).value(`https://app.winggo.vn/mobile/activity/${item._id}/w6g9o22`).hyperlink(`https://app.winggo.vn/mobile/activity/${item._id}/w6g9o22`)
+                            workbook
+                                .sheet('ExportContact')
+                                .row(i)
+                                .cell(1)
+                                .value(Number(index + 1))
+                            workbook
+                                .sheet('ExportContact')
+                                .row(i)
+                                .cell(2)
+                                .value(item.name)
+                            workbook
+                                .sheet('ExportContact')
+                                .row(i)
+                                .cell(3)
+                                .value(item.phone)
+                            workbook
+                                .sheet('ExportContact')
+                                .row(i)
+                                .cell(4)
+                                .value(item.note)
+                            workbook
+                                .sheet('ExportContact')
+                                .row(i)
+                                .cell(5)
+                                .value(`${item._id}`)
+                            workbook
+                                .sheet('ExportContact')
+                                .row(i)
+                                .cell(6)
+                                .value(
+                                    `https://app.winggo.vn/mobile/activity/${item._id}/w6g9o22`
+                                )
+                                .hyperlink(
+                                    `https://app.winggo.vn/mobile/activity/${item._id}/w6g9o22`
+                                )
 
                             i++
-                        });
+                        })
 
-                        const now = new Date();
-                        const filePath = '../../../files/temporary_uploads/';
-                        const fileName = `template_import_contact_voucher_${now.getTime()}.xlsx`;
-                        const pathWriteFile = path.resolve(__dirname, filePath, fileName);
+                        const now = new Date()
+                        const filePath = '../../../files/temporary_uploads/'
+                        const fileName = `template_import_contact_voucher_${now.getTime()}.xlsx`
+                        const pathWriteFile = path.resolve(
+                            __dirname,
+                            filePath,
+                            fileName
+                        )
 
-                        await workbook.toFileAsync(pathWriteFile);
-                        const result = await uploadFileS3(pathWriteFile, fileName);
+                        await workbook.toFileAsync(pathWriteFile)
+                        const result = await uploadFileS3(
+                            pathWriteFile,
+                            fileName
+                        )
 
-                        fs.unlinkSync(pathWriteFile);
+                        fs.unlinkSync(pathWriteFile)
                         // console.log({ result })
-                        return resolve({ error: false, data: result?.Location, status: 200 });
-                    });
-                }else{
+                        return resolve({
+                            error: false,
+                            data: result?.Location,
+                            status: 200,
+                        })
+                    })
+                } else {
                     /**
                      * TẢI DANH SÁCH NHÂN VIÊN
                      */
-                    if(option == 1){
+                    if (option == 1) {
                         // Danh sách danh bạ
-                        let listData  = await ITEM__CONTACT_COLL.find({ company: companyID, type: 1 })
-                        .select('name funda phone address note')
-                        .populate({
-                            path: 'funda',
-                            select: 'name'
+                        let listData = await ITEM__CONTACT_COLL.find({
+                            company: companyID,
+                            type: 1,
                         })
-                        .sort({_id: -1})
-                        .limit(600)
+                            .select('name funda phone address note')
+                            .populate({
+                                path: 'funda',
+                                select: 'name',
+                            })
+                            .sort({ _id: -1 })
+                            .limit(600)
                         // console.log(listData)
 
                         // Modify the workbook.
-                        XlsxPopulate.fromFileAsync(path.resolve(__dirname, ('../../../files/templates/excels/fnb_voucher_template_import.xlsx')))
-                        .then(async workbook => {
-
-                            var i = 3;
+                        XlsxPopulate.fromFileAsync(
+                            path.resolve(
+                                __dirname,
+                                '../../../files/templates/excels/fnb_voucher_template_import.xlsx'
+                            )
+                        ).then(async (workbook) => {
+                            var i = 3
                             listData?.forEach((item, index) => {
-                                workbook.sheet("ExportContact").row(i).cell(1).value(Number(index+1))
-                                workbook.sheet("ExportContact").row(i).cell(2).value(item.name)
-                                workbook.sheet("ExportContact").row(i).cell(3).value(item.phone)
-                                workbook.sheet("ExportContact").row(i).cell(4).value(item.note)
-                                workbook.sheet("ExportContact").row(i).cell(5).value(`${item._id}`)
-                                workbook.sheet("ExportContact").row(i).cell(6).value(`https://app.winggo.vn/mobile/activity/${item._id}/w6g9o22`).hyperlink(`https://app.winggo.vn/mobile/activity/${item._id}/w6g9o22`)
-                                workbook.sheet("ExportContact").row(i).cell(7).value(`${item?.funda.name}`)
+                                workbook
+                                    .sheet('ExportContact')
+                                    .row(i)
+                                    .cell(1)
+                                    .value(Number(index + 1))
+                                workbook
+                                    .sheet('ExportContact')
+                                    .row(i)
+                                    .cell(2)
+                                    .value(item.name)
+                                workbook
+                                    .sheet('ExportContact')
+                                    .row(i)
+                                    .cell(3)
+                                    .value(item.phone)
+                                workbook
+                                    .sheet('ExportContact')
+                                    .row(i)
+                                    .cell(4)
+                                    .value(item.note)
+                                workbook
+                                    .sheet('ExportContact')
+                                    .row(i)
+                                    .cell(5)
+                                    .value(`${item._id}`)
+                                workbook
+                                    .sheet('ExportContact')
+                                    .row(i)
+                                    .cell(6)
+                                    .value(
+                                        `https://app.winggo.vn/mobile/activity/${item._id}/w6g9o22`
+                                    )
+                                    .hyperlink(
+                                        `https://app.winggo.vn/mobile/activity/${item._id}/w6g9o22`
+                                    )
+                                workbook
+                                    .sheet('ExportContact')
+                                    .row(i)
+                                    .cell(7)
+                                    .value(`${item?.funda.name}`)
 
                                 i++
-                            });
+                            })
 
-                            const now = new Date();
-                            const filePath = '../../../files/temporary_uploads/';
-                            const fileName = `template_import_contact_${now.getTime()}.xlsx`;
-                            const pathWriteFile = path.resolve(__dirname, filePath, fileName);
+                            const now = new Date()
+                            const filePath = '../../../files/temporary_uploads/'
+                            const fileName = `template_import_contact_${now.getTime()}.xlsx`
+                            const pathWriteFile = path.resolve(
+                                __dirname,
+                                filePath,
+                                fileName
+                            )
 
-                            await workbook.toFileAsync(pathWriteFile);
-                            const result = await uploadFileS3(pathWriteFile, fileName);
+                            await workbook.toFileAsync(pathWriteFile)
+                            const result = await uploadFileS3(
+                                pathWriteFile,
+                                fileName
+                            )
 
-                            fs.unlinkSync(pathWriteFile);
-                            return resolve({ error: false, data: result?.Location, status: 200 });
-                        });
+                            fs.unlinkSync(pathWriteFile)
+                            return resolve({
+                                error: false,
+                                data: result?.Location,
+                                status: 200,
+                            })
+                        })
                     }
 
                     /**
                      * TẢI KHÁCH HÀNG ĐÃ BẤM QUAN TÂM ZALO OA
                      */
-                    if(option == 2){
+                    if (option == 2) {
                         // Danh sách danh bạ
-                        let listData  = await ITEM__CONTACT_COLL.find({ company: companyID, getVouchers: {$in: [ObjectID("64378d6618c77f00128abe93")]} })
-                        .select('type name funda phone address note usedVouchers')
-                        .populate({
-                            path: 'funda',
-                            select: 'name'
+                        let listData = await ITEM__CONTACT_COLL.find({
+                            company: companyID,
+                            getVouchers: {
+                                $in: [ObjectID('64378d6618c77f00128abe93')],
+                            },
                         })
-                        .sort({_id: -1})
+                            .select(
+                                'type name funda phone address note usedVouchers'
+                            )
+                            .populate({
+                                path: 'funda',
+                                select: 'name',
+                            })
+                            .sort({ _id: -1 })
                         // .limit(600)
                         // console.log(listData)
 
                         // Modify the workbook.
-                        XlsxPopulate.fromFileAsync(path.resolve(__dirname, ('../../../files/templates/excels/fnb_export_oa_contact.xlsx')))
-                        .then(async workbook => {
-
-                            var i = 3;
+                        XlsxPopulate.fromFileAsync(
+                            path.resolve(
+                                __dirname,
+                                '../../../files/templates/excels/fnb_export_oa_contact.xlsx'
+                            )
+                        ).then(async (workbook) => {
+                            var i = 3
                             listData?.forEach((item, index) => {
-                                workbook.sheet("Data").row(i).cell(1).value(Number(index+1))
-                                workbook.sheet("Data").row(i).cell(2).value(item.name)
-                                workbook.sheet("Data").row(i).cell(3).value(item.phone)
-                                workbook.sheet("Data").row(i).cell(4).value(item.note)
-                                workbook.sheet("Data").row(i).cell(5).value(`${item._id}`)
-                                workbook.sheet("Data").row(i).cell(6).value(`https://app.winggo.vn/mobile/activity/${item._id}/w6g9o22`).hyperlink(`https://app.winggo.vn/mobile/activity/${item._id}/w6g9o22`)
-                                workbook.sheet("Data").row(i).cell(7).value(`${item?.funda.name}`)
-                                if(item?.usedVouchers.includes(ObjectID("64378d6618c77f00128abe93"))){
-                                    workbook.sheet("Data").row(i).cell(8).value(1)
-                                }else{
-                                    workbook.sheet("Data").row(i).cell(8).value(0)
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(1)
+                                    .value(Number(index + 1))
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(2)
+                                    .value(item.name)
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(3)
+                                    .value(item.phone)
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(4)
+                                    .value(item.note)
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(5)
+                                    .value(`${item._id}`)
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(6)
+                                    .value(
+                                        `https://app.winggo.vn/mobile/activity/${item._id}/w6g9o22`
+                                    )
+                                    .hyperlink(
+                                        `https://app.winggo.vn/mobile/activity/${item._id}/w6g9o22`
+                                    )
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(7)
+                                    .value(`${item?.funda.name}`)
+                                if (
+                                    item?.usedVouchers.includes(
+                                        ObjectID('64378d6618c77f00128abe93')
+                                    )
+                                ) {
+                                    workbook
+                                        .sheet('Data')
+                                        .row(i)
+                                        .cell(8)
+                                        .value(1)
+                                } else {
+                                    workbook
+                                        .sheet('Data')
+                                        .row(i)
+                                        .cell(8)
+                                        .value(0)
                                 }
-                                workbook.sheet("Data").row(i).cell(9).value(Number(item.type))
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(9)
+                                    .value(Number(item.type))
 
                                 i++
-                            });
+                            })
 
-                            const now = new Date();
-                            const filePath = '../../../files/temporary_uploads/';
-                            const fileName = `oa_contact_${now.getTime()}.xlsx`;
-                            const pathWriteFile = path.resolve(__dirname, filePath, fileName);
+                            const now = new Date()
+                            const filePath = '../../../files/temporary_uploads/'
+                            const fileName = `oa_contact_${now.getTime()}.xlsx`
+                            const pathWriteFile = path.resolve(
+                                __dirname,
+                                filePath,
+                                fileName
+                            )
 
-                            await workbook.toFileAsync(pathWriteFile);
-                            const result = await uploadFileS3(pathWriteFile, fileName);
+                            await workbook.toFileAsync(pathWriteFile)
+                            const result = await uploadFileS3(
+                                pathWriteFile,
+                                fileName
+                            )
 
-                            fs.unlinkSync(pathWriteFile);
-                            return resolve({ error: false, data: result?.Location, status: 200 });
-                        });
+                            fs.unlinkSync(pathWriteFile)
+                            return resolve({
+                                error: false,
+                                data: result?.Location,
+                                status: 200,
+                            })
+                        })
                     }
-                    
+
                     /**
                      * TẢI KHÁCH HÀNG ĐÃ BẤM QUAN TÂM ZALO OA VÀ CÓ NGÀY SINH NHẬT
                      */
-                    if(option == 3){
+                    if (option == 3) {
                         // Danh sách danh bạ
-                        let listData  = await ITEM__CONTACT_COLL.find({ company: companyID, getVouchers: {$in: [ObjectID("64378d6618c77f00128abe93")]}, birthday: {$exists: true, $ne: null} })
-                        .select('type name funda phone address note usedVouchers birthday')
-                        .populate({
-                            path: 'funda',
-                            select: 'name'
+                        let listData = await ITEM__CONTACT_COLL.find({
+                            company: companyID,
+                            getVouchers: {
+                                $in: [ObjectID('64378d6618c77f00128abe93')],
+                            },
+                            birthday: { $exists: true, $ne: null },
                         })
-                        .sort({_id: -1})
+                            .select(
+                                'type name funda phone address note usedVouchers birthday'
+                            )
+                            .populate({
+                                path: 'funda',
+                                select: 'name',
+                            })
+                            .sort({ _id: -1 })
                         // .limit(600)
                         // console.log(listData)
 
                         // Modify the workbook.
-                        XlsxPopulate.fromFileAsync(path.resolve(__dirname, ('../../../files/templates/excels/fnb_export_oa_contact.xlsx')))
-                        .then(async workbook => {
-
-                            var i = 3;
+                        XlsxPopulate.fromFileAsync(
+                            path.resolve(
+                                __dirname,
+                                '../../../files/templates/excels/fnb_export_oa_contact.xlsx'
+                            )
+                        ).then(async (workbook) => {
+                            var i = 3
                             listData?.forEach((item, index) => {
-                                workbook.sheet("Data").row(i).cell(1).value(Number(index+1))
-                                workbook.sheet("Data").row(i).cell(2).value(item.name)
-                                workbook.sheet("Data").row(i).cell(3).value(item.phone)
-                                workbook.sheet("Data").row(i).cell(4).value(item.note)
-                                workbook.sheet("Data").row(i).cell(5).value(`${item._id}`)
-                                workbook.sheet("Data").row(i).cell(6).value(`https://app.winggo.vn/mobile/activity/${item._id}/w6g9o22`).hyperlink(`https://app.winggo.vn/mobile/activity/${item._id}/w6g9o22`)
-                                workbook.sheet("Data").row(i).cell(7).value(`${item?.funda.name}`)
-                                if(item?.usedVouchers.includes(ObjectID("64378d6618c77f00128abe93"))){
-                                    workbook.sheet("Data").row(i).cell(8).value(1)
-                                }else{
-                                    workbook.sheet("Data").row(i).cell(8).value(0)
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(1)
+                                    .value(Number(index + 1))
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(2)
+                                    .value(item.name)
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(3)
+                                    .value(item.phone)
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(4)
+                                    .value(item.note)
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(5)
+                                    .value(`${item._id}`)
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(6)
+                                    .value(
+                                        `https://app.winggo.vn/mobile/activity/${item._id}/w6g9o22`
+                                    )
+                                    .hyperlink(
+                                        `https://app.winggo.vn/mobile/activity/${item._id}/w6g9o22`
+                                    )
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(7)
+                                    .value(`${item?.funda.name}`)
+                                if (
+                                    item?.usedVouchers.includes(
+                                        ObjectID('64378d6618c77f00128abe93')
+                                    )
+                                ) {
+                                    workbook
+                                        .sheet('Data')
+                                        .row(i)
+                                        .cell(8)
+                                        .value(1)
+                                } else {
+                                    workbook
+                                        .sheet('Data')
+                                        .row(i)
+                                        .cell(8)
+                                        .value(0)
                                 }
-                                workbook.sheet("Data").row(i).cell(9).value(Number(item.type))
-                                workbook.sheet("Data").row(i).cell(10).value(item.birthday)
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(9)
+                                    .value(Number(item.type))
+                                workbook
+                                    .sheet('Data')
+                                    .row(i)
+                                    .cell(10)
+                                    .value(item.birthday)
 
                                 i++
-                            });
+                            })
 
-                            const now = new Date();
-                            const filePath = '../../../files/temporary_uploads/';
-                            const fileName = `oa_contact_${now.getTime()}.xlsx`;
-                            const pathWriteFile = path.resolve(__dirname, filePath, fileName);
+                            const now = new Date()
+                            const filePath = '../../../files/temporary_uploads/'
+                            const fileName = `oa_contact_${now.getTime()}.xlsx`
+                            const pathWriteFile = path.resolve(
+                                __dirname,
+                                filePath,
+                                fileName
+                            )
 
-                            await workbook.toFileAsync(pathWriteFile);
-                            const result = await uploadFileS3(pathWriteFile, fileName);
+                            await workbook.toFileAsync(pathWriteFile)
+                            const result = await uploadFileS3(
+                                pathWriteFile,
+                                fileName
+                            )
 
-                            fs.unlinkSync(pathWriteFile);
-                            return resolve({ error: false, data: result?.Location, status: 200 });
-                        });
+                            fs.unlinkSync(pathWriteFile)
+                            return resolve({
+                                error: false,
+                                data: result?.Location,
+                                status: 200,
+                            })
+                        })
                     }
                 }
-
             } catch (error) {
                 console.log({ error })
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
@@ -666,22 +1046,25 @@ class Model extends BaseModel {
      */
     importFromExcel({ companyID, dataImport, userID, email }) {
         const that = this
-        return new Promise(async resolve => {
+        return new Promise(async (resolve) => {
             try {
-                if(FNB_ACC.bod.includes(email.toString()) || FNB_ACC.cskh.includes(email.toString()) ){
+                if (
+                    FNB_ACC.bod.includes(email.toString()) ||
+                    FNB_ACC.cskh.includes(email.toString())
+                ) {
                     // console.log('=============Có quyền===================')
-                    const dataImportJSON = JSON.parse(dataImport);
+                    const dataImportJSON = JSON.parse(dataImport)
                     // console.log('=============Log data===================');
                     // console.log({ dataImportJSON });
-                    let index = 0;
+                    let index = 0
 
                     let option = Number(dataImportJSON[0].__EMPTY_9)
                     // console.log({ option })
 
-                    if(option == 1){
+                    if (option == 1) {
                         for (const item of dataImportJSON) {
                             // Chỉ lấy dữ liệu từ mẩu tin thứ 2 trở đi
-                            if(index > 0){
+                            if (index > 0) {
                                 let dataInsert = {
                                     companyID,
                                     userID,
@@ -697,42 +1080,53 @@ class Model extends BaseModel {
                                 // console.log(dataInsert)
 
                                 let info = await that.insert(dataInsert)
-                            //    console.log(info)
+                                //    console.log(info)
                             }
-        
-                            index ++;
+
+                            index++
                         }
 
-                        return resolve({ error: false, message: "Import successfull" })
+                        return resolve({
+                            error: false,
+                            message: 'Import successfull',
+                        })
                     }
 
                     // Cấp phát Voucher
-                    if(option == 2){
+                    if (option == 2) {
                         let receivers = []
                         let voucherID = dataImportJSON[0].__EMPTY_3
 
                         for (const item of dataImportJSON) {
                             // Chỉ lấy dữ liệu từ mẩu tin thứ 2 trở đi
-                            if(index > 0){
+                            if (index > 0) {
                                 // console.log(item)
                                 receivers.push(item?.__EMPTY_3)
                             }
-        
-                            index ++;
+
+                            index++
                         }
                         // console.log({voucherID})
                         // console.log(receivers)
-        
-                        await this.update({ userID, voucherID, receivers, option: 1 })
-        
-                        return resolve({ error: false, message: "Import successfull" })
+
+                        await this.update({
+                            userID,
+                            voucherID,
+                            receivers,
+                            option: 1,
+                        })
+
+                        return resolve({
+                            error: false,
+                            message: 'Import successfull',
+                        })
                     }
-                    
+
                     // Tạo danh bạ
-                    if(option == 3){
+                    if (option == 3) {
                         for (const item of dataImportJSON) {
                             // Chỉ lấy dữ liệu từ mẩu tin thứ 2 trở đi
-                            if(index > 0){
+                            if (index > 0) {
                                 let dataInsert = {
                                     authorID: userID,
                                     fundaID: item?.__EMPTY,
@@ -745,22 +1139,34 @@ class Model extends BaseModel {
                                 }
                                 // console.log(dataInsert)
 
-                                let info = await ITEM__CONTACT_MODEL.insert(dataInsert)
+                                let info =
+                                    await ITEM__CONTACT_MODEL.insert(dataInsert)
                                 // console.log(info)
                             }
-        
-                            index ++;
+
+                            index++
                         }
 
-                        return resolve({ error: false, message: "Import successfull" })
+                        return resolve({
+                            error: false,
+                            message: 'Import successfull',
+                        })
                     }
-                }else{
+                } else {
                     // console.log('=============Không có quyền===================')
-                    return resolve({ error: true, message: 'Bạn không có quyền', status: 500 })
+                    return resolve({
+                        error: true,
+                        message: 'Bạn không có quyền',
+                        status: 500,
+                    })
                 }
             } catch (error) {
                 // console.log({ error })
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
@@ -837,7 +1243,7 @@ class Model extends BaseModel {
     // }
 }
 
-exports.MODEL = new Model
+exports.MODEL = new Model()
 
 // Import tại đây để không bị lỗi triệu gọi CHÉO
-const ITEM__CONTACT_MODEL                       = require('../../item/model/item.contact-model').MODEL;
+const ITEM__CONTACT_MODEL = require('../../item/model/item.contact-model').MODEL

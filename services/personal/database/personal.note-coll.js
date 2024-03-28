@@ -1,44 +1,49 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
 /**
  * QUẢN LÝ GHI CHÚ
  */
 
-module.exports  = DATABASE_MIDDLEWARE("note", {
+module.exports = DATABASE_MIDDLEWARE('note', {
     //_________Tác giả
     author: {
         type: Schema.Types.ObjectId,
-        ref : "user"
+        ref: 'user',
     },
     //_________Tiêu đề
     name: String,
     //_________Nội dung
     description: {
         type: String,
-        default: ''
+        default: '',
     },
     //_________Thành viên được chia sẻ
-    members: [{
-        type: Schema.Types.ObjectId,
-        ref: "user"
-    }],
+    members: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
 
     //_________user pin
-    usersPin: [{
-        type: Schema.Types.ObjectId,
-        ref: "user"
-    }],
-    
+    usersPin: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
+
     //_________Note cha
     parent: {
         type: Schema.Types.ObjectId,
-        ref: "note",
+        ref: 'note',
     },
     //_________Xóa vào thùng rác
     trash: {
-        type: Number, default: 0
-    }
+        type: Number,
+        default: 0,
+    },
 })

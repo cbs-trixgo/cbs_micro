@@ -1,60 +1,85 @@
-"use strict";
-const BaseModel                         = require('../../../tools/db/base_model');
-const { checkObjectIDs, IsJsonString }  = require('../../../tools/utils/utils');
-const { isValidDate }                   = require('../../../tools/utils/time_utils');
+'use strict'
+const BaseModel = require('../../../tools/db/base_model')
+const { checkObjectIDs, IsJsonString } = require('../../../tools/utils/utils')
+const { isValidDate } = require('../../../tools/utils/time_utils')
 
-const ObjectID                          = require('mongoose').Types.ObjectId;
-const { CF_DOMAIN_SERVICES } 		    = require('../../gateway/helper/domain.constant');
-const { CF_ACTIONS_ACCOUNTING } 		= require('../../accounting/helper/accounting.actions-constant');
+const ObjectID = require('mongoose').Types.ObjectId
+const { CF_DOMAIN_SERVICES } = require('../../gateway/helper/domain.constant')
+const {
+    CF_ACTIONS_ACCOUNTING,
+} = require('../../accounting/helper/accounting.actions-constant')
 
-const XlsxPopulate                      = require('xlsx-populate');
-const fs                                = require('fs');
-const path                              = require('path');
-const { uploadFileS3 }                  = require('../../../tools/s3');
+const XlsxPopulate = require('xlsx-populate')
+const fs = require('fs')
+const path = require('path')
+const { uploadFileS3 } = require('../../../tools/s3')
 
 /**
  * import inter-coll, exter-coll
  */
-const BUDGET_COLL                      = require('../database/budget-coll');
-const BUDGET__ITEM_COLL                = require('../database/budget.item-coll');
-const BUDGET__GROUP_COLL               = require('../database/budget.group-coll');
-const BUDGET__WORK_COLL                = require('../database/budget.work-coll');
+const BUDGET_COLL = require('../database/budget-coll')
+const BUDGET__ITEM_COLL = require('../database/budget.item-coll')
+const BUDGET__GROUP_COLL = require('../database/budget.group-coll')
+const BUDGET__WORK_COLL = require('../database/budget.work-coll')
 
-const { RANGE_BASE_PAGINATION_V2 } 	    = require('../../../tools/cursor_base/playground/index')
-const { KEY_ERROR }                     = require('../../../tools/keys/index')
+const {
+    RANGE_BASE_PAGINATION_V2,
+} = require('../../../tools/cursor_base/playground/index')
+const { KEY_ERROR } = require('../../../tools/keys/index')
 
 /**
  * import inter-model, exter-model
  */
 class Model extends BaseModel {
     constructor() {
-        super(BUDGET_COLL);
+        super(BUDGET_COLL)
     }
 
     /**
-     * Name: Insert 
+     * Name: Insert
      * Author: Hiepnh
      * Date: 9/4/2022
      */
-    insert({ userID, companyID, type, projectID, contractID, name, sign, description, date, note, revenue, vatRevenue, forecastRevenue, forecastVatRevenue, finalRevenue, finalVatRevenue }) {
+    insert({
+        userID,
+        companyID,
+        type,
+        projectID,
+        contractID,
+        name,
+        sign,
+        description,
+        date,
+        note,
+        revenue,
+        vatRevenue,
+        forecastRevenue,
+        forecastVatRevenue,
+        finalRevenue,
+        finalVatRevenue,
+    }) {
         return new Promise(async (resolve) => {
             try {
-
                 /**
                  * DECALARTION VARIABLE (1)
                  */
-                let dataInsert = { userCreate: userID, company: companyID, admins: [userID], members: [userID] };
+                let dataInsert = {
+                    userCreate: userID,
+                    company: companyID,
+                    admins: [userID],
+                    members: [userID],
+                }
 
                 /**
                  * VALIDATION STEP (2)
                  *  - Kiểm tra valid từ các input
                  *  - Kiểm tra valid từ database (ví dụ: đảm bảo foreign_key hoặc các điều kiện của coll)
                  */
-                if(checkObjectIDs(projectID)){
+                if (checkObjectIDs(projectID)) {
                     dataInsert.project = projectID
                 }
 
-                if(checkObjectIDs(contractID)){
+                if (checkObjectIDs(contractID)) {
                     dataInsert.contract = contractID
                 }
 
@@ -63,74 +88,108 @@ class Model extends BaseModel {
                  * 3.1: Convert type + update name (ví dụ: string -> number)
                  * 3.2: Operation database
                  */
-                if(type && [1,2,3].includes(Number(type))){
-                    dataInsert.type = type;
+                if (type && [1, 2, 3].includes(Number(type))) {
+                    dataInsert.type = type
                 }
 
-                if(name){
-                    dataInsert.name = name;
+                if (name) {
+                    dataInsert.name = name
                 }
 
-                if(sign){
-                    dataInsert.sign = sign;
+                if (sign) {
+                    dataInsert.sign = sign
                 }
 
-                if(description){
-                    dataInsert.description = description;
+                if (description) {
+                    dataInsert.description = description
                 }
 
-                if(date && isValidDate(date)){
-                    dataInsert.date = new Date(date);
+                if (date && isValidDate(date)) {
+                    dataInsert.date = new Date(date)
                 }
 
-                if(note){
-                    dataInsert.note = note;
+                if (note) {
+                    dataInsert.note = note
                 }
 
                 //______Giá trị
-                if(!isNaN(revenue) && Number(revenue) >= 0){
-                    dataInsert.revenue     = revenue;
+                if (!isNaN(revenue) && Number(revenue) >= 0) {
+                    dataInsert.revenue = revenue
                 }
-                if(!isNaN(vatRevenue) && Number(vatRevenue) >= 0){
-                    dataInsert.vatRevenue     = vatRevenue;
+                if (!isNaN(vatRevenue) && Number(vatRevenue) >= 0) {
+                    dataInsert.vatRevenue = vatRevenue
                 }
-                if(!isNaN(forecastRevenue) && Number(forecastRevenue) >= 0){
-                    dataInsert.forecastRevenue     = forecastRevenue;
+                if (!isNaN(forecastRevenue) && Number(forecastRevenue) >= 0) {
+                    dataInsert.forecastRevenue = forecastRevenue
                 }
-                if(!isNaN(forecastVatRevenue) && Number(forecastVatRevenue) >= 0){
-                    dataInsert.forecastVatRevenue     = forecastVatRevenue;
+                if (
+                    !isNaN(forecastVatRevenue) &&
+                    Number(forecastVatRevenue) >= 0
+                ) {
+                    dataInsert.forecastVatRevenue = forecastVatRevenue
                 }
-                if(!isNaN(finalRevenue) && Number(finalRevenue) >= 0){
-                    dataInsert.finalRevenue     = finalRevenue;
+                if (!isNaN(finalRevenue) && Number(finalRevenue) >= 0) {
+                    dataInsert.finalRevenue = finalRevenue
                 }
-                if(!isNaN(finalVatRevenue) && Number(finalVatRevenue) >= 0){
-                    dataInsert.finalVatRevenue     = finalVatRevenue;
+                if (!isNaN(finalVatRevenue) && Number(finalVatRevenue) >= 0) {
+                    dataInsert.finalVatRevenue = finalVatRevenue
                 }
 
-                let infoAfterInsert = await this.insertData(dataInsert);
-                if(!infoAfterInsert)
-                    return resolve({ error: true, message: "Thêm thất bại" , keyError: KEY_ERROR.INSERT_FAILED, status: 403 });
+                let infoAfterInsert = await this.insertData(dataInsert)
+                if (!infoAfterInsert)
+                    return resolve({
+                        error: true,
+                        message: 'Thêm thất bại',
+                        keyError: KEY_ERROR.INSERT_FAILED,
+                        status: 403,
+                    })
 
-                return resolve({ error: false, data: infoAfterInsert, status: 200 });
+                return resolve({
+                    error: false,
+                    data: infoAfterInsert,
+                    status: 200,
+                })
             } catch (error) {
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
 
     /**
-     * Name: Update 
+     * Name: Update
      * Author: Hiepnh
      * Date: 9/4/2022
      */
     update({
-        budgetID, type, projectID, contractID, name, sign, description, date, note, revenue, vatRevenue, forecastRevenue, forecastVatRevenue, finalRevenue, finalVatRevenue, userID
-    }){
+        budgetID,
+        type,
+        projectID,
+        contractID,
+        name,
+        sign,
+        description,
+        date,
+        note,
+        revenue,
+        vatRevenue,
+        forecastRevenue,
+        forecastVatRevenue,
+        finalRevenue,
+        finalVatRevenue,
+        userID,
+    }) {
         return new Promise(async (resolve) => {
             try {
-
-                if(!checkObjectIDs(budgetID))
-                    return resolve({ error: true, message: "Mã không hợp lệ", keyError: KEY_ERROR.PARAMS_INVALID });
+                if (!checkObjectIDs(budgetID))
+                    return resolve({
+                        error: true,
+                        message: 'Mã không hợp lệ',
+                        keyError: KEY_ERROR.PARAMS_INVALID,
+                    })
 
                 /**
                  * DECALARTION VARIABLE (1)
@@ -142,11 +201,11 @@ class Model extends BaseModel {
                  *  - Kiểm tra valid từ các input
                  *  - Kiểm tra valid từ database (ví dụ: đảm bảo foreign_key hoặc các điều kiện của coll)
                  */
-                if(checkObjectIDs(projectID)){
+                if (checkObjectIDs(projectID)) {
                     dataUpdate.project = projectID
                 }
 
-                if(checkObjectIDs(contractID)){
+                if (checkObjectIDs(contractID)) {
                     dataUpdate.contract = contractID
                 }
 
@@ -155,57 +214,77 @@ class Model extends BaseModel {
                  * 3.1: Convert type + update name (ví dụ: string -> number)
                  * 3.2: Operation database
                  */
-                if(type && [1,2,3].includes(Number(type))){
-                    dataUpdate.type = type;
+                if (type && [1, 2, 3].includes(Number(type))) {
+                    dataUpdate.type = type
                 }
 
-                if(name){
-                    dataUpdate.name = name;
+                if (name) {
+                    dataUpdate.name = name
                 }
 
-                if(sign){
-                    dataUpdate.sign = sign;
+                if (sign) {
+                    dataUpdate.sign = sign
                 }
 
-                if(description){
-                    dataUpdate.description = description;
+                if (description) {
+                    dataUpdate.description = description
                 }
 
-                if(date){
-                    dataUpdate.date = date;
+                if (date) {
+                    dataUpdate.date = date
                 }
 
-                if(note){
-                    dataUpdate.note = note;
+                if (note) {
+                    dataUpdate.note = note
                 }
 
                 //______Giá trị
-                if(!isNaN(revenue) && Number(revenue) >= 0){
-                    dataUpdate.revenue     = revenue;
+                if (!isNaN(revenue) && Number(revenue) >= 0) {
+                    dataUpdate.revenue = revenue
                 }
-                if(!isNaN(vatRevenue) && Number(vatRevenue) >= 0){
-                    dataUpdate.vatRevenue     = vatRevenue;
+                if (!isNaN(vatRevenue) && Number(vatRevenue) >= 0) {
+                    dataUpdate.vatRevenue = vatRevenue
                 }
-                if(!isNaN(forecastRevenue) && Number(forecastRevenue) >= 0){
-                    dataUpdate.forecastRevenue     = forecastRevenue;
+                if (!isNaN(forecastRevenue) && Number(forecastRevenue) >= 0) {
+                    dataUpdate.forecastRevenue = forecastRevenue
                 }
-                if(!isNaN(forecastVatRevenue) && Number(forecastVatRevenue) >= 0){
-                    dataUpdate.forecastVatRevenue     = forecastVatRevenue;
+                if (
+                    !isNaN(forecastVatRevenue) &&
+                    Number(forecastVatRevenue) >= 0
+                ) {
+                    dataUpdate.forecastVatRevenue = forecastVatRevenue
                 }
-                if(!isNaN(finalRevenue) && Number(finalRevenue) >= 0){
-                    dataUpdate.finalRevenue     = finalRevenue;
+                if (!isNaN(finalRevenue) && Number(finalRevenue) >= 0) {
+                    dataUpdate.finalRevenue = finalRevenue
                 }
-                if(!isNaN(finalVatRevenue) && Number(finalVatRevenue) >= 0){
-                    dataUpdate.finalVatRevenue     = finalVatRevenue;
+                if (!isNaN(finalVatRevenue) && Number(finalVatRevenue) >= 0) {
+                    dataUpdate.finalVatRevenue = finalVatRevenue
                 }
 
-                let infoAfterUpdate = await BUDGET_COLL.findByIdAndUpdate(budgetID, dataUpdate, { new: true });
-                if(!infoAfterUpdate)
-                    return resolve({ error: true, message: "Cập nhật thất bại", keyError: KEY_ERROR.UPDATE_FAILED, status: 403 });
+                let infoAfterUpdate = await BUDGET_COLL.findByIdAndUpdate(
+                    budgetID,
+                    dataUpdate,
+                    { new: true }
+                )
+                if (!infoAfterUpdate)
+                    return resolve({
+                        error: true,
+                        message: 'Cập nhật thất bại',
+                        keyError: KEY_ERROR.UPDATE_FAILED,
+                        status: 403,
+                    })
 
-                return resolve({ error: false, data: infoAfterUpdate, status: 200 });
+                return resolve({
+                    error: false,
+                    data: infoAfterUpdate,
+                    status: 200,
+                })
             } catch (error) {
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
@@ -217,160 +296,203 @@ class Model extends BaseModel {
      */
 
     /**
-     * Name: Get info 
+     * Name: Get info
      * Author: Hiepnh
      * Date: 9/4/2022
      */
-    getInfo({ budgetID,
-        select, populates }){
-        return new Promise(async resolve => {
+    getInfo({ budgetID, select, populates }) {
+        return new Promise(async (resolve) => {
             try {
                 if (!checkObjectIDs(budgetID))
-                    return resolve({ error: true, message: 'param_invalid' });
+                    return resolve({ error: true, message: 'param_invalid' })
 
                 // populates
-                if(populates && typeof populates === 'string'){
-					if(!IsJsonString(populates))
-						return resolve({ error: true, message: 'Request params populates invalid', status: 400 });
+                if (populates && typeof populates === 'string') {
+                    if (!IsJsonString(populates))
+                        return resolve({
+                            error: true,
+                            message: 'Request params populates invalid',
+                            status: 400,
+                        })
 
-					populates = JSON.parse(populates);
-				}else{
-					populates = {
-                        path: "",
-                        select: ""
+                    populates = JSON.parse(populates)
+                } else {
+                    populates = {
+                        path: '',
+                        select: '',
                     }
                 }
 
                 let info = await BUDGET_COLL.findById(budgetID)
-                                .select(select)
-                                .populate(populates)
+                    .select(select)
+                    .populate(populates)
 
-				if (!info) return resolve({ error: true, message: 'cannot_get' });
+                if (!info)
+                    return resolve({ error: true, message: 'cannot_get' })
 
-                return resolve({ error: false, data: info });
+                return resolve({ error: false, data: info })
             } catch (error) {
-                return resolve({ error: true, message: error.message });
+                return resolve({ error: true, message: error.message })
             }
         })
     }
 
     /**
-     * Name  : Get list 
+     * Name  : Get list
      * Author: Hiepnh
      * Date: 9/4/2022
      */
-    getList({ isMember, companyID, projectID, contractID, type, userID,
-        keyword, limit = 10, lastestID, select, populates= {} }) {
+    getList({
+        isMember,
+        companyID,
+        projectID,
+        contractID,
+        type,
+        userID,
+        keyword,
+        limit = 10,
+        lastestID,
+        select,
+        populates = {},
+    }) {
         return new Promise(async (resolve) => {
             try {
-
-                if(limit > 20){
+                if (limit > 20) {
                     limit = 20
-                }else{
-                    limit = +limit;
+                } else {
+                    limit = +limit
                 }
 
-                let sortBy;
-                let conditionObj = {};
-                let keys	     = ['createAt__-1', '_id__-1'];
+                let sortBy
+                let conditionObj = {}
+                let keys = ['createAt__-1', '_id__-1']
 
-                if(populates && typeof populates === 'string'){
-					if(!IsJsonString(populates))
-						return resolve({ error: true, message: 'Request params populates invalid', status: 400 });
+                if (populates && typeof populates === 'string') {
+                    if (!IsJsonString(populates))
+                        return resolve({
+                            error: true,
+                            message: 'Request params populates invalid',
+                            status: 400,
+                        })
 
-					populates = JSON.parse(populates);
-				}else{
-					populates = {
-                        path: "",
-                        select: ""
+                    populates = JSON.parse(populates)
+                } else {
+                    populates = {
+                        path: '',
+                        select: '',
                     }
                 }
 
-                if(type){
+                if (type) {
                     conditionObj.type = type
                 }
-                
-                if(contractID){
+
+                if (contractID) {
                     conditionObj.contract = contractID
-                }else{
-                    if(projectID){
+                } else {
+                    if (projectID) {
                         conditionObj.project = projectID
-                    }else{
-                        if(companyID){
+                    } else {
+                        if (companyID) {
                             conditionObj.company = companyID
                             // conditionObj.members = { $in: [userID] }
                         }
                     }
                 }
 
-                if(keyword){
-                    keyword = keyword.split(" ");
-                    keyword = '.*' + keyword.join(".*") + '.*';
-                    let regExpSearch = RegExp(keyword, 'i');
-                    conditionObj.name = regExpSearch;
+                if (keyword) {
+                    keyword = keyword.split(' ')
+                    keyword = '.*' + keyword.join('.*') + '.*'
+                    let regExpSearch = RegExp(keyword, 'i')
+                    conditionObj.name = regExpSearch
                 }
-                let conditionObjOrg = { ...conditionObj };
+                let conditionObjOrg = { ...conditionObj }
 
-                if(lastestID && checkObjectIDs(lastestID)){
-					let infoData = await BUDGET_COLL.findById(lastestID);
-					if(!infoData)
-						return resolve({ error: true, message: "Can't get info lastest", status: 400 });
+                if (lastestID && checkObjectIDs(lastestID)) {
+                    let infoData = await BUDGET_COLL.findById(lastestID)
+                    if (!infoData)
+                        return resolve({
+                            error: true,
+                            message: "Can't get info lastest",
+                            status: 400,
+                        })
 
-                    let dataPagingAndSort = RANGE_BASE_PAGINATION_V2({ keys, latestRecord: infoData, objectQuery: conditionObjOrg });
-					if(!dataPagingAndSort || dataPagingAndSort.error)
-						return resolve({ error: true, message: "Can't get range pagination", status: 400 });
+                    let dataPagingAndSort = RANGE_BASE_PAGINATION_V2({
+                        keys,
+                        latestRecord: infoData,
+                        objectQuery: conditionObjOrg,
+                    })
+                    if (!dataPagingAndSort || dataPagingAndSort.error)
+                        return resolve({
+                            error: true,
+                            message: "Can't get range pagination",
+                            status: 400,
+                        })
 
-                    conditionObj = dataPagingAndSort.data.find;
-					sortBy       = dataPagingAndSort.data.sort;
-				}else{
-                    let dataPagingAndSort = RANGE_BASE_PAGINATION_V2({ keys, latestRecord: null, objectQuery: conditionObjOrg });
-                    sortBy       = dataPagingAndSort.data.sort;
+                    conditionObj = dataPagingAndSort.data.find
+                    sortBy = dataPagingAndSort.data.sort
+                } else {
+                    let dataPagingAndSort = RANGE_BASE_PAGINATION_V2({
+                        keys,
+                        latestRecord: null,
+                        objectQuery: conditionObjOrg,
+                    })
+                    sortBy = dataPagingAndSort.data.sort
                 }
 
                 let infoDataAfterGet = await BUDGET_COLL.find(conditionObj)
-                    .limit(limit+1)
+                    .limit(limit + 1)
                     .sort(sortBy)
                     .select(select)
                     .populate(populates)
-                    .lean();
+                    .lean()
 
                 // GET TOTAL RECORD
-                if(!infoDataAfterGet)
-                    return resolve({ error: true, message: "Can't get data", status: 403 });
+                if (!infoDataAfterGet)
+                    return resolve({
+                        error: true,
+                        message: "Can't get data",
+                        status: 403,
+                    })
 
-                let nextCursor	= null;
-                if(infoDataAfterGet && infoDataAfterGet.length){
-                    if(infoDataAfterGet.length > limit){
-                        nextCursor = infoDataAfterGet[limit - 1]._id;
-                        infoDataAfterGet.length = limit;
+                let nextCursor = null
+                if (infoDataAfterGet && infoDataAfterGet.length) {
+                    if (infoDataAfterGet.length > limit) {
+                        nextCursor = infoDataAfterGet[limit - 1]._id
+                        infoDataAfterGet.length = limit
                     }
                 }
 
-                let totalRecord = await BUDGET_COLL.count(conditionObjOrg);
-                let totalPage   = Math.ceil(totalRecord/limit);
+                let totalRecord = await BUDGET_COLL.count(conditionObjOrg)
+                let totalPage = Math.ceil(totalRecord / limit)
 
-                return resolve({ error: false, data: {
-                    listRecords: infoDataAfterGet,
-                    limit: +limit,
-                    totalRecord,
-                    totalPage,
-                    nextCursor,
-                }, status: 200 });
-
+                return resolve({
+                    error: false,
+                    data: {
+                        listRecords: infoDataAfterGet,
+                        limit: +limit,
+                        totalRecord,
+                        totalPage,
+                        nextCursor,
+                    },
+                    status: 200,
+                })
             } catch (error) {
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
 
     /**
-     * Name  : Cập nhật giá trị (ngân sách, thực hiện, dự báo) 
+     * Name  : Cập nhật giá trị (ngân sách, thực hiện, dự báo)
      * Author: Hiepnh
      * Date  : 10/4/2022
      */
-    updateValue({
-        option, budgetID, userID, ctx
-    }){
+    updateValue({ option, budgetID, userID, ctx }) {
         return new Promise(async (resolve) => {
             try {
                 /**
@@ -379,51 +501,79 @@ class Model extends BaseModel {
                  * 2-Cập nhật dự báo ngân sách
                  * 3-Cập nhật thực hiện ngân sách
                  */
-                if(!checkObjectIDs(budgetID))
-                    return resolve({ error: true, message: "Mã hiệu không đúng", keyError: "budgetID_invalid" });
+                if (!checkObjectIDs(budgetID))
+                    return resolve({
+                        error: true,
+                        message: 'Mã hiệu không đúng',
+                        keyError: 'budgetID_invalid',
+                    })
 
-                let dataUpdate = { userUpdate: userID };
+                let dataUpdate = { userUpdate: userID }
 
                 // Cập nhật Ngân sách theo kế hoạch và dự báo ngân sách
-                if(option && Number(option) === 1){
+                if (option && Number(option) === 1) {
                     let listDataWork = await BUDGET__WORK_COLL.aggregate([
                         {
                             $match: {
                                 budget: ObjectID(budgetID),
-                            }
+                            },
                         },
                         {
                             $group: {
-                                _id: { },
-                                amount: { $sum: "$amount" },
-                                forecastAmount: { $sum: "$forecastAmount" }
-                            }
+                                _id: {},
+                                amount: { $sum: '$amount' },
+                                forecastAmount: { $sum: '$forecastAmount' },
+                            },
                         },
                     ])
-                    if(listDataWork && listDataWork.length){
+                    if (listDataWork && listDataWork.length) {
                         dataUpdate.budget = Number(listDataWork[0].amount)
-                        dataUpdate.forecastBudget = Number(listDataWork[0].forecastAmount)
+                        dataUpdate.forecastBudget = Number(
+                            listDataWork[0].forecastAmount
+                        )
                     }
                 }
 
                 // Cập nhật Ngân sách thực hiện
-                if(option && Number(option) === 2){
-                    const infoImpleBudget = await ctx.call(`${CF_DOMAIN_SERVICES.ACCOUNTING}.${CF_ACTIONS_ACCOUNTING.JOURNAL_CAL_IMPLE_BUDGET}`, {
-                        budgetID
-                    })
+                if (option && Number(option) === 2) {
+                    const infoImpleBudget = await ctx.call(
+                        `${CF_DOMAIN_SERVICES.ACCOUNTING}.${CF_ACTIONS_ACCOUNTING.JOURNAL_CAL_IMPLE_BUDGET}`,
+                        {
+                            budgetID,
+                        }
+                    )
                     // console.log(infoImpleBudget)
-                    if(infoImpleBudget){
-                        dataUpdate.finalBudget = Number(infoImpleBudget.data.amount)
+                    if (infoImpleBudget) {
+                        dataUpdate.finalBudget = Number(
+                            infoImpleBudget.data.amount
+                        )
                     }
                 }
 
-                let infoAfterUpdate = await BUDGET_COLL.findByIdAndUpdate(budgetID, dataUpdate, { new: true });
-                if(!infoAfterUpdate)
-                    return resolve({ error: true, message: "Cập nhật thất bại", keyError: "can't_update_budget", status: 403 });
+                let infoAfterUpdate = await BUDGET_COLL.findByIdAndUpdate(
+                    budgetID,
+                    dataUpdate,
+                    { new: true }
+                )
+                if (!infoAfterUpdate)
+                    return resolve({
+                        error: true,
+                        message: 'Cập nhật thất bại',
+                        keyError: "can't_update_budget",
+                        status: 403,
+                    })
 
-                return resolve({ error: false, data: infoAfterUpdate, status: 200 });
+                return resolve({
+                    error: false,
+                    data: infoAfterUpdate,
+                    status: 200,
+                })
             } catch (error) {
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
@@ -435,7 +585,7 @@ class Model extends BaseModel {
      */
     downloadTemplateExcel({ option, projectID, userID }) {
         // console.log({ option, projectID, userID })
-        return new Promise(async resolve => {
+        return new Promise(async (resolve) => {
             try {
                 // let listData  = await PCM_PLAN_GROUP_COLL.find({ project: projectID }).select('name sign members')
                 // .sort({_id: -1})
@@ -443,9 +593,13 @@ class Model extends BaseModel {
                 // console.log(listData)
 
                 // Modify the workbook.
-                XlsxPopulate.fromFileAsync(path.resolve(__dirname, ('../../../files/templates/excels/budget_import.xlsm')))
-                .then(async workbook => {
-                    var i = 4;
+                XlsxPopulate.fromFileAsync(
+                    path.resolve(
+                        __dirname,
+                        '../../../files/templates/excels/budget_import.xlsm'
+                    )
+                ).then(async (workbook) => {
+                    var i = 4
                     // infoProject.members?.forEach((item, index) => {
                     //     workbook.sheet("ThanhVienDuAn").row(i).cell(1).value(Number(index+1))
                     //     workbook.sheet("ThanhVienDuAn").row(i).cell(2).value(item.fullname)
@@ -460,22 +614,32 @@ class Model extends BaseModel {
                     //     i++
                     // });
 
+                    const now = new Date()
+                    const filePath = '../../../files/temporary_uploads/'
+                    const fileName = `budget_import_${now.getTime()}.xlsm`
+                    const pathWriteFile = path.resolve(
+                        __dirname,
+                        filePath,
+                        fileName
+                    )
 
-                    const now = new Date();
-                    const filePath = '../../../files/temporary_uploads/';
-                    const fileName = `budget_import_${now.getTime()}.xlsm`;
-                    const pathWriteFile = path.resolve(__dirname, filePath, fileName);
+                    await workbook.toFileAsync(pathWriteFile)
+                    const result = await uploadFileS3(pathWriteFile, fileName)
 
-                    await workbook.toFileAsync(pathWriteFile);
-                    const result = await uploadFileS3(pathWriteFile, fileName);
-
-                    fs.unlinkSync(pathWriteFile);
-                    return resolve({ error: false, data: result?.Location, status: 200 });
-                });
-
+                    fs.unlinkSync(pathWriteFile)
+                    return resolve({
+                        error: false,
+                        data: result?.Location,
+                        status: 200,
+                    })
+                })
             } catch (error) {
                 console.log({ error })
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
@@ -487,17 +651,17 @@ class Model extends BaseModel {
      */
     importExcel({ option, projectID, dataImport, userID }) {
         // console.log({option, projectID, userID})
-        return new Promise(async resolve => {
+        return new Promise(async (resolve) => {
             try {
                 // if(!checkObjectIDs(projectID))
                 //     return resolve({ error: true, message: 'projectID_invalid', status: 400 })
 
-                const dataImportJSON = JSON.parse(dataImport);
-                let index = 0;
-                let errorNumber = 0;
+                const dataImportJSON = JSON.parse(dataImport)
+                let index = 0
+                let errorNumber = 0
 
                 for (const data of dataImportJSON) {
-                    if(index > 0){
+                    if (index > 0) {
                         let dataInsert = {
                             name: data?.__EMPTY_1,
                             groupID: data?.__EMPTY_12,
@@ -505,29 +669,32 @@ class Model extends BaseModel {
                             sign: data?.__EMPTY_8,
                             type: data?.__EMPTY_9,
                             description: data?.__EMPTY_10,
-                            startTime:  data?.__EMPTY_14,
-                            expiredTime:  data?.__EMPTY_15,
+                            startTime: data?.__EMPTY_14,
+                            expiredTime: data?.__EMPTY_15,
                             assigneeID: data?.__EMPTY_13,
                             draft: data?.__EMPTY_17,
                             contractID: data?.__EMPTY_16,
                             subType: data?.__EMPTY_9,
                         }
                         // console.log(dataInsert)
-
                     }
 
-                    index ++;
+                    index++
                 }
 
-                if(errorNumber != 0)
-                return resolve({ error: true, message: "import field" });
+                if (errorNumber != 0)
+                    return resolve({ error: true, message: 'import field' })
 
-                return resolve({ error: false, message: "import success" });
+                return resolve({ error: false, message: 'import success' })
             } catch (error) {
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
 }
 
-exports.MODEL = new Model;
+exports.MODEL = new Model()

@@ -1,68 +1,80 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("pcm_plan_report", {
+module.exports = DATABASE_MIDDLEWARE('pcm_plan_report', {
     //_________Công ty
     company: {
         type: Schema.Types.ObjectId,
-        ref: 'company'
+        ref: 'company',
     },
     //_________Dự án phòng ban
     project: {
         type: Schema.Types.ObjectId,
-        ref: 'department'
+        ref: 'department',
     },
     //_________Tên
     name: String,
     //_________Mô tả
     description: String,
     //_________Chủ đề
-    subjects: [{
-        type: Schema.Types.ObjectId,
-        ref: 'pcm_plan_task',
-    }],
-    //_________Công việc (sử dụng cho Kanban/báo cáo)
-    tasks: [{
-        task :  {
+    subjects: [
+        {
             type: Schema.Types.ObjectId,
             ref: 'pcm_plan_task',
         },
-        order: { type: Number, default: 1 }
-    }],
-    //_________Tài liệu (sử dụng cho Kanban/báo cáo)
-    documents: [{
-        document :  {
-            type: Schema.Types.ObjectId,
-            ref: 'document_doc',
+    ],
+    //_________Công việc (sử dụng cho Kanban/báo cáo)
+    tasks: [
+        {
+            task: {
+                type: Schema.Types.ObjectId,
+                ref: 'pcm_plan_task',
+            },
+            order: { type: Number, default: 1 },
         },
-        order: { type: Number, default: 1 }
-    }],
+    ],
+    //_________Tài liệu (sử dụng cho Kanban/báo cáo)
+    documents: [
+        {
+            document: {
+                type: Schema.Types.ObjectId,
+                ref: 'document_doc',
+            },
+            order: { type: Number, default: 1 },
+        },
+    ],
     //_________Highlight task
-    active: [{
-        type: Schema.Types.ObjectId,
-        ref: 'pcm_plan_task',
-    }],
+    active: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'pcm_plan_task',
+        },
+    ],
     //_________Người được phép truy cập/xem (do author phân quyền vào)
-    members: [{
-        type: Schema.Types.ObjectId,
-        ref: "user"
-    }],
-    /**           
+    members: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
+    /**
      * CẤU TRÚC ĐỆ QUY
      */
     parent: {
         type: Schema.Types.ObjectId,
-        ref: "pcm_plan_report"
+        ref: 'pcm_plan_report',
     },
-    childs: [{
-        type: Schema.Types.ObjectId,
-        ref: "pcm_plan_report"
-    }],
+    childs: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'pcm_plan_report',
+        },
+    ],
     level: {
         type: Number,
-        default: 1
+        default: 1,
     },
     /**
      * Phân loại báo cáo và ghim kết quả tìm kiếm
@@ -90,8 +102,8 @@ module.exports  = DATABASE_MIDDLEWARE("pcm_plan_report", {
     tasksRemove: [
         {
             type: Schema.Types.ObjectId,
-            ref: "pcm_plan_task"
-        }
+            ref: 'pcm_plan_task',
+        },
     ],
     /**
      * Sử dụng xóa Checklist trong Báo cáo động
@@ -99,8 +111,8 @@ module.exports  = DATABASE_MIDDLEWARE("pcm_plan_report", {
     checklistsRemove: [
         {
             type: Schema.Types.ObjectId,
-            ref: "pcm_plan_checklist"
-        }
+            ref: 'pcm_plan_checklist',
+        },
     ],
     /**
      * Sử dụng xóa Document trong báo cáo động
@@ -108,8 +120,8 @@ module.exports  = DATABASE_MIDDLEWARE("pcm_plan_report", {
     documentRemove: [
         {
             type: Schema.Types.ObjectId,
-            ref: "pcm_plan_checklist"
-        }
+            ref: 'pcm_plan_checklist',
+        },
     ],
     /**
      * Dùng để lưu 1 mảng tìm kiếm động trong báo cáo
@@ -118,17 +130,17 @@ module.exports  = DATABASE_MIDDLEWARE("pcm_plan_report", {
         {
             type: Schema.Types.ObjectId,
             ref: 'pcm_plan_report',
-        }
+        },
     ],
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     author: {
         type: Schema.Types.ObjectId,
-        ref : "user"
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : "user"
-    }
+        ref: 'user',
+    },
 })

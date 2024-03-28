@@ -1,25 +1,25 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
 
-const Schema    = require('mongoose').Schema;
+const Schema = require('mongoose').Schema
 /**
  *  Chức danh trong công ty
  */
-module.exports  = DATABASE_MIDDLEWARE("position", {
-    //_________Thuộc về công ty nào  
+module.exports = DATABASE_MIDDLEWARE('position', {
+    //_________Thuộc về công ty nào
     company: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     //_________Phần tử cha
     parent: {
         type: Schema.Types.ObjectId,
-        ref: "warehouse"
+        ref: 'warehouse',
     },
     level: {
         type: Number,
-        default: 1 
+        default: 1,
     },
     //_________Tên
     name: String,
@@ -27,10 +27,10 @@ module.exports  = DATABASE_MIDDLEWARE("position", {
     description: String,
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

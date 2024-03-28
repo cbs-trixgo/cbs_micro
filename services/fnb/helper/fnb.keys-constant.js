@@ -1,8 +1,47 @@
 exports.FNB_ACC = {
-    bod: ['adwgo.winggo@gmail.com', 'hiepnh.winggo@gmail.com', 'chinhnv.winggo@gmail.com','huongnt.winggo@gmail.com','hoangnh.winggo@gmail.com', 'toannd.winggo@gmail.com','kiemthuvien.dcop.trx@gmail.com','hiepnh.pmi@gmail.com'],
-    taichinh: ['thaobnbp.winggo@gmail.com','quynhntd.winggo@gmail.com','kiemthuvien.dcop.trx@gmail.com','hiepnh.pmi@gmail.com','hiepnh.winggo@gmail.com','chinhnv.winggo@gmail.com', 'toannd.winggo@gmail.com'],
-    cskh: ['vund.winggo@gmail.com','quynhntd.winggo@gmail.com','nhungvth.winggo@gmail.com','huongnt.winggo@gmail.com','kiemthuvien.dcop.trx@gmail.com','hiepnh.pmi@gmail.com','hiepnh.winggo@gmail.com','chinhnv.winggo@gmail.com','toannd.winggo@gmail.com'],
-    man: ['thupt1.winggo@gmail.com','hapt.winggo@gmail.com','hienpd.winggo@gmail.com','vyhth.winggo@gmail.com','toannd.winggo@gmail.com','nhungvth.winggo@gmail.com','anhml.winggo@gmail.com','kiemthuvien.dcop.trx@gmail.com','hiepnh.pmi@gmail.com','hiepnh.winggo@gmail.com','chinhnv.winggo@gmail.com']
+    bod: [
+        'adwgo.winggo@gmail.com',
+        'hiepnh.winggo@gmail.com',
+        'chinhnv.winggo@gmail.com',
+        'huongnt.winggo@gmail.com',
+        'hoangnh.winggo@gmail.com',
+        'toannd.winggo@gmail.com',
+        'kiemthuvien.dcop.trx@gmail.com',
+        'hiepnh.pmi@gmail.com',
+    ],
+    taichinh: [
+        'thaobnbp.winggo@gmail.com',
+        'quynhntd.winggo@gmail.com',
+        'kiemthuvien.dcop.trx@gmail.com',
+        'hiepnh.pmi@gmail.com',
+        'hiepnh.winggo@gmail.com',
+        'chinhnv.winggo@gmail.com',
+        'toannd.winggo@gmail.com',
+    ],
+    cskh: [
+        'vund.winggo@gmail.com',
+        'quynhntd.winggo@gmail.com',
+        'nhungvth.winggo@gmail.com',
+        'huongnt.winggo@gmail.com',
+        'kiemthuvien.dcop.trx@gmail.com',
+        'hiepnh.pmi@gmail.com',
+        'hiepnh.winggo@gmail.com',
+        'chinhnv.winggo@gmail.com',
+        'toannd.winggo@gmail.com',
+    ],
+    man: [
+        'thupt1.winggo@gmail.com',
+        'hapt.winggo@gmail.com',
+        'hienpd.winggo@gmail.com',
+        'vyhth.winggo@gmail.com',
+        'toannd.winggo@gmail.com',
+        'nhungvth.winggo@gmail.com',
+        'anhml.winggo@gmail.com',
+        'kiemthuvien.dcop.trx@gmail.com',
+        'hiepnh.pmi@gmail.com',
+        'hiepnh.winggo@gmail.com',
+        'chinhnv.winggo@gmail.com',
+    ],
 }
 
 exports.FNB_FACTOR = {
@@ -83,13 +122,13 @@ exports.FNB_AFFILIATE_COM = [
     { amount: 1000000, rate: 16 }, // Sale trực tiếp
     { amount: 1000000, rate: 2.75 }, // Cấp 1
     { amount: 2000000, rate: 2.25 }, // Cấp 2
-    { amount: 5000000, rate: 2.20 }, // Cấp ...
+    { amount: 5000000, rate: 2.2 }, // Cấp ...
     { amount: 5000000, rate: 1.75 },
-    { amount: 5000000, rate: 1.50 },
+    { amount: 5000000, rate: 1.5 },
     { amount: 5000000, rate: 1.25 },
-    { amount: 5000000, rate: 1.00 },
+    { amount: 5000000, rate: 1.0 },
     { amount: 5000000, rate: 0.75 },
-    { amount: 5000000, rate: 0.50 },
+    { amount: 5000000, rate: 0.5 },
 ]
 
 exports.CRM_STATUS = [

@@ -1,41 +1,41 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * ĐỊNH MỨC CỦA HỆ THỐNG ÁP DỤNG CHO TỪNG GÓI THẦU
  * => Số liệu tính toán đều là trước VAT
  */
-module.exports  = DATABASE_MIDDLEWARE("bidding_bill_workline", {
+module.exports = DATABASE_MIDDLEWARE('bidding_bill_workline', {
     //_________Dự án
     project: {
         type: Schema.Types.ObjectId,
-        ref : "department"
+        ref: 'department',
     },
     //_________Hồ sơ mời thầu
     doc: {
         type: Schema.Types.ObjectId,
-        ref : "bidding_doc"
+        ref: 'bidding_doc',
     },
     //_________Hạng mục
     item: {
         type: Schema.Types.ObjectId,
-        ref : "bidding_bill_item"
-    }, 
+        ref: 'bidding_bill_item',
+    },
     //_________Nhóm dữ liệu
     group: {
         type: Schema.Types.ObjectId,
-        ref : "bidding_bill_group"
-    },  
+        ref: 'bidding_bill_group',
+    },
     //_________Tiên lượng mời thầu
     work: {
         type: Schema.Types.ObjectId,
-        ref : "bidding_bill_work"
+        ref: 'bidding_bill_work',
     },
     //_________Nguồn lực
     product: {
         type: Schema.Types.ObjectId,
-        ref: 'datahub_product'
+        ref: 'datahub_product',
     },
     /**
      * Phân loại nguồn lực: được lấy theo tính chất của nguồn lực
@@ -57,10 +57,10 @@ module.exports  = DATABASE_MIDDLEWARE("bidding_bill_workline", {
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

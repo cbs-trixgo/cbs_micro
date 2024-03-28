@@ -1,22 +1,22 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * ĐỊNH MỨC CHUẨN CỦA HỆ THỐNG
  * - Áp dụng cho lập ngân sách thi công của nhà thầu
  * - Áp dụng cho lập ngân sách gói thầu
  */
-module.exports  = DATABASE_MIDDLEWARE("datahub_jobline", {    
+module.exports = DATABASE_MIDDLEWARE('datahub_jobline', {
     //_________Công việc trong thư viện (áp dụng xây Thư viện)
     job: {
         type: Schema.Types.ObjectId,
-        ref : "datahub_job"
+        ref: 'datahub_job',
     },
     //_________Nguồn lực
     product: {
         type: Schema.Types.ObjectId,
-        ref: 'datahub_product'
+        ref: 'datahub_product',
     },
     /**
      * Phân loại nguồn lực: được lấy theo tính chất của nguồn lực
@@ -38,10 +38,10 @@ module.exports  = DATABASE_MIDDLEWARE("datahub_jobline", {
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

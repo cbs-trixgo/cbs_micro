@@ -1,7 +1,7 @@
-"use strict";
+'use strict'
 
-const BaseModel                         = require('../../../tools/db/base_model');
-const ObjectID                          = require('mongoose').Types.ObjectId;
+const BaseModel = require('../../../tools/db/base_model')
+const ObjectID = require('mongoose').Types.ObjectId
 
 /**
  * DOMAIN AND ACTIONS
@@ -12,21 +12,23 @@ const ObjectID                          = require('mongoose').Types.ObjectId;
 /**
  * TOOLS
  */
-const { RANGE_BASE_PAGINATION_V2 } 	    = require('../../../tools/cursor_base/playground/index');
 const {
-  checkObjectIDs,
-  IsJsonString,
-  validateParamsObjectID
-}  = require('../../../tools/utils/utils');
+    RANGE_BASE_PAGINATION_V2,
+} = require('../../../tools/cursor_base/playground/index')
+const {
+    checkObjectIDs,
+    IsJsonString,
+    validateParamsObjectID,
+} = require('../../../tools/utils/utils')
 
 /**
  * COLLECTIONS
  */
-const TIMESHEET__EXPERT_SALARY_COLL     = require('../database/timesheet.expert_salary-coll')
-const TIMESHEET__EXPERT_TIMESHEET_COLL  = require('../database/timesheet.expert_timesheet-coll')
-const AUTH__USER_COLL                   = require('../../auth/database/auth.user-coll')
-const FNB_MISTAKE_COLL                  = require('../../fnb/database/fnb.mistake-coll')
-const ITEM__DEPARTMENT_COLL             = require('../../item/database/item.department-coll')
+const TIMESHEET__EXPERT_SALARY_COLL = require('../database/timesheet.expert_salary-coll')
+const TIMESHEET__EXPERT_TIMESHEET_COLL = require('../database/timesheet.expert_timesheet-coll')
+const AUTH__USER_COLL = require('../../auth/database/auth.user-coll')
+const FNB_MISTAKE_COLL = require('../../fnb/database/fnb.mistake-coll')
+const ITEM__DEPARTMENT_COLL = require('../../item/database/item.department-coll')
 // const AUTH__COMPANY_COLL                = require('../../auth/database/auth.company-coll')
 
 const AUTH__APP_USER = require('../../auth/model/auth.app_users').MODEL
@@ -39,9 +41,8 @@ const AUTH__APP_USER = require('../../auth/model/auth.app_users').MODEL
 // }
 
 class Model extends BaseModel {
-
     constructor() {
-        super(TIMESHEET__EXPERT_SALARY_COLL);
+        super(TIMESHEET__EXPERT_SALARY_COLL)
     }
 
     /**
@@ -49,16 +50,32 @@ class Model extends BaseModel {
      * Author: HiepNH
      * Code: 22/11/2023
      */
-    insert({ userCreate, companyID, projectID, humanID, name, date, type, note, salary, onLeaveSalary, reward, punishment, advance, convertFactor, paid }) {
+    insert({
+        userCreate,
+        companyID,
+        projectID,
+        humanID,
+        name,
+        date,
+        type,
+        note,
+        salary,
+        onLeaveSalary,
+        reward,
+        punishment,
+        advance,
+        convertFactor,
+        paid,
+    }) {
         // console.log({ userCreate, companyID, projectID, humanID, name, date, type, note, salary, onLeaveSalary, reward, punishment, advance, convertFactor, paid })
-        return new Promise(async resolve => {
+        return new Promise(async (resolve) => {
             try {
-                if(!name){
+                if (!name) {
                     return resolve({
                         error: true,
-                        message: "Name invalid",
-                        keyError: "name_invalid",
-                    });
+                        message: 'Name invalid',
+                        keyError: 'name_invalid',
+                    })
                 }
 
                 let year = new Date().getFullYear()
@@ -66,11 +83,13 @@ class Model extends BaseModel {
                 let checkExists = await TIMESHEET__EXPERT_SALARY_COLL.findOne({
                     company: companyID,
                     parent: { $exists: false },
-                    $where:
-                    `return this.date.getMonth() === ${Number(month)} && this.date.getFullYear() === ${Number(year)}`
+                    $where: `return this.date.getMonth() === ${Number(month)} && this.date.getFullYear() === ${Number(year)}`,
                 })
-                if(checkExists)
-                    return resolve({ error: true, message: `Bảng lương tháng ${month + 1} năm ${year} đã tồn tại - ${checkExists.name}` })
+                if (checkExists)
+                    return resolve({
+                        error: true,
+                        message: `Bảng lương tháng ${month + 1} năm ${year} đã tồn tại - ${checkExists.name}`,
+                    })
 
                 //__________Khai báo và validate dữ liệu
                 let dataInsert = {
@@ -78,69 +97,80 @@ class Model extends BaseModel {
                     userCreate,
                     name,
                     admins: [userCreate],
-                    members: [userCreate]
+                    members: [userCreate],
                 }
 
-                if(humanID){
-                    dataInsert.human = humanID;
+                if (humanID) {
+                    dataInsert.human = humanID
                 }
 
-                if(projectID){
-                    dataInsert.project = projectID;
+                if (projectID) {
+                    dataInsert.project = projectID
                 }
 
-                if(date){
-                    dataInsert.date = date;
+                if (date) {
+                    dataInsert.date = date
                 }
 
-                if(type){
-                    dataInsert.type = type;
+                if (type) {
+                    dataInsert.type = type
                 }
 
-                if(convertFactor){
-                    dataInsert.convertFactor = Number(convertFactor);
+                if (convertFactor) {
+                    dataInsert.convertFactor = Number(convertFactor)
                 }
 
-                if(note){
-                    dataInsert.note = note;
+                if (note) {
+                    dataInsert.note = note
                 }
 
-                if(salary){
-                    dataInsert.salary = Number(salary);
+                if (salary) {
+                    dataInsert.salary = Number(salary)
                 }
-                if(onLeaveSalary){
-                    dataInsert.onLeaveSalary = Number(onLeaveSalary);
+                if (onLeaveSalary) {
+                    dataInsert.onLeaveSalary = Number(onLeaveSalary)
                 }
-                if(reward){
-                    dataInsert.reward = Number(reward);
+                if (reward) {
+                    dataInsert.reward = Number(reward)
                 }
-                if(punishment){
-                    dataInsert.punishment = Number(punishment);
+                if (punishment) {
+                    dataInsert.punishment = Number(punishment)
                 }
-                if(advance){
-                    dataInsert.advance = Number(advance);
+                if (advance) {
+                    dataInsert.advance = Number(advance)
                 }
-                if(paid){
-                    dataInsert.paid = Number(paid);
+                if (paid) {
+                    dataInsert.paid = Number(paid)
                 }
 
                 let infoAfterInsert = await this.insertData(dataInsert)
-                if(!infoAfterInsert)
-                    return resolve({ error: true, message: "cannot_insert" })
+                if (!infoAfterInsert)
+                    return resolve({ error: true, message: 'cannot_insert' })
 
                 // Tạo chi tiết lương cho các user đang hoạt động
-                let listHuman = await AUTH__USER_COLL.find({ company: companyID, status: 1 })
-                .select('fullname department position contacts')
-                .populate({
-                    path: 'contacts',
-                    select: 'company sallaryBasic insuranceFee union share'
+                let listHuman = await AUTH__USER_COLL.find({
+                    company: companyID,
+                    status: 1,
                 })
-                for(const item of listHuman){
-                    let insuranceFee = 0, union = 0, share = 0
-                    if(item.contacts && item.contacts.length){
-                        for(const contact of item.contacts){
-                            if(contact.company.toString() === companyID.toString() && contact.insuranceFee){
-                                insuranceFee = Number(insuranceFee) + Number(contact.insuranceFee)
+                    .select('fullname department position contacts')
+                    .populate({
+                        path: 'contacts',
+                        select: 'company sallaryBasic insuranceFee union share',
+                    })
+                for (const item of listHuman) {
+                    let insuranceFee = 0,
+                        union = 0,
+                        share = 0
+                    if (item.contacts && item.contacts.length) {
+                        for (const contact of item.contacts) {
+                            if (
+                                contact.company.toString() ===
+                                    companyID.toString() &&
+                                contact.insuranceFee
+                            ) {
+                                insuranceFee =
+                                    Number(insuranceFee) +
+                                    Number(contact.insuranceFee)
                                 union = Number(union) + Number(contact.union)
                                 share = Number(share) + Number(contact.share)
                             }
@@ -162,24 +192,24 @@ class Model extends BaseModel {
                         type: infoAfterInsert.type,
                     }
 
-                    if(Number(insuranceFee) > 0){
+                    if (Number(insuranceFee) > 0) {
                         dataInsertDetail.insurance = Number(insuranceFee)
                     }
 
-                    if(Number(union) > 0){
+                    if (Number(union) > 0) {
                         dataInsertDetail.union = Number(union)
                     }
 
-                    if(Number(share) > 0){
+                    if (Number(share) > 0) {
                         dataInsertDetail.share = Number(share)
                     }
 
                     await this.insertData(dataInsertDetail)
                 }
 
-                return resolve({ error: false, data: infoAfterInsert });
+                return resolve({ error: false, data: infoAfterInsert })
             } catch (error) {
-                return resolve({ error: true, message: error.message });
+                return resolve({ error: true, message: error.message })
             }
         })
     }
@@ -189,18 +219,49 @@ class Model extends BaseModel {
      * Author: HiepNH
      * Code: 22/11/2023
      */
-    update({ expertSalaryID, admins, members, userID, status, projectID, humanID, name, date, type, note, salary, onLeaveSalary, reward, punishment, advance, convertFactor, paid, revenueBonus, mealAllowance, insurance, pitax, union, share, other, kpiFactor, subAllowance1, subAllowance2, pependent }){
+    update({
+        expertSalaryID,
+        admins,
+        members,
+        userID,
+        status,
+        projectID,
+        humanID,
+        name,
+        date,
+        type,
+        note,
+        salary,
+        onLeaveSalary,
+        reward,
+        punishment,
+        advance,
+        convertFactor,
+        paid,
+        revenueBonus,
+        mealAllowance,
+        insurance,
+        pitax,
+        union,
+        share,
+        other,
+        kpiFactor,
+        subAllowance1,
+        subAllowance2,
+        pependent,
+    }) {
         // console.log({ expertSalaryID, admins, members, userID, status, projectID, humanID, name, date, type, note, salary, onLeaveSalary, reward, punishment, advance, convertFactor, paid, revenueBonus, mealAllowance, insurance, pitax, union, share, other })
         return new Promise(async (resolve) => {
             const that = this
             try {
-                let infoSalary = await TIMESHEET__EXPERT_SALARY_COLL.findById(expertSalaryID)
-                if(!infoSalary) {
+                let infoSalary =
+                    await TIMESHEET__EXPERT_SALARY_COLL.findById(expertSalaryID)
+                if (!infoSalary) {
                     return resolve({
                         error: true,
                         message: 'Timesheet không tồn tại',
-                        keyError: "timesheet_not_exists",
-                        status: 400
+                        keyError: 'timesheet_not_exists',
+                        status: 400,
                     })
                 }
 
@@ -209,113 +270,175 @@ class Model extends BaseModel {
                     modifyAt: Date.now(),
                 }
 
-                if(checkObjectIDs(projectID)){
-                    dataUpdate.project = projectID;
+                if (checkObjectIDs(projectID)) {
+                    dataUpdate.project = projectID
                 }
 
-                if(checkObjectIDs(humanID)){
-                    dataUpdate.human = humanID;
+                if (checkObjectIDs(humanID)) {
+                    dataUpdate.human = humanID
                 }
 
-                if(name){
-                    dataUpdate.name = name;
+                if (name) {
+                    dataUpdate.name = name
                 }
 
-                if(date){
-                    dataUpdate.date = date;
+                if (date) {
+                    dataUpdate.date = date
                 }
 
-                if(status){
-                    dataUpdate.status = status;
+                if (status) {
+                    dataUpdate.status = status
                 }
 
-                if(note){
-                    dataUpdate.note = note;
+                if (note) {
+                    dataUpdate.note = note
                 }
 
-                if(convertFactor){
-                    dataUpdate.convertFactor = convertFactor;
+                if (convertFactor) {
+                    dataUpdate.convertFactor = convertFactor
                 }
 
-                if(kpiFactor){
-                    dataUpdate.kpiFactor = Number(kpiFactor);
+                if (kpiFactor) {
+                    dataUpdate.kpiFactor = Number(kpiFactor)
                 }
 
-                if(subAllowance1){
-                    dataUpdate.subAllowance1 = Number(subAllowance1);
+                if (subAllowance1) {
+                    dataUpdate.subAllowance1 = Number(subAllowance1)
                 }
 
-                if(subAllowance2){
-                    dataUpdate.subAllowance2 = Number(subAllowance2);
+                if (subAllowance2) {
+                    dataUpdate.subAllowance2 = Number(subAllowance2)
                 }
 
-                if(pependent){
-                    dataUpdate.pependent = Number(pependent);
+                if (pependent) {
+                    dataUpdate.pependent = Number(pependent)
                 }
 
-                if(!isNaN(salary) && Number(infoSalary.salary) != Number(salary)){
-                    dataUpdate.salary = salary;
+                if (
+                    !isNaN(salary) &&
+                    Number(infoSalary.salary) != Number(salary)
+                ) {
+                    dataUpdate.salary = salary
                 }
-                if(!isNaN(onLeaveSalary) && Number(infoSalary.onLeaveSalary) != Number(onLeaveSalary)){
-                    dataUpdate.onLeaveSalary = onLeaveSalary;
+                if (
+                    !isNaN(onLeaveSalary) &&
+                    Number(infoSalary.onLeaveSalary) != Number(onLeaveSalary)
+                ) {
+                    dataUpdate.onLeaveSalary = onLeaveSalary
                 }
-                if(!isNaN(reward) && Number(infoSalary.reward) != Number(reward)){
-                    dataUpdate.reward = reward;
+                if (
+                    !isNaN(reward) &&
+                    Number(infoSalary.reward) != Number(reward)
+                ) {
+                    dataUpdate.reward = reward
                 }
-                if(!isNaN(revenueBonus) && Number(infoSalary.revenueBonus) != Number(revenueBonus)){
-                    dataUpdate.revenueBonus = revenueBonus;
+                if (
+                    !isNaN(revenueBonus) &&
+                    Number(infoSalary.revenueBonus) != Number(revenueBonus)
+                ) {
+                    dataUpdate.revenueBonus = revenueBonus
                 }
-                if(!isNaN(punishment) && Number(infoSalary.punishment) != Number(punishment)){
-                    dataUpdate.punishment = punishment;
+                if (
+                    !isNaN(punishment) &&
+                    Number(infoSalary.punishment) != Number(punishment)
+                ) {
+                    dataUpdate.punishment = punishment
                 }
-                if(!isNaN(mealAllowance) && Number(infoSalary.mealAllowance) != Number(mealAllowance)){
-                    dataUpdate.mealAllowance = mealAllowance;
+                if (
+                    !isNaN(mealAllowance) &&
+                    Number(infoSalary.mealAllowance) != Number(mealAllowance)
+                ) {
+                    dataUpdate.mealAllowance = mealAllowance
                 }
-                if(!isNaN(insurance) && Number(infoSalary.insurance) != Number(insurance)){
-                    dataUpdate.insurance = insurance;
+                if (
+                    !isNaN(insurance) &&
+                    Number(infoSalary.insurance) != Number(insurance)
+                ) {
+                    dataUpdate.insurance = insurance
                 }
-                if(!isNaN(pitax) && Number(infoSalary.pitax) != Number(pitax)){
-                    dataUpdate.pitax = pitax;
+                if (
+                    !isNaN(pitax) &&
+                    Number(infoSalary.pitax) != Number(pitax)
+                ) {
+                    dataUpdate.pitax = pitax
                 }
-                if(!isNaN(union) && Number(infoSalary.union) != Number(union)){
-                    dataUpdate.union = union;
+                if (
+                    !isNaN(union) &&
+                    Number(infoSalary.union) != Number(union)
+                ) {
+                    dataUpdate.union = union
                 }
-                if(!isNaN(share) && Number(infoSalary.share) != Number(share)){
-                    dataUpdate.share = share;
+                if (
+                    !isNaN(share) &&
+                    Number(infoSalary.share) != Number(share)
+                ) {
+                    dataUpdate.share = share
                 }
-                if(!isNaN(other) && Number(infoSalary.other) != Number(other)){
-                    dataUpdate.other = other;
+                if (
+                    !isNaN(other) &&
+                    Number(infoSalary.other) != Number(other)
+                ) {
+                    dataUpdate.other = other
                 }
-                if(!isNaN(advance) && Number(infoSalary.advance) != Number(advance)){
-                    dataUpdate.advance = advance;
+                if (
+                    !isNaN(advance) &&
+                    Number(infoSalary.advance) != Number(advance)
+                ) {
+                    dataUpdate.advance = advance
                 }
-                if(!isNaN(paid) && Number(infoSalary.paid) != Number(paid)){
-                    dataUpdate.paid = paid;
+                if (!isNaN(paid) && Number(infoSalary.paid) != Number(paid)) {
+                    dataUpdate.paid = paid
                 }
 
                 // Tính toán giá trị còn lại
-                if(!isNaN(salary) || !isNaN(onLeaveSalary) || !isNaN(reward) || !isNaN(revenueBonus) || !isNaN(mealAllowance) || !isNaN(punishment) || !isNaN(insurance) || !isNaN(pitax) || !isNaN(advance) || !isNaN(paid)){
-                    dataUpdate.remaining = Number(salary) + Number(onLeaveSalary) + Number(reward) + Number(revenueBonus) + Number(mealAllowance) - Number(punishment) - Number(insurance) - Number(pitax) - Number(union) - Number(share) - Number(other) - Number(advance) - Number(paid)
+                if (
+                    !isNaN(salary) ||
+                    !isNaN(onLeaveSalary) ||
+                    !isNaN(reward) ||
+                    !isNaN(revenueBonus) ||
+                    !isNaN(mealAllowance) ||
+                    !isNaN(punishment) ||
+                    !isNaN(insurance) ||
+                    !isNaN(pitax) ||
+                    !isNaN(advance) ||
+                    !isNaN(paid)
+                ) {
+                    dataUpdate.remaining =
+                        Number(salary) +
+                        Number(onLeaveSalary) +
+                        Number(reward) +
+                        Number(revenueBonus) +
+                        Number(mealAllowance) -
+                        Number(punishment) -
+                        Number(insurance) -
+                        Number(pitax) -
+                        Number(union) -
+                        Number(share) -
+                        Number(other) -
+                        Number(advance) -
+                        Number(paid)
                 }
                 // console.log(dataUpdate)
 
-                const adminsID = [...infoSalary.admins?.map(item => item?.toString())]
-                if(adminsID.includes(userID.toString())) {
-                    if(admins) {
-                        if(admins.length && checkObjectIDs(admins)) {
-                            admins = [...new Set(admins)];
-                            dataUpdate.admins = admins;
-                        } else{
-                            dataUpdate.admins = [];
+                const adminsID = [
+                    ...infoSalary.admins?.map((item) => item?.toString()),
+                ]
+                if (adminsID.includes(userID.toString())) {
+                    if (admins) {
+                        if (admins.length && checkObjectIDs(admins)) {
+                            admins = [...new Set(admins)]
+                            dataUpdate.admins = admins
+                        } else {
+                            dataUpdate.admins = []
                         }
                     }
 
-                    if(members) {
-                        if(members.length && checkObjectIDs(members)) {
-                            members = [...new Set(members)];
-                            dataUpdate.members = members;
-                        } else{
-                            dataUpdate.members = [];
+                    if (members) {
+                        if (members.length && checkObjectIDs(members)) {
+                            members = [...new Set(members)]
+                            dataUpdate.members = members
+                        } else {
+                            dataUpdate.members = []
                         }
                     }
                 }
@@ -339,40 +462,66 @@ class Model extends BaseModel {
                 //     }
                 // }
 
-                let infoAfterUpdate = await TIMESHEET__EXPERT_SALARY_COLL.findByIdAndUpdate(expertSalaryID, dataUpdate, { new: true })
-                if(!infoAfterUpdate) {
+                let infoAfterUpdate =
+                    await TIMESHEET__EXPERT_SALARY_COLL.findByIdAndUpdate(
+                        expertSalaryID,
+                        dataUpdate,
+                        { new: true }
+                    )
+                if (!infoAfterUpdate) {
                     return resolve({
                         error: true,
-                        message: "Cannot update",
-                        keyError: "cannot_update",
+                        message: 'Cannot update',
+                        keyError: 'cannot_update',
                     })
                 }
 
-                if(!infoAfterUpdate.parent){
+                if (!infoAfterUpdate.parent) {
                     // Cập nhật hệ số chuyển đổi vào Chi tiết lương
-                    if(convertFactor){
-                        await TIMESHEET__EXPERT_SALARY_COLL.updateMany({parent: expertSalaryID},{$set: {convertFactor: convertFactor}})
+                    if (convertFactor) {
+                        await TIMESHEET__EXPERT_SALARY_COLL.updateMany(
+                            { parent: expertSalaryID },
+                            { $set: { convertFactor: convertFactor } }
+                        )
                     }
 
                     // Thêm các nhân sự còn thiếu vào bảng lương
-                    let companyID = infoSalary.company, userCreate = userID
-                    let listHuman = await AUTH__USER_COLL.find({ company: companyID, status: 1 })
-                    .select('fullname department position contacts')
-                    .populate({
-                        path: 'contacts',
-                        select: 'company sallaryBasic insuranceFee union share'
+                    let companyID = infoSalary.company,
+                        userCreate = userID
+                    let listHuman = await AUTH__USER_COLL.find({
+                        company: companyID,
+                        status: 1,
                     })
+                        .select('fullname department position contacts')
+                        .populate({
+                            path: 'contacts',
+                            select: 'company sallaryBasic insuranceFee union share',
+                        })
 
-                    for(const item of listHuman){
-                        let infoS = await TIMESHEET__EXPERT_SALARY_COLL.findOne({parent: expertSalaryID, human: item._id})
-                        if(!infoS){
-                            let insuranceFee = 0, union = 0, share = 0
-                            if(item.contacts && item.contacts.length){
-                                for(const contact of item.contacts){
-                                    if(contact.company.toString() === companyID.toString() && contact.insuranceFee){
-                                        insuranceFee = Number(insuranceFee) + Number(contact.insuranceFee)
-                                        union = Number(union) + Number(contact.union)
-                                        share = Number(share) + Number(contact.share)
+                    for (const item of listHuman) {
+                        let infoS = await TIMESHEET__EXPERT_SALARY_COLL.findOne(
+                            { parent: expertSalaryID, human: item._id }
+                        )
+                        if (!infoS) {
+                            let insuranceFee = 0,
+                                union = 0,
+                                share = 0
+                            if (item.contacts && item.contacts.length) {
+                                for (const contact of item.contacts) {
+                                    if (
+                                        contact.company.toString() ===
+                                            companyID.toString() &&
+                                        contact.insuranceFee
+                                    ) {
+                                        insuranceFee =
+                                            Number(insuranceFee) +
+                                            Number(contact.insuranceFee)
+                                        union =
+                                            Number(union) +
+                                            Number(contact.union)
+                                        share =
+                                            Number(share) +
+                                            Number(contact.share)
                                     }
                                 }
                             }
@@ -392,15 +541,16 @@ class Model extends BaseModel {
                                 type: infoSalary.type,
                             }
 
-                            if(Number(insuranceFee) > 0){
-                                dataInsertDetail.insurance = Number(insuranceFee)
+                            if (Number(insuranceFee) > 0) {
+                                dataInsertDetail.insurance =
+                                    Number(insuranceFee)
                             }
 
-                            if(Number(union) > 0){
+                            if (Number(union) > 0) {
                                 dataInsertDetail.union = Number(union)
                             }
 
-                            if(Number(share) > 0){
+                            if (Number(share) > 0) {
                                 dataInsertDetail.share = Number(share)
                             }
 
@@ -410,13 +560,19 @@ class Model extends BaseModel {
                 }
 
                 // Cập nhật giá trị vào Bảng lương cha
-                if(infoAfterUpdate.parent && checkObjectIDs(infoAfterUpdate.parent)){
-                    await that.updateValue({ expertSalaryID: infoAfterUpdate.parent, userID })
+                if (
+                    infoAfterUpdate.parent &&
+                    checkObjectIDs(infoAfterUpdate.parent)
+                ) {
+                    await that.updateValue({
+                        expertSalaryID: infoAfterUpdate.parent,
+                        userID,
+                    })
                 }
 
-                return resolve({ error: false, data: infoAfterUpdate });
+                return resolve({ error: false, data: infoAfterUpdate })
             } catch (error) {
-                return resolve({ error: true, message: error.message });
+                return resolve({ error: true, message: error.message })
             }
         })
     }
@@ -426,102 +582,121 @@ class Model extends BaseModel {
      * Author: HiepNH
      * Code: 22/11/2023
      */
-    updateValueTimesheet({
-        expertSalaryID, companyID
-    }){
+    updateValueTimesheet({ expertSalaryID, companyID }) {
         return new Promise(async (resolve) => {
             try {
-                let infoSalary = await TIMESHEET__EXPERT_SALARY_COLL.findById(expertSalaryID)
-                if(!infoSalary)
-                    return resolve({ error: true, message: "can't_get_info", status: 403 });
+                let infoSalary =
+                    await TIMESHEET__EXPERT_SALARY_COLL.findById(expertSalaryID)
+                if (!infoSalary)
+                    return resolve({
+                        error: true,
+                        message: "can't_get_info",
+                        status: 403,
+                    })
 
                 let month = Number(infoSalary.date.getMonth()) + 1
                 let year = infoSalary.date.getFullYear()
                 // console.log({month})
 
                 // Lương cứng (subtype = 1)
-                let listData = await TIMESHEET__EXPERT_TIMESHEET_COLL.aggregate([
-                    {
-                        $match: {
-                            company: ObjectID(companyID),
-                            parent: { $exists: true, $ne: null },
-                            assignee: { $exists: true, $ne: null },
-                            subtype: 1,
-                        }
-                    },
-                    {
-                        $project: {
-                            year : {$year : "$date"},
-                            month : {$month : "$date"},
-                            date: 1,
-                            assignee: 1,
-                            hours: 1,
-                            amount: 1,
-                        }
-                    },
-                    {
-                        $match: {
-                            year: Number(year),
-                            month: Number(month),
-                        }
-                    },
-                    {
-                        $group: {
-                            _id: { assignee: '$assignee' },
-                            quantity: { $sum: "$hours" },
-                            amount: { $sum: "$amount" },
-                        }
-                    },
-                ])
+                let listData = await TIMESHEET__EXPERT_TIMESHEET_COLL.aggregate(
+                    [
+                        {
+                            $match: {
+                                company: ObjectID(companyID),
+                                parent: { $exists: true, $ne: null },
+                                assignee: { $exists: true, $ne: null },
+                                subtype: 1,
+                            },
+                        },
+                        {
+                            $project: {
+                                year: { $year: '$date' },
+                                month: { $month: '$date' },
+                                date: 1,
+                                assignee: 1,
+                                hours: 1,
+                                amount: 1,
+                            },
+                        },
+                        {
+                            $match: {
+                                year: Number(year),
+                                month: Number(month),
+                            },
+                        },
+                        {
+                            $group: {
+                                _id: { assignee: '$assignee' },
+                                quantity: { $sum: '$hours' },
+                                amount: { $sum: '$amount' },
+                            },
+                        },
+                    ]
+                )
                 // console.log(listData)
 
                 // Lương phép, lễ/tết
-                let listData2 = await TIMESHEET__EXPERT_TIMESHEET_COLL.aggregate([
-                    {
-                        $match: {
-                            company: ObjectID(companyID),
-                            parent: { $exists: true, $ne: null },
-                            assignee: { $exists: true, $ne: null },
-                            subtype: {$in: [2,3,4]},
-                        }
-                    },
-                    {
-                        $project: {
-                            year : {$year : "$date"},
-                            month : {$month : "$date"},
-                            date: 1,
-                            assignee: 1,
-                            hours: 1,
-                            amount: 1,
-                        }
-                    },
-                    {
-                        $match: {
-                            year: Number(year),
-                            month: Number(month),
-                        }
-                    },
-                    {
-                        $group: {
-                            _id: { assignee: '$assignee' },
-                            quantity: { $sum: "$hours" },
-                            amount: { $sum: "$amount" },
-                            // quantity: { $sum: 1 },
-                        }
-                    },
-                ])
+                let listData2 =
+                    await TIMESHEET__EXPERT_TIMESHEET_COLL.aggregate([
+                        {
+                            $match: {
+                                company: ObjectID(companyID),
+                                parent: { $exists: true, $ne: null },
+                                assignee: { $exists: true, $ne: null },
+                                subtype: { $in: [2, 3, 4] },
+                            },
+                        },
+                        {
+                            $project: {
+                                year: { $year: '$date' },
+                                month: { $month: '$date' },
+                                date: 1,
+                                assignee: 1,
+                                hours: 1,
+                                amount: 1,
+                            },
+                        },
+                        {
+                            $match: {
+                                year: Number(year),
+                                month: Number(month),
+                            },
+                        },
+                        {
+                            $group: {
+                                _id: { assignee: '$assignee' },
+                                quantity: { $sum: '$hours' },
+                                amount: { $sum: '$amount' },
+                                // quantity: { $sum: 1 },
+                            },
+                        },
+                    ])
                 // console.log(listData2)
 
-                for(const item of listData){
+                for (const item of listData) {
                     // console.log(item._id.assignee.toString())
 
-                    let salary = 0, onLeaveSalary = 0, reward = 0, revenueBonus = 0, mealAllowance = 0, punishment = 0, insurance = 0, pitax = 0, union = 0, share = 0, other = 0, advance  = 0, paid = 0, remaining = 0
+                    let salary = 0,
+                        onLeaveSalary = 0,
+                        reward = 0,
+                        revenueBonus = 0,
+                        mealAllowance = 0,
+                        punishment = 0,
+                        insurance = 0,
+                        pitax = 0,
+                        union = 0,
+                        share = 0,
+                        other = 0,
+                        advance = 0,
+                        paid = 0,
+                        remaining = 0
                     let info = await TIMESHEET__EXPERT_SALARY_COLL.findOne({
                         parent: expertSalaryID,
                         human: item._id.assignee,
                     })
 
-                    if(info){
+                    if (info) {
                         salary = Number(item.amount).toFixed(0) // Lấy theo bảng chấm công
                         onLeaveSalary = info.onLeaveSalary
                         reward = info.reward
@@ -537,9 +712,22 @@ class Model extends BaseModel {
                         paid = info.paid
                     }
 
-                    remaining = Number(salary) + Number(onLeaveSalary) + Number(reward) + Number(revenueBonus) + Number(mealAllowance) - Number(punishment) - Number(insurance) - Number(pitax) - Number(union) - Number(share) - Number(other) - Number(advance) - Number(paid)
+                    remaining =
+                        Number(salary) +
+                        Number(onLeaveSalary) +
+                        Number(reward) +
+                        Number(revenueBonus) +
+                        Number(mealAllowance) -
+                        Number(punishment) -
+                        Number(insurance) -
+                        Number(pitax) -
+                        Number(union) -
+                        Number(share) -
+                        Number(other) -
+                        Number(advance) -
+                        Number(paid)
 
-                    let dataUpdate =  {
+                    let dataUpdate = {
                         salary,
                         onLeaveSalary,
                         reward,
@@ -553,23 +741,40 @@ class Model extends BaseModel {
                         other,
                         advance,
                         paid,
-                        remaining
+                        remaining,
                     }
 
-                    if(info){
-                        await TIMESHEET__EXPERT_SALARY_COLL.findByIdAndUpdate(info._id, dataUpdate, { new: true })
+                    if (info) {
+                        await TIMESHEET__EXPERT_SALARY_COLL.findByIdAndUpdate(
+                            info._id,
+                            dataUpdate,
+                            { new: true }
+                        )
                     }
                 }
 
-                for(const item of listData2){
-                    let salary = 0, onLeaveSalary = 0, reward = 0, revenueBonus = 0, mealAllowance = 0, punishment = 0, insurance = 0, pitax = 0, union = 0, share = 0, other = 0, advance  = 0, paid = 0, remaining = 0
+                for (const item of listData2) {
+                    let salary = 0,
+                        onLeaveSalary = 0,
+                        reward = 0,
+                        revenueBonus = 0,
+                        mealAllowance = 0,
+                        punishment = 0,
+                        insurance = 0,
+                        pitax = 0,
+                        union = 0,
+                        share = 0,
+                        other = 0,
+                        advance = 0,
+                        paid = 0,
+                        remaining = 0
 
                     let info = await TIMESHEET__EXPERT_SALARY_COLL.findOne({
                         parent: expertSalaryID,
                         human: item._id.assignee,
                     })
 
-                    if(info){
+                    if (info) {
                         salary = info.salary
                         onLeaveSalary = Number(item.amount).toFixed(0)
                         reward = info.reward
@@ -585,9 +790,23 @@ class Model extends BaseModel {
                         paid = info.paid
                     }
 
-                    remaining = Number(Number(salary) + Number(onLeaveSalary) + Number(reward) + Number(revenueBonus) + Number(mealAllowance) - Number(punishment) - Number(insurance) - Number(pitax) - Number(union) - Number(share) - Number(other) - Number(advance) - Number(paid)).toFixed(0)
+                    remaining = Number(
+                        Number(salary) +
+                            Number(onLeaveSalary) +
+                            Number(reward) +
+                            Number(revenueBonus) +
+                            Number(mealAllowance) -
+                            Number(punishment) -
+                            Number(insurance) -
+                            Number(pitax) -
+                            Number(union) -
+                            Number(share) -
+                            Number(other) -
+                            Number(advance) -
+                            Number(paid)
+                    ).toFixed(0)
 
-                    let dataUpdate =  {
+                    let dataUpdate = {
                         salary,
                         onLeaveSalary,
                         reward,
@@ -601,17 +820,25 @@ class Model extends BaseModel {
                         other,
                         advance,
                         paid,
-                        remaining
+                        remaining,
                     }
 
-                    if(info){
-                        await TIMESHEET__EXPERT_SALARY_COLL.findByIdAndUpdate(info._id, dataUpdate, { new: true })
+                    if (info) {
+                        await TIMESHEET__EXPERT_SALARY_COLL.findByIdAndUpdate(
+                            info._id,
+                            dataUpdate,
+                            { new: true }
+                        )
                     }
                 }
 
-                return resolve({ error: false, status: 200 });
+                return resolve({ error: false, status: 200 })
             } catch (error) {
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
@@ -621,14 +848,17 @@ class Model extends BaseModel {
      * Author: HiepNH
      * Code: 22/11/2023
      */
-    updateValueKpi({
-        expertSalaryID, userID, companyID
-    }){
+    updateValueKpi({ expertSalaryID, userID, companyID }) {
         return new Promise(async (resolve) => {
             try {
-                let infoSalary = await TIMESHEET__EXPERT_SALARY_COLL.findById(expertSalaryID)
-                if(!infoSalary)
-                    return resolve({ error: true, message: "can't_get_info", status: 403 })
+                let infoSalary =
+                    await TIMESHEET__EXPERT_SALARY_COLL.findById(expertSalaryID)
+                if (!infoSalary)
+                    return resolve({
+                        error: true,
+                        message: "can't_get_info",
+                        status: 403,
+                    })
 
                 let month = Number(infoSalary.date.getMonth()) + 1
                 let year = infoSalary.date.getFullYear()
@@ -638,43 +868,56 @@ class Model extends BaseModel {
                     {
                         $match: {
                             company: ObjectID(companyID),
-                            executor: { $exists: true, $ne: null }
-                        }
+                            executor: { $exists: true, $ne: null },
+                        },
                     },
                     {
                         $project: {
-                            year : {$year : "$createAt"},
-                            month : {$month : "$createAt"},
+                            year: { $year: '$createAt' },
+                            month: { $month: '$createAt' },
                             executor: 1,
                             amount: 1,
-                            bonus: 1
-                        }
+                            bonus: 1,
+                        },
                     },
                     {
                         $match: {
                             year: Number(year),
                             month: Number(month),
-                        }
+                        },
                     },
                     {
                         $group: {
                             _id: { executor: '$executor' },
-                            bonus: { $sum: "$bonus" },
-                            amount: { $sum: "$amount" },
-                        }
+                            bonus: { $sum: '$bonus' },
+                            amount: { $sum: '$amount' },
+                        },
                     },
                 ])
                 // console.log({listData})
 
-                for(const item of listData){
-                    let salary = 0, onLeaveSalary = 0, reward = 0, revenueBonus = 0, mealAllowance = 0, punishment = 0, insurance = 0, pitax = 0, union = 0, share = 0, other = 0, advance  = 0, paid = 0, remaining = 0
+                for (const item of listData) {
+                    let salary = 0,
+                        onLeaveSalary = 0,
+                        reward = 0,
+                        revenueBonus = 0,
+                        mealAllowance = 0,
+                        punishment = 0,
+                        insurance = 0,
+                        pitax = 0,
+                        union = 0,
+                        share = 0,
+                        other = 0,
+                        advance = 0,
+                        paid = 0,
+                        remaining = 0
 
                     let info = await TIMESHEET__EXPERT_SALARY_COLL.findOne({
                         parent: expertSalaryID,
                         human: item._id.executor,
                     })
 
-                    if(info){
+                    if (info) {
                         salary = info.salary
                         onLeaveSalary = info.onLeaveSalary
                         reward = item.bonus * info.convertFactor // KPI
@@ -690,9 +933,23 @@ class Model extends BaseModel {
                         paid = info.paid
                     }
 
-                    remaining = Number(Number(salary) + Number(onLeaveSalary) + Number(reward) + Number(revenueBonus) + Number(mealAllowance) - Number(punishment) - Number(insurance) - Number(pitax) - Number(union) - Number(share) - Number(other) - Number(advance) - Number(paid)).toFixed(0)
+                    remaining = Number(
+                        Number(salary) +
+                            Number(onLeaveSalary) +
+                            Number(reward) +
+                            Number(revenueBonus) +
+                            Number(mealAllowance) -
+                            Number(punishment) -
+                            Number(insurance) -
+                            Number(pitax) -
+                            Number(union) -
+                            Number(share) -
+                            Number(other) -
+                            Number(advance) -
+                            Number(paid)
+                    ).toFixed(0)
 
-                    let dataUpdate =  {
+                    let dataUpdate = {
                         salary,
                         onLeaveSalary,
                         reward,
@@ -706,14 +963,22 @@ class Model extends BaseModel {
                         other,
                         advance,
                         paid,
-                        remaining
+                        remaining,
                     }
 
-                   await TIMESHEET__EXPERT_SALARY_COLL.findByIdAndUpdate(info._id, dataUpdate, { new: true })
+                    await TIMESHEET__EXPERT_SALARY_COLL.findByIdAndUpdate(
+                        info._id,
+                        dataUpdate,
+                        { new: true }
+                    )
                 }
                 return resolve({ error: false, status: 200 })
             } catch (error) {
-                return resolve({ error: true, message: error.message, status: 500 })
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
@@ -723,9 +988,7 @@ class Model extends BaseModel {
      * Author: HiepNH
      * Code: 22/11/2023
      */
-    updateValue({
-        expertSalaryID, userID
-    }){
+    updateValue({ expertSalaryID, userID }) {
         return new Promise(async (resolve) => {
             try {
                 let dataUpdate = { userUpdate: userID, modifyAt: new Date() }
@@ -733,32 +996,32 @@ class Model extends BaseModel {
                 let listData = await TIMESHEET__EXPERT_SALARY_COLL.aggregate([
                     {
                         $match: {
-                            parent: ObjectID(expertSalaryID)
-                        }
+                            parent: ObjectID(expertSalaryID),
+                        },
                     },
                     {
                         $group: {
-                            _id: { },
-                            salary: { $sum:"$salary" },
-                            onLeaveSalary: { $sum:"$onLeaveSalary" },
-                            reward: { $sum:"$reward" },
-                            punishment: { $sum:"$punishment" },
-                            advance: { $sum:"$advance" },
-                            remaining: { $sum:"$remaining" },
-                            paid: { $sum:"$paid" },
-                            revenueBonus: { $sum:"$revenueBonus" },
-                            mealAllowance: { $sum:"$mealAllowance" },
-                            insurance: { $sum:"$insurance" },
-                            pitax: { $sum:"$pitax" },
-                            union: { $sum:"$union" },
-                            share: { $sum:"$share" },
-                            other: { $sum:"$other" },
-                        }
+                            _id: {},
+                            salary: { $sum: '$salary' },
+                            onLeaveSalary: { $sum: '$onLeaveSalary' },
+                            reward: { $sum: '$reward' },
+                            punishment: { $sum: '$punishment' },
+                            advance: { $sum: '$advance' },
+                            remaining: { $sum: '$remaining' },
+                            paid: { $sum: '$paid' },
+                            revenueBonus: { $sum: '$revenueBonus' },
+                            mealAllowance: { $sum: '$mealAllowance' },
+                            insurance: { $sum: '$insurance' },
+                            pitax: { $sum: '$pitax' },
+                            union: { $sum: '$union' },
+                            share: { $sum: '$share' },
+                            other: { $sum: '$other' },
+                        },
                     },
                 ])
                 // console.log(listData[0])
 
-                if(listData[0]){
+                if (listData[0]) {
                     dataUpdate.salary = Number(listData[0].salary)
                     dataUpdate.onLeaveSalary = Number(listData[0].onLeaveSalary)
                     dataUpdate.reward = Number(listData[0].reward)
@@ -775,13 +1038,31 @@ class Model extends BaseModel {
                     dataUpdate.other = Number(listData[0].other)
                 }
 
-                let infoAfterUpdate = await TIMESHEET__EXPERT_SALARY_COLL.findByIdAndUpdate(expertSalaryID, dataUpdate, { new: true });
-                if(!infoAfterUpdate)
-                    return resolve({ error: true, message: "Cập nhật thất bại", keyError: "can't_update_task", status: 403 });
+                let infoAfterUpdate =
+                    await TIMESHEET__EXPERT_SALARY_COLL.findByIdAndUpdate(
+                        expertSalaryID,
+                        dataUpdate,
+                        { new: true }
+                    )
+                if (!infoAfterUpdate)
+                    return resolve({
+                        error: true,
+                        message: 'Cập nhật thất bại',
+                        keyError: "can't_update_task",
+                        status: 403,
+                    })
 
-                return resolve({ error: false, data: infoAfterUpdate, status: 200 });
+                return resolve({
+                    error: false,
+                    data: infoAfterUpdate,
+                    status: 200,
+                })
             } catch (error) {
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
@@ -791,41 +1072,66 @@ class Model extends BaseModel {
      * Author: HiepNH
      * Code: 22/11/2023
      */
-    syncData({
-        option, salaryID, userID, companyID
-    }){
+    syncData({ option, salaryID, userID, companyID }) {
         const that = this
         return new Promise(async (resolve) => {
             try {
-                if(option == 1){
+                if (option == 1) {
                     // Cập nhật chấm công vào các Chi tiết của Bảng lương
-                    await that.updateValueTimesheet({ expertSalaryID: salaryID, userID, companyID })
-
-                    // Cập nhật KPI vào các chi tiết của Bảng lương
-                    await that.updateValueKpi( { expertSalaryID: salaryID, userID, companyID })
-
-                    // Tổng hợp các chi tiết lương vào Bảng lương
-                    await that.updateValue( {expertSalaryID: salaryID, userID })
-
-                    return resolve({ error: false, message: 'Đồng bộ thành công', status: 200 })
-                }else if(option == 2){
-                    //___________Quyền truy cập ứng dụng Nhân sự
-                    let infoAppUser = await AUTH__APP_USER.checkPermissionsAccessApp({
-                        appID: "61e049cffdebf77b072d1b14",
-                        userID
+                    await that.updateValueTimesheet({
+                        expertSalaryID: salaryID,
+                        userID,
+                        companyID,
                     })
 
+                    // Cập nhật KPI vào các chi tiết của Bảng lương
+                    await that.updateValueKpi({
+                        expertSalaryID: salaryID,
+                        userID,
+                        companyID,
+                    })
+
+                    // Tổng hợp các chi tiết lương vào Bảng lương
+                    await that.updateValue({ expertSalaryID: salaryID, userID })
+
+                    return resolve({
+                        error: false,
+                        message: 'Đồng bộ thành công',
+                        status: 200,
+                    })
+                } else if (option == 2) {
+                    //___________Quyền truy cập ứng dụng Nhân sự
+                    let infoAppUser =
+                        await AUTH__APP_USER.checkPermissionsAccessApp({
+                            appID: '61e049cffdebf77b072d1b14',
+                            userID,
+                        })
+
                     // Chỉ admin ứng dụng mới được thêm phần tử cha con
-                    if(!infoAppUser.error && infoAppUser.data.level == 0){
-                        await TIMESHEET__EXPERT_SALARY_COLL.deleteMany({parent: salaryID})
-                        await TIMESHEET__EXPERT_SALARY_COLL.findByIdAndDelete(salaryID);
-                        return resolve({ error: false, data: 'Reset thành công' })
-                    }else{
-                        return resolve({ error: false, data: 'Bạn không có quyền Reset' })
+                    if (!infoAppUser.error && infoAppUser.data.level == 0) {
+                        await TIMESHEET__EXPERT_SALARY_COLL.deleteMany({
+                            parent: salaryID,
+                        })
+                        await TIMESHEET__EXPERT_SALARY_COLL.findByIdAndDelete(
+                            salaryID
+                        )
+                        return resolve({
+                            error: false,
+                            data: 'Reset thành công',
+                        })
+                    } else {
+                        return resolve({
+                            error: false,
+                            data: 'Bạn không có quyền Reset',
+                        })
                     }
                 }
             } catch (error) {
-                return resolve({ error: true, message: error.message, status: 500 })
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
@@ -838,8 +1144,12 @@ class Model extends BaseModel {
     remove({ arraysRemove, userID }) {
         return new Promise(async (resolve) => {
             try {
-                if(!checkObjectIDs(arraysRemove)) {
-                    return resolve({ error: true, message: 'Yêu cầu không hợp lệ', status: 200 });
+                if (!checkObjectIDs(arraysRemove)) {
+                    return resolve({
+                        error: true,
+                        message: 'Yêu cầu không hợp lệ',
+                        status: 200,
+                    })
                 }
 
                 const result = await TIMESHEET__EXPERT_SALARY_COLL.deleteMany({
@@ -851,17 +1161,26 @@ class Model extends BaseModel {
                     // ]
                 })
 
-                if(result.deletedCount !== arraysRemove.length) {
+                if (result.deletedCount !== arraysRemove.length) {
                     return resolve({
                         error: true,
-                        message: "Dữ liệu có thể chưa xóa hết vì không đủ quyền",
-                        status: 200
-                    });
+                        message:
+                            'Dữ liệu có thể chưa xóa hết vì không đủ quyền',
+                        status: 200,
+                    })
                 }
 
-                return resolve({ error: false, message: "Xóa dữ liệu thành công", status: 200 });
+                return resolve({
+                    error: false,
+                    message: 'Xóa dữ liệu thành công',
+                    status: 200,
+                })
             } catch (error) {
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
@@ -874,35 +1193,53 @@ class Model extends BaseModel {
     getInfo({ expertSalaryID, userID, select, populates, ctx }) {
         return new Promise(async (resolve) => {
             try {
-                if(!checkObjectIDs(expertSalaryID))
-                    return resolve({ error: true, message: 'Request params expertSalaryID invalid', status: 400 });
+                if (!checkObjectIDs(expertSalaryID))
+                    return resolve({
+                        error: true,
+                        message: 'Request params expertSalaryID invalid',
+                        status: 400,
+                    })
 
-                 // populates
-                 if(populates && typeof populates === 'string'){
-					if(!IsJsonString(populates))
-						return resolve({ error: true, message: 'Request params populates invalid', status: 400 });
+                // populates
+                if (populates && typeof populates === 'string') {
+                    if (!IsJsonString(populates))
+                        return resolve({
+                            error: true,
+                            message: 'Request params populates invalid',
+                            status: 400,
+                        })
 
-					populates = JSON.parse(populates);
-				}else{
+                    populates = JSON.parse(populates)
+                } else {
                     populates = {
-                        path: "",
-                        select: ""
+                        path: '',
+                        select: '',
                     }
                 }
 
-                let infoAterGet = await TIMESHEET__EXPERT_SALARY_COLL.findById(expertSalaryID)
-                .select(select)
-                .populate(populates)
+                let infoAterGet = await TIMESHEET__EXPERT_SALARY_COLL.findById(
+                    expertSalaryID
+                )
+                    .select(select)
+                    .populate(populates)
 
-                if(!infoAterGet)
-                    return resolve({ error: true, message: "can't_get_info", status: 403 });
+                if (!infoAterGet)
+                    return resolve({
+                        error: true,
+                        message: "can't_get_info",
+                        status: 403,
+                    })
 
                 // Record Traffic
                 //await ctx.call(`${CF_DOMAIN_SERVICES.ANALYSIS}.${CF_ACTIONS_ANALYSIS.HISTORY_TRAFFIC_INSERT}`, dataTF)
 
-                return resolve({ error: false, data: infoAterGet, status: 200 });
+                return resolve({ error: false, data: infoAterGet, status: 200 })
             } catch (error) {
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
@@ -913,156 +1250,218 @@ class Model extends BaseModel {
      * Code  :
      */
     getList({
-        sortOption, parentID, userID,
-        keyword, limit = 10, lastestID, select, populates= {}, companyID, positionsID, departmentsID }) {
+        sortOption,
+        parentID,
+        userID,
+        keyword,
+        limit = 10,
+        lastestID,
+        select,
+        populates = {},
+        companyID,
+        positionsID,
+        departmentsID,
+    }) {
         // console.log({sortOption, parentID, userID, keyword, limit, lastestID, select, populates, companyID, positionsID, departmentsID })
         return new Promise(async (resolve) => {
             try {
                 // Record Traffic
                 // //await ctx.call(`${CF_DOMAIN_SERVICES.ANALYSIS}.${CF_ACTIONS_ANALYSIS.HISTORY_TRAFFIC_INSERT}`, dataTF)
 
-                let getInfoUserApp = await AUTH__APP_USER.checkPermissionsAccessApp({
-                    appID: "61e049cffdebf77b072d1b14",
-                    userID
-                })
+                let getInfoUserApp =
+                    await AUTH__APP_USER.checkPermissionsAccessApp({
+                        appID: '61e049cffdebf77b072d1b14',
+                        userID,
+                    })
 
-                if(Number(limit) > 50){
-                    limit = 50;
-                } else{
-                    limit = +Number(limit);
+                if (Number(limit) > 50) {
+                    limit = 50
+                } else {
+                    limit = +Number(limit)
                 }
 
-                let conditionObj = {};
-                let nextCursor	= null;
-                let sortBy      = null;
-                let keys	 = ['createAt__1', '_id__1'];
+                let conditionObj = {}
+                let nextCursor = null
+                let sortBy = null
+                let keys = ['createAt__1', '_id__1']
 
-                if(sortOption == 1){
-                    keys	 = ['date__-1', '_id__-1'];
+                if (sortOption == 1) {
+                    keys = ['date__-1', '_id__-1']
                 }
 
                 const validation = validateParamsObjectID({
-                    positionsID           : { value: positionsID, isRequire: false },
-                    departmentsID         : { value: departmentsID, isRequire: false },
+                    positionsID: { value: positionsID, isRequire: false },
+                    departmentsID: { value: departmentsID, isRequire: false },
                 })
-                if(validation.error) return resolve(validation);
+                if (validation.error) return resolve(validation)
 
-                if(populates && typeof populates === 'string'){
-					if(!IsJsonString(populates))
-						return resolve({ error: true, message: 'Request params populates invalid', status: 400 });
+                if (populates && typeof populates === 'string') {
+                    if (!IsJsonString(populates))
+                        return resolve({
+                            error: true,
+                            message: 'Request params populates invalid',
+                            status: 400,
+                        })
 
-					populates = JSON.parse(populates);
-				}else{
+                    populates = JSON.parse(populates)
+                } else {
                     populates = {
-                        path: "",
-                        select: ""
+                        path: '',
+                        select: '',
                     }
                 }
 
-				if(checkObjectIDs(parentID)){
+                if (checkObjectIDs(parentID)) {
                     // keys	 = ['project__1', '_id__-1']; // Đưa vào đây thì phân trang không còn đúng nữa
 
-					conditionObj.parent = parentID
+                    conditionObj.parent = parentID
 
-                    if(!getInfoUserApp.error && Number(getInfoUserApp.data.level) == 0){
-                       // Admin ứng dụng
-                    }else{
-                        let listDepartment = await ITEM__DEPARTMENT_COLL.find({company:companyID, members: { $in: [userID] }}).select('_id name')
-                        conditionObj.project = { $in: listDepartment.map(item=>item.id) }
+                    if (
+                        !getInfoUserApp.error &&
+                        Number(getInfoUserApp.data.level) == 0
+                    ) {
+                        // Admin ứng dụng
+                    } else {
+                        let listDepartment = await ITEM__DEPARTMENT_COLL.find({
+                            company: companyID,
+                            members: { $in: [userID] },
+                        }).select('_id name')
+                        conditionObj.project = {
+                            $in: listDepartment.map((item) => item.id),
+                        }
                     }
 
                     // Lọc dữ liệu
-                    if(departmentsID && departmentsID.length){
+                    if (departmentsID && departmentsID.length) {
                         conditionObj.project = { $in: departmentsID }
                     }
 
-                    if(positionsID && positionsID.length){
+                    if (positionsID && positionsID.length) {
                         conditionObj.position = { $in: positionsID }
                     }
 
-                    if(keyword){
-                        keyword = keyword.split(" ");
-                        keyword = '.*' + keyword.join(".*") + '.*';
+                    if (keyword) {
+                        keyword = keyword.split(' ')
+                        keyword = '.*' + keyword.join('.*') + '.*'
 
-                        let listUser = await AUTH__USER_COLL.find({company:companyID, fullname: new RegExp(keyword, 'i')})
-                        .select('_id fullname')
-                        .limit(20)
+                        let listUser = await AUTH__USER_COLL.find({
+                            company: companyID,
+                            fullname: new RegExp(keyword, 'i'),
+                        })
+                            .select('_id fullname')
+                            .limit(20)
                         // console.log(listUser)
 
-                        conditionObj.human = {$in: listUser.map(item=>item._id)}
+                        conditionObj.human = {
+                            $in: listUser.map((item) => item._id),
+                        }
                     }
-				}else{
-                    if(!getInfoUserApp.error && Number(getInfoUserApp.data.level) == 0){
+                } else {
+                    if (
+                        !getInfoUserApp.error &&
+                        Number(getInfoUserApp.data.level) == 0
+                    ) {
                         conditionObj.company = companyID
                         conditionObj.parent = { $exists: false }
-                    }else{
+                    } else {
                         conditionObj.$or = [
-                            {admins: { $in: [userID] }},
-                            {members: { $in: [userID] }}
+                            { admins: { $in: [userID] } },
+                            { members: { $in: [userID] } },
                         ]
                         conditionObj.company = companyID
                         conditionObj.parent = { $exists: false }
                     }
 
-                    if(keyword){
-                        keyword = keyword.split(" ");
-                        keyword = '.*' + keyword.join(".*") + '.*';
-                        conditionObj.name =  new RegExp(keyword, 'i')
+                    if (keyword) {
+                        keyword = keyword.split(' ')
+                        keyword = '.*' + keyword.join('.*') + '.*'
+                        conditionObj.name = new RegExp(keyword, 'i')
                     }
                 }
                 // console.log(conditionObj)
 
                 let conditionObjOrg = { ...conditionObj }
 
-				if(lastestID && checkObjectIDs(lastestID)){
-					let infoData = await TIMESHEET__EXPERT_SALARY_COLL.findById(lastestID);
-					if(!infoData)
-						return resolve({ error: true, message: "Can't get info lastest", status: 400 });
+                if (lastestID && checkObjectIDs(lastestID)) {
+                    let infoData =
+                        await TIMESHEET__EXPERT_SALARY_COLL.findById(lastestID)
+                    if (!infoData)
+                        return resolve({
+                            error: true,
+                            message: "Can't get info lastest",
+                            status: 400,
+                        })
 
-                    let dataPagingAndSort = RANGE_BASE_PAGINATION_V2({ keys, latestRecord: infoData, objectQuery: conditionObjOrg });
+                    let dataPagingAndSort = RANGE_BASE_PAGINATION_V2({
+                        keys,
+                        latestRecord: infoData,
+                        objectQuery: conditionObjOrg,
+                    })
 
-					if(!dataPagingAndSort || dataPagingAndSort.error)
-						return resolve({ error: true, message: "Can't get range pagination", status: 400 });
+                    if (!dataPagingAndSort || dataPagingAndSort.error)
+                        return resolve({
+                            error: true,
+                            message: "Can't get range pagination",
+                            status: 400,
+                        })
 
-                    conditionObj = dataPagingAndSort.data.find;
-					sortBy       = dataPagingAndSort.data.sort;
-				}else{
-                    let dataPagingAndSort = RANGE_BASE_PAGINATION_V2({ keys, latestRecord: null, objectQuery: conditionObjOrg });
-					sortBy        = dataPagingAndSort.data.sort;
+                    conditionObj = dataPagingAndSort.data.find
+                    sortBy = dataPagingAndSort.data.sort
+                } else {
+                    let dataPagingAndSort = RANGE_BASE_PAGINATION_V2({
+                        keys,
+                        latestRecord: null,
+                        objectQuery: conditionObjOrg,
+                    })
+                    sortBy = dataPagingAndSort.data.sort
                 }
                 // sortBy      = { project: 1 };
-                console.log({sortBy})
+                console.log({ sortBy })
 
-                let infoDataAfterGet = await TIMESHEET__EXPERT_SALARY_COLL.find(conditionObj)
+                let infoDataAfterGet = await TIMESHEET__EXPERT_SALARY_COLL.find(
+                    conditionObj
+                )
                     .select(select)
-                    .limit(+limit+1)
+                    .limit(+limit + 1)
                     .sort(sortBy)
                     .populate(populates)
-                    .lean();
+                    .lean()
 
-                if(!infoDataAfterGet)
-                    return resolve({ error: true, message: "Can't get data", status: 403 });
+                if (!infoDataAfterGet)
+                    return resolve({
+                        error: true,
+                        message: "Can't get data",
+                        status: 403,
+                    })
 
-                if(infoDataAfterGet && infoDataAfterGet.length){
-                    if(infoDataAfterGet.length > limit){
-                        nextCursor = infoDataAfterGet[limit - 1]._id;
-                        infoDataAfterGet.length = limit;
+                if (infoDataAfterGet && infoDataAfterGet.length) {
+                    if (infoDataAfterGet.length > limit) {
+                        nextCursor = infoDataAfterGet[limit - 1]._id
+                        infoDataAfterGet.length = limit
                     }
                 }
 
-                let totalRecord = await TIMESHEET__EXPERT_SALARY_COLL.count(conditionObjOrg);
-                let totalPage   = Math.ceil(totalRecord/limit);
+                let totalRecord =
+                    await TIMESHEET__EXPERT_SALARY_COLL.count(conditionObjOrg)
+                let totalPage = Math.ceil(totalRecord / limit)
 
-                return resolve({ error: false, data: {
-                    listRecords: infoDataAfterGet,
-                    limit: +limit,
-                    totalRecord,
-                    totalPage,
-                    nextCursor,
-                }, status: 200 });
-
+                return resolve({
+                    error: false,
+                    data: {
+                        listRecords: infoDataAfterGet,
+                        limit: +limit,
+                        totalRecord,
+                        totalPage,
+                        nextCursor,
+                    },
+                    status: 200,
+                })
             } catch (error) {
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
@@ -1072,176 +1471,230 @@ class Model extends BaseModel {
      * Author: Hiepnh
      * Date: 21/9/2022
      */
-    getListByProperty({ userID, option, year, month, companyID, projectID, assigneeID, ctx }){
+    getListByProperty({
+        userID,
+        option,
+        year,
+        month,
+        companyID,
+        projectID,
+        assigneeID,
+        ctx,
+    }) {
         // console.log({ userID, option, year, companyID, assigneeID })
-        return new Promise(async resolve => {
+        return new Promise(async (resolve) => {
             try {
                 // Record Traffic
                 //await ctx.call(`${CF_DOMAIN_SERVICES.ANALYSIS}.${CF_ACTIONS_ANALYSIS.HISTORY_TRAFFIC_INSERT}`, dataTF)
 
                 let yearFilter
                 let currentYear = new Date().getFullYear()
-                if(year && !isNaN(year)){
+                if (year && !isNaN(year)) {
                     yearFilter = Number(year)
-                }else{
+                } else {
                     yearFilter = Number(currentYear)
                 }
 
                 // Tổng hợp Lương của công ty theo tháng
-                if(!option){
+                if (!option) {
                     let conditionObj = {
                         company: ObjectID(companyID),
-                        parent: { $exists: true, $ne: null }
+                        parent: { $exists: true, $ne: null },
                     }
 
-                    let listData = await TIMESHEET__EXPERT_SALARY_COLL.aggregate([
-                        {
-                            $match: conditionObj
-                        },
-                        {
-                            $project: {
-                                year : {$year : "$date"},
-                                month : {$month : "$date"},
-                                salary: 1,
-                                reward: 1,
-                                punishment: 1,
-                                advance: 1,
-                                remaining: 1,
-                                paid: 1,
-                                revenueBonus: 1,
-                                mealAllowance: 1,
-                                insurance: 1,
-                                pitax: 1,
-                            }
-                        },
-                        {
-                            $match: {
-                                year: Number(yearFilter)
-                            }
-                        },
-                        {
-                            $group: {
-                                _id: { month: '$month' },
-                                salary: { $sum: { $subtract: [ { $add: ["$salary","$revenueBonus","$reward","$mealAllowance"] }, {$add: ["$punishment","$insurance","$pitax"]} ] } },
-                                paid: { $sum: {$add: [ "$paid", "$advance" ]} },
-                            }
-                        },
-                    ])
+                    let listData =
+                        await TIMESHEET__EXPERT_SALARY_COLL.aggregate([
+                            {
+                                $match: conditionObj,
+                            },
+                            {
+                                $project: {
+                                    year: { $year: '$date' },
+                                    month: { $month: '$date' },
+                                    salary: 1,
+                                    reward: 1,
+                                    punishment: 1,
+                                    advance: 1,
+                                    remaining: 1,
+                                    paid: 1,
+                                    revenueBonus: 1,
+                                    mealAllowance: 1,
+                                    insurance: 1,
+                                    pitax: 1,
+                                },
+                            },
+                            {
+                                $match: {
+                                    year: Number(yearFilter),
+                                },
+                            },
+                            {
+                                $group: {
+                                    _id: { month: '$month' },
+                                    salary: {
+                                        $sum: {
+                                            $subtract: [
+                                                {
+                                                    $add: [
+                                                        '$salary',
+                                                        '$revenueBonus',
+                                                        '$reward',
+                                                        '$mealAllowance',
+                                                    ],
+                                                },
+                                                {
+                                                    $add: [
+                                                        '$punishment',
+                                                        '$insurance',
+                                                        '$pitax',
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    },
+                                    paid: {
+                                        $sum: { $add: ['$paid', '$advance'] },
+                                    },
+                                },
+                            },
+                        ])
 
                     return resolve({ error: false, data: listData })
                 }
 
                 // Bảng lương của assigneeID theo tháng
-                else if(option == 1){
-
+                else if (option == 1) {
                     let conditionObj = {
                         human: ObjectID(assigneeID),
-                        parent: { $exists: true, $ne: null }
+                        parent: { $exists: true, $ne: null },
                     }
 
-                    let listData = await TIMESHEET__EXPERT_SALARY_COLL.aggregate([
-                        {
-                            $match: conditionObj
-                        },
-                        {
-                            $project: {
-                                year : {$year : "$date"},
-                                month : {$month : "$date"},
-                                // examTotal: { $sum: [ "$salary","$reward","-$punishment" ] },
-                                salary: 1,
-                                reward: 1,
-                                punishment: 1,
-                                advance: 1,
-                                remaining: 1,
-                                paid: 1,
-                                revenueBonus: 1,
-                                mealAllowance: 1,
-                                insurance: 1,
-                                pitax: 1,
-                            }
-                        },
-                        {
-                            $match: {
-                                year: Number(yearFilter)
-                            }
-                        },
-                        {
-                            $group: {
-                                _id: { month: '$month' },
-                                // examTotal: { $sum:"$examTotal" },
-                                // totalAmount: { $sum: { $multiply: [ "$salary", "$reward" ] } },
-                                // totalAmount2: { $sum: { $add: [ "$salary", "$reward" ] } },
-                                // salary: { $sum: { $subtract: [ { $add: [ "$salary", "$reward" ] }, "$punishment" ] } },
-                                salary: { $sum: { $subtract: [ { $add: ["$salary","$revenueBonus","$reward","$mealAllowance"] }, {$add: ["$punishment","$insurance","$pitax"]} ] } },
-                                // advance: { $sum: "$advance" },
-                                // salary: { $sum:"$salary" },
-                                paid: { $sum: {$add: [ "$paid", "$advance" ]} },
-                            }
-                        },
-                    ])
+                    let listData =
+                        await TIMESHEET__EXPERT_SALARY_COLL.aggregate([
+                            {
+                                $match: conditionObj,
+                            },
+                            {
+                                $project: {
+                                    year: { $year: '$date' },
+                                    month: { $month: '$date' },
+                                    // examTotal: { $sum: [ "$salary","$reward","-$punishment" ] },
+                                    salary: 1,
+                                    reward: 1,
+                                    punishment: 1,
+                                    advance: 1,
+                                    remaining: 1,
+                                    paid: 1,
+                                    revenueBonus: 1,
+                                    mealAllowance: 1,
+                                    insurance: 1,
+                                    pitax: 1,
+                                },
+                            },
+                            {
+                                $match: {
+                                    year: Number(yearFilter),
+                                },
+                            },
+                            {
+                                $group: {
+                                    _id: { month: '$month' },
+                                    // examTotal: { $sum:"$examTotal" },
+                                    // totalAmount: { $sum: { $multiply: [ "$salary", "$reward" ] } },
+                                    // totalAmount2: { $sum: { $add: [ "$salary", "$reward" ] } },
+                                    // salary: { $sum: { $subtract: [ { $add: [ "$salary", "$reward" ] }, "$punishment" ] } },
+                                    salary: {
+                                        $sum: {
+                                            $subtract: [
+                                                {
+                                                    $add: [
+                                                        '$salary',
+                                                        '$revenueBonus',
+                                                        '$reward',
+                                                        '$mealAllowance',
+                                                    ],
+                                                },
+                                                {
+                                                    $add: [
+                                                        '$punishment',
+                                                        '$insurance',
+                                                        '$pitax',
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    },
+                                    // advance: { $sum: "$advance" },
+                                    // salary: { $sum:"$salary" },
+                                    paid: {
+                                        $sum: { $add: ['$paid', '$advance'] },
+                                    },
+                                },
+                            },
+                        ])
                     // console.log(listData)
 
                     return resolve({ error: false, data: listData })
                 }
 
                 // Bảng lương của assigneeID 1 tháng
-                else if(option == 2){
-
+                else if (option == 2) {
                     let conditionObj = {
                         human: ObjectID(assigneeID),
-                        parent: { $exists: true, $ne: null }
+                        parent: { $exists: true, $ne: null },
                     }
 
-                    let listData = await TIMESHEET__EXPERT_SALARY_COLL.aggregate([
-                        {
-                            $match: conditionObj
-                        },
-                        {
-                            $project: {
-                                year : {$year : "$date"},
-                                month : {$month : "$date"},
-                                salary: 1,
-                                reward: 1,
-                                punishment: 1,
-                                advance: 1,
-                                remaining: 1,
-                                paid: 1,
-                                revenueBonus: 1,
-                                mealAllowance: 1,
-                                insurance: 1,
-                                pitax: 1,
-                            }
-                        },
-                        {
-                            $match: {
-                                year: Number(yearFilter),
-                                month: Number(month),
-                            }
-                        },
-                        {
-                            $group: {
-                                _id: { },
-                                salary: { $sum:"$salary" },
-                                reward: { $sum:"$reward" },
-                                punishment: { $sum:"$punishment" },
-                                advance: { $sum:"$advance" },
-                                remaining: { $sum:"$remaining" },
-                                paid: { $sum:"$paid" },
-                                revenueBonus: { $sum:"$revenueBonus" },
-                                mealAllowance: { $sum:"$mealAllowance" },
-                                insurance: { $sum:"$insurance" },
-                                pitax: { $sum:"$pitax" },
-                            }
-                        },
-                    ])
+                    let listData =
+                        await TIMESHEET__EXPERT_SALARY_COLL.aggregate([
+                            {
+                                $match: conditionObj,
+                            },
+                            {
+                                $project: {
+                                    year: { $year: '$date' },
+                                    month: { $month: '$date' },
+                                    salary: 1,
+                                    reward: 1,
+                                    punishment: 1,
+                                    advance: 1,
+                                    remaining: 1,
+                                    paid: 1,
+                                    revenueBonus: 1,
+                                    mealAllowance: 1,
+                                    insurance: 1,
+                                    pitax: 1,
+                                },
+                            },
+                            {
+                                $match: {
+                                    year: Number(yearFilter),
+                                    month: Number(month),
+                                },
+                            },
+                            {
+                                $group: {
+                                    _id: {},
+                                    salary: { $sum: '$salary' },
+                                    reward: { $sum: '$reward' },
+                                    punishment: { $sum: '$punishment' },
+                                    advance: { $sum: '$advance' },
+                                    remaining: { $sum: '$remaining' },
+                                    paid: { $sum: '$paid' },
+                                    revenueBonus: { $sum: '$revenueBonus' },
+                                    mealAllowance: { $sum: '$mealAllowance' },
+                                    insurance: { $sum: '$insurance' },
+                                    pitax: { $sum: '$pitax' },
+                                },
+                            },
+                        ])
                     // console.log(listData)
 
                     return resolve({ error: false, data: listData })
                 }
 
                 // Gom nhóm theo Dự án/Bộ phận
-                else if(option == 3){
-                    let sortBy = { "_id.project": 1 }
+                else if (option == 3) {
+                    let sortBy = { '_id.project': 1 }
 
                     let conditionPopulate1 = {
                         path: '_id.project',
@@ -1254,58 +1707,84 @@ class Model extends BaseModel {
                         parent: { $exists: true, $ne: null },
                     }
 
-                    let listData1 = await TIMESHEET__EXPERT_SALARY_COLL.aggregate([
-                        {
-                            $match: conditionObj
-                        },
-                        {
-                            $project: {
-                                year : {$year : "$date"},
-                                month : {$month : "$date"},
-                                project: 1,
-                                position: 1,
-                                human: 1,
-                                salary: 1,
-                                reward: 1,
-                                punishment: 1,
-                                advance: 1,
-                                remaining: 1,
-                                paid: 1,
-                                revenueBonus: 1,
-                                mealAllowance: 1,
-                                insurance: 1,
-                                pitax: 1,
-                            }
-                        },
-                        {
-                            $match: {
-                                year: Number(yearFilter),
-                                month: Number(month),
-                            }
-                        },
-                        {
-                            $group: {
-                                _id: { project: '$project' },
-                                // salary: { $sum: { $subtract: [ { $add: [ "$salary", "$reward" ] }, "$punishment" ] } },
-                                salary: { $sum: { $subtract: [ { $add: ["$salary","$revenueBonus","$reward","$mealAllowance"] }, {$add: ["$punishment","$insurance","$pitax"]} ] } },
-                                paid: { $sum: {$add: [ "$paid", "$advance" ]} },
-                            }
-                        },
-                        {
-                            $sort: sortBy
-                        },
-                    ])
+                    let listData1 =
+                        await TIMESHEET__EXPERT_SALARY_COLL.aggregate([
+                            {
+                                $match: conditionObj,
+                            },
+                            {
+                                $project: {
+                                    year: { $year: '$date' },
+                                    month: { $month: '$date' },
+                                    project: 1,
+                                    position: 1,
+                                    human: 1,
+                                    salary: 1,
+                                    reward: 1,
+                                    punishment: 1,
+                                    advance: 1,
+                                    remaining: 1,
+                                    paid: 1,
+                                    revenueBonus: 1,
+                                    mealAllowance: 1,
+                                    insurance: 1,
+                                    pitax: 1,
+                                },
+                            },
+                            {
+                                $match: {
+                                    year: Number(yearFilter),
+                                    month: Number(month),
+                                },
+                            },
+                            {
+                                $group: {
+                                    _id: { project: '$project' },
+                                    // salary: { $sum: { $subtract: [ { $add: [ "$salary", "$reward" ] }, "$punishment" ] } },
+                                    salary: {
+                                        $sum: {
+                                            $subtract: [
+                                                {
+                                                    $add: [
+                                                        '$salary',
+                                                        '$revenueBonus',
+                                                        '$reward',
+                                                        '$mealAllowance',
+                                                    ],
+                                                },
+                                                {
+                                                    $add: [
+                                                        '$punishment',
+                                                        '$insurance',
+                                                        '$pitax',
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    },
+                                    paid: {
+                                        $sum: { $add: ['$paid', '$advance'] },
+                                    },
+                                },
+                            },
+                            {
+                                $sort: sortBy,
+                            },
+                        ])
 
-                    if(listData1.length){
-                        await TIMESHEET__EXPERT_SALARY_COLL.populate(listData1, conditionPopulate1)
+                    if (listData1.length) {
+                        await TIMESHEET__EXPERT_SALARY_COLL.populate(
+                            listData1,
+                            conditionPopulate1
+                        )
                     }
 
                     return resolve({ error: false, data: listData1 })
                 }
 
                 // Gom nhóm theo Nhân sự trong bộ phận
-                else if(option == 4){
-                    let sortBy = { "_id.human": 1 }
+                else if (option == 4) {
+                    let sortBy = { '_id.human': 1 }
 
                     let conditionPopulate1 = {
                         path: '_id.human',
@@ -1318,57 +1797,83 @@ class Model extends BaseModel {
                         parent: { $exists: true, $ne: null },
                     }
 
-                    let listData1 = await TIMESHEET__EXPERT_SALARY_COLL.aggregate([
-                        {
-                            $match: conditionObj
-                        },
-                        {
-                            $project: {
-                                year : {$year : "$date"},
-                                month : {$month : "$date"},
-                                project: 1,
-                                human: 1,
-                                salary: 1,
-                                reward: 1,
-                                punishment: 1,
-                                advance: 1,
-                                remaining: 1,
-                                paid: 1,
-                                revenueBonus: 1,
-                                mealAllowance: 1,
-                                insurance: 1,
-                                pitax: 1,
-                            }
-                        },
-                        {
-                            $match: {
-                                year: Number(yearFilter),
-                                month: Number(month),
-                            }
-                        },
-                        {
-                            $group: {
-                                _id: { human: '$human' },
-                                // salary: { $sum: { $subtract: [ { $add: [ "$salary", "$reward" ] }, "$punishment" ] } },
-                                salary: { $sum: { $subtract: [ { $add: ["$salary","$revenueBonus","$reward","$mealAllowance"] }, {$add: ["$punishment","$insurance","$pitax"]} ] } },
-                                paid: { $sum: {$add: [ "$paid", "$advance" ]} },
-                            }
-                        },
-                        {
-                            $sort: sortBy
-                        },
-                    ])
+                    let listData1 =
+                        await TIMESHEET__EXPERT_SALARY_COLL.aggregate([
+                            {
+                                $match: conditionObj,
+                            },
+                            {
+                                $project: {
+                                    year: { $year: '$date' },
+                                    month: { $month: '$date' },
+                                    project: 1,
+                                    human: 1,
+                                    salary: 1,
+                                    reward: 1,
+                                    punishment: 1,
+                                    advance: 1,
+                                    remaining: 1,
+                                    paid: 1,
+                                    revenueBonus: 1,
+                                    mealAllowance: 1,
+                                    insurance: 1,
+                                    pitax: 1,
+                                },
+                            },
+                            {
+                                $match: {
+                                    year: Number(yearFilter),
+                                    month: Number(month),
+                                },
+                            },
+                            {
+                                $group: {
+                                    _id: { human: '$human' },
+                                    // salary: { $sum: { $subtract: [ { $add: [ "$salary", "$reward" ] }, "$punishment" ] } },
+                                    salary: {
+                                        $sum: {
+                                            $subtract: [
+                                                {
+                                                    $add: [
+                                                        '$salary',
+                                                        '$revenueBonus',
+                                                        '$reward',
+                                                        '$mealAllowance',
+                                                    ],
+                                                },
+                                                {
+                                                    $add: [
+                                                        '$punishment',
+                                                        '$insurance',
+                                                        '$pitax',
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    },
+                                    paid: {
+                                        $sum: { $add: ['$paid', '$advance'] },
+                                    },
+                                },
+                            },
+                            {
+                                $sort: sortBy,
+                            },
+                        ])
 
-                    if(listData1.length){
-                        await TIMESHEET__EXPERT_SALARY_COLL.populate(listData1, conditionPopulate1)
+                    if (listData1.length) {
+                        await TIMESHEET__EXPERT_SALARY_COLL.populate(
+                            listData1,
+                            conditionPopulate1
+                        )
                     }
 
                     return resolve({ error: false, data: listData1 })
                 }
 
                 // Gom nhóm theo Nhân sự trong 1 tháng/
-                else if(option == 5){
-                    let sortBy = { "_id.human": 1 }
+                else if (option == 5) {
+                    let sortBy = { '_id.human': 1 }
 
                     let conditionPopulate1 = {
                         path: '_id.human',
@@ -1381,106 +1886,132 @@ class Model extends BaseModel {
                         parent: { $exists: true, $ne: null },
                     }
 
-                    let listData1 = await TIMESHEET__EXPERT_SALARY_COLL.aggregate([
-                        {
-                            $match: conditionObj
-                        },
-                        {
-                            $project: {
-                                year : {$year : "$date"},
-                                month : {$month : "$date"},
-                                human: 1,
-                                salary: 1,
-                                reward: 1,
-                                punishment: 1,
-                                advance: 1,
-                                remaining: 1,
-                                paid: 1,
-                                revenueBonus: 1,
-                                mealAllowance: 1,
-                                insurance: 1,
-                                pitax: 1,
-                            }
-                        },
-                        {
-                            $match: {
-                                year: Number(yearFilter),
-                                month: Number(month),
-                            }
-                        },
-                        {
-                            $group: {
-                                _id: { human: '$human' },
-                                // salary: { $sum: { $subtract: [ { $add: [ "$salary", "$reward" ] }, "$punishment" ] } },
-                                salary: { $sum: { $subtract: [ { $add: ["$salary","$revenueBonus","$reward","$mealAllowance"] }, {$add: ["$punishment","$insurance","$pitax"]} ] } },
-                                paid: { $sum: {$add: [ "$paid", "$advance" ]} },
-                            }
-                        },
-                        {
-                            $sort: sortBy
-                        },
-                    ])
+                    let listData1 =
+                        await TIMESHEET__EXPERT_SALARY_COLL.aggregate([
+                            {
+                                $match: conditionObj,
+                            },
+                            {
+                                $project: {
+                                    year: { $year: '$date' },
+                                    month: { $month: '$date' },
+                                    human: 1,
+                                    salary: 1,
+                                    reward: 1,
+                                    punishment: 1,
+                                    advance: 1,
+                                    remaining: 1,
+                                    paid: 1,
+                                    revenueBonus: 1,
+                                    mealAllowance: 1,
+                                    insurance: 1,
+                                    pitax: 1,
+                                },
+                            },
+                            {
+                                $match: {
+                                    year: Number(yearFilter),
+                                    month: Number(month),
+                                },
+                            },
+                            {
+                                $group: {
+                                    _id: { human: '$human' },
+                                    // salary: { $sum: { $subtract: [ { $add: [ "$salary", "$reward" ] }, "$punishment" ] } },
+                                    salary: {
+                                        $sum: {
+                                            $subtract: [
+                                                {
+                                                    $add: [
+                                                        '$salary',
+                                                        '$revenueBonus',
+                                                        '$reward',
+                                                        '$mealAllowance',
+                                                    ],
+                                                },
+                                                {
+                                                    $add: [
+                                                        '$punishment',
+                                                        '$insurance',
+                                                        '$pitax',
+                                                    ],
+                                                },
+                                            ],
+                                        },
+                                    },
+                                    paid: {
+                                        $sum: { $add: ['$paid', '$advance'] },
+                                    },
+                                },
+                            },
+                            {
+                                $sort: sortBy,
+                            },
+                        ])
 
-                    if(listData1.length){
-                        await TIMESHEET__EXPERT_SALARY_COLL.populate(listData1, conditionPopulate1)
+                    if (listData1.length) {
+                        await TIMESHEET__EXPERT_SALARY_COLL.populate(
+                            listData1,
+                            conditionPopulate1
+                        )
                     }
 
                     return resolve({ error: false, data: listData1 })
                 }
 
                 // Tổng hợp toàn bộ của 1 nhân sự
-                else if(option == 6){
-
+                else if (option == 6) {
                     let conditionObj = {
                         human: ObjectID(assigneeID),
-                        parent: { $exists: true, $ne: null }
+                        parent: { $exists: true, $ne: null },
                     }
 
-                    let listData = await TIMESHEET__EXPERT_SALARY_COLL.aggregate([
-                        {
-                            $match: conditionObj
-                        },
-                        {
-                            $project: {
-                                year : {$year : "$date"},
-                                month : {$month : "$date"},
-                                salary: 1,
-                                reward: 1,
-                                punishment: 1,
-                                advance: 1,
-                                remaining: 1,
-                                paid: 1,
-                                revenueBonus: 1,
-                                mealAllowance: 1,
-                                insurance: 1,
-                                pitax: 1,
-                            }
-                        },
-                        {
-                            $group: {
-                                _id: { },
-                                salary: { $sum:"$salary" },
-                                reward: { $sum:"$reward" },
-                                punishment: { $sum:"$punishment" },
-                                advance: { $sum:"$advance" },
-                                remaining: { $sum:"$remaining" },
-                                paid: { $sum:"$paid" },
-                                revenueBonus: { $sum:"$revenueBonus" },
-                                mealAllowance: { $sum:"$mealAllowance" },
-                                insurance: { $sum:"$insurance" },
-                                pitax: { $sum:"$pitax" },
-                            }
-                        },
-                    ])
+                    let listData =
+                        await TIMESHEET__EXPERT_SALARY_COLL.aggregate([
+                            {
+                                $match: conditionObj,
+                            },
+                            {
+                                $project: {
+                                    year: { $year: '$date' },
+                                    month: { $month: '$date' },
+                                    salary: 1,
+                                    reward: 1,
+                                    punishment: 1,
+                                    advance: 1,
+                                    remaining: 1,
+                                    paid: 1,
+                                    revenueBonus: 1,
+                                    mealAllowance: 1,
+                                    insurance: 1,
+                                    pitax: 1,
+                                },
+                            },
+                            {
+                                $group: {
+                                    _id: {},
+                                    salary: { $sum: '$salary' },
+                                    reward: { $sum: '$reward' },
+                                    punishment: { $sum: '$punishment' },
+                                    advance: { $sum: '$advance' },
+                                    remaining: { $sum: '$remaining' },
+                                    paid: { $sum: '$paid' },
+                                    revenueBonus: { $sum: '$revenueBonus' },
+                                    mealAllowance: { $sum: '$mealAllowance' },
+                                    insurance: { $sum: '$insurance' },
+                                    pitax: { $sum: '$pitax' },
+                                },
+                            },
+                        ])
                     // console.log(listData)
 
                     return resolve({ error: false, data: listData })
                 }
             } catch (error) {
-                return resolve({ error: true, message: error.message });
+                return resolve({ error: true, message: error.message })
             }
         })
     }
 }
 
-exports.MODEL = new Model
+exports.MODEL = new Model()

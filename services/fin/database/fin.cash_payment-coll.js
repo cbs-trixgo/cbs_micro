@@ -1,20 +1,20 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * PAYMENT TRẢ TRƯỚC
  */
-module.exports  = DATABASE_MIDDLEWARE("cash_payment", {
+module.exports = DATABASE_MIDDLEWARE('cash_payment', {
     //_________Công ty
     company: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     //_________Mã khách
     customer: {
         type: Schema.Types.ObjectId,
-        ref: 'contact'
+        ref: 'contact',
     },
     //_________Tên
     name: String,
@@ -27,10 +27,12 @@ module.exports  = DATABASE_MIDDLEWARE("cash_payment", {
     //_________Giá trị thanh toán
     payment: { type: Number, default: 0 },
     //_________Ảnh đính kèm
-    images: [{
-        type: Schema.Types.ObjectId,
-        ref: "file"
-    }],
+    images: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'file',
+        },
+    ],
     /**
      * Trạng thái
      * 1-Hoạt động
@@ -42,10 +44,10 @@ module.exports  = DATABASE_MIDDLEWARE("cash_payment", {
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

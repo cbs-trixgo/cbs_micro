@@ -1,15 +1,15 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports = DATABASE_MIDDLEWARE("message_conversation_folder", {
+module.exports = DATABASE_MIDDLEWARE('message_conversation_folder', {
     /**
      * Tên folder
      */
     name: {
         type: String,
-        require: true
+        require: true,
     },
 
     // /**
@@ -32,15 +32,15 @@ module.exports = DATABASE_MIDDLEWARE("message_conversation_folder", {
      * Số lượng tin nhắn bị miss (của tất cả cuộc hội thoại trong folder)
      */
     amountMissMessage: {
-        type    : Number,
-        default : 0
+        type: Number,
+        default: 0,
     },
 
     /**
      * Người tạo folder
      */
-	author: {
-        type    : Schema.Types.ObjectId,
-        ref     : 'user'
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
     },
-});
+})

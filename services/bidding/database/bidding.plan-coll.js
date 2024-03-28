@@ -1,7 +1,7 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * KẾ HOẠCH LỰA CHỌN NHÀ THẦU
  * - Áp dụng cho tất cả các ngành của nền kinh tế, không chỉ xây dựng
@@ -15,47 +15,51 @@ const Schema                = require('mongoose').Schema;
  * +++Dự thầu kỹ thuật (bidding_apply)
  * +++Dự thầu tài chính (bidding_quotation)
  */
-module.exports  = DATABASE_MIDDLEWARE("bidding_plan", {
+module.exports = DATABASE_MIDDLEWARE('bidding_plan', {
     /**
      * THÔNG TIN CHUNG
      */
     //_________Lĩnh vực
     field: {
         type: Schema.Types.ObjectId,
-        ref : "datahub_type" 
-    },      
+        ref: 'datahub_type',
+    },
     //_________Khu vực (lấy từ thông tin dự án)
     area: {
         type: Schema.Types.ObjectId,
-        ref : "area"
-    },    
+        ref: 'area',
+    },
     //_________Chủ đầu tư (lấy từ thông tin dự án)
     client: {
         type: Schema.Types.ObjectId,
-        ref : "company"
-    }, 
+        ref: 'company',
+    },
     //_________Dự án
     project: {
         type: Schema.Types.ObjectId,
-        ref : "department"
+        ref: 'department',
     },
     //_________Quản trị
-    admins: [{
-        type: Schema.Types.ObjectId,
-        ref : "user"
-    }],
+    admins: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     //_________Thành viên được quyền xem ngân sách
-    members: [{
-        type: Schema.Types.ObjectId,
-        ref : "user"
-    }],
+    members: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     /**
      * THÔNG TIN GÓI THẦU
-     */    
+     */
     //_________Phần tử cha
     parent: {
         type: Schema.Types.ObjectId,
-        ref: "bidding_plan"
+        ref: 'bidding_plan',
     },
     /**
      * Loại gói thầu
@@ -70,7 +74,7 @@ module.exports  = DATABASE_MIDDLEWARE("bidding_plan", {
     //_________Mô tả
     description: String,
     //_________Giá gói thầu
-    packagePrice: { type: Number, default: 0 },      
+    packagePrice: { type: Number, default: 0 },
     //_________Ký hiệu gói thầu
     sign: String,
     //_________Ghi chú
@@ -111,33 +115,33 @@ module.exports  = DATABASE_MIDDLEWARE("bidding_plan", {
     //_________Thời gian thực hiện hợp đồng theo mời thầu (ngày)
     duration: { type: Number, default: 0 },
     //_________Progress tiến trình (%)
-    progress: { type: Number, default: 0 },   
+    progress: { type: Number, default: 0 },
     /**
      * THÔNG TIN NHÀ THẦU
      */
     //_________Nhà thầu trúng thầu
     bidder: {
         type: Schema.Types.ObjectId,
-        ref : "company"
-    }, 
+        ref: 'company',
+    },
     //_________Giá trúng thầu
-    tenderPrice: { type: Number, default: 0 },  
+    tenderPrice: { type: Number, default: 0 },
     //_________VAT
     vatTenderPrice: { type: Number, default: 0 },
     //_________Link tới hợp đồng
     contract: {
         type: Schema.Types.ObjectId,
-        ref : "contract"
-    },       
+        ref: 'contract',
+    },
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

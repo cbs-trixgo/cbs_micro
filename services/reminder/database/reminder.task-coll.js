@@ -1,9 +1,9 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("reminder_task", {
+module.exports = DATABASE_MIDDLEWARE('reminder_task', {
     /**
      * VÍ DỤ
      *  type: 'REMINDER_TASK': nhắc công việc
@@ -11,7 +11,7 @@ module.exports  = DATABASE_MIDDLEWARE("reminder_task", {
      */
     type: {
         type: String,
-        require: true
+        require: true,
     },
     /**
      * 1. đang chờ thực hiện
@@ -20,10 +20,10 @@ module.exports  = DATABASE_MIDDLEWARE("reminder_task", {
     delivery: {
         type: Number,
         enum: [1, 2],
-        default: 1
-    }, 
+        default: 1,
+    },
     runAt: {
         type: Date,
-        require: true
-    }
+        require: true,
+    },
 })

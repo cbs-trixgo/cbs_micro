@@ -1,15 +1,15 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * HỒ SƠ ĐỀ XUẤT KỸ THUẬT
  */
-module.exports  = DATABASE_MIDDLEWARE("bidding_apply", {
+module.exports = DATABASE_MIDDLEWARE('bidding_apply', {
     //_________Nhà thầu dự thầu (companyOfAssignee trong bidding_doc)
     contractor: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     // //_________Thuộc hồ sơ mời thầu nào
     // doc: {
@@ -19,7 +19,7 @@ module.exports  = DATABASE_MIDDLEWARE("bidding_apply", {
     //_________Dự thầu ứng với yêu cầu nào
     request: {
         type: Schema.Types.ObjectId,
-        ref : "bidding_request"
+        ref: 'bidding_request',
     },
     //_________Nội dung
     name: String,
@@ -28,19 +28,21 @@ module.exports  = DATABASE_MIDDLEWARE("bidding_apply", {
     //_________Ghi chú
     note: String,
     //________Tài liệu đính kèm
-    attachs: [{
-        type: Schema.Types.ObjectId,
-        ref: "file"
-    }],
+    attachs: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'file',
+        },
+    ],
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

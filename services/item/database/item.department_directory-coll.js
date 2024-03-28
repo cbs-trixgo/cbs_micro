@@ -1,13 +1,13 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
 /**
  * DANH BẠ DỰ ÁN/PHÒNG BAN
  */
 
-module.exports  = DATABASE_MIDDLEWARE("department_directory", {
+module.exports = DATABASE_MIDDLEWARE('department_directory', {
     /**
      * Phân loại
      * 1-Trợ lý viên
@@ -21,17 +21,17 @@ module.exports  = DATABASE_MIDDLEWARE("department_directory", {
     //_________Dự án, phòng ban
     department: {
         type: Schema.Types.ObjectId,
-        ref : "department"
+        ref: 'department',
     },
     //_________Thành viên (Họ và tên, Điện thoại, Email)
     member: {
         type: Schema.Types.ObjectId,
-        ref : "user"
+        ref: 'user',
     },
     //_________Công ty chứa member (được tạo tự động theo member)
     company: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     //_________Tên chức vụ (trưởng ban, cán bộ,...)
     name: String,
@@ -46,10 +46,10 @@ module.exports  = DATABASE_MIDDLEWARE("department_directory", {
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

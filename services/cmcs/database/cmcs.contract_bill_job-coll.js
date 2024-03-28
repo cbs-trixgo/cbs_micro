@@ -1,33 +1,33 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("contract_bill_job", {
+module.exports = DATABASE_MIDDLEWARE('contract_bill_job', {
     //_________ Công ty
     company: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     //_________Dự án
     project: {
         type: Schema.Types.ObjectId,
-        ref : "department"
-    },    
+        ref: 'department',
+    },
     //_________Hợp đồng
     contract: {
         type: Schema.Types.ObjectId,
-        ref : "contract"
+        ref: 'contract',
     },
     //_________Hạng mục
     item: {
         type: Schema.Types.ObjectId,
-        ref : "contract_bill_item"
+        ref: 'contract_bill_item',
     },
     //_________Nhóm dữ liệu
     group: {
         type: Schema.Types.ObjectId,
-        ref : "contract_bill_group"
+        ref: 'contract_bill_group',
     },
     /**
      * THÔNG TIN CĂN BẢN
@@ -38,7 +38,7 @@ module.exports  = DATABASE_MIDDLEWARE("contract_bill_job", {
      * 1 - PS được thanh toán
      * 2 - PS không được thanh toán
      */
-    plus: { type: Number, default: 0},
+    plus: { type: Number, default: 0 },
     //_________Tên công việc
     name: String,
     //_________Mô tả
@@ -85,7 +85,7 @@ module.exports  = DATABASE_MIDDLEWARE("contract_bill_job", {
 
     /**
      * USD-NGOẠI TỆ
-     */ 
+     */
     //_________Tỷ giá hối đoái
     fcuExRate: Number,
     //_________Đơn giá ban đầu (chưa gồm VAT)
@@ -99,10 +99,10 @@ module.exports  = DATABASE_MIDDLEWARE("contract_bill_job", {
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

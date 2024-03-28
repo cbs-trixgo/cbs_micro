@@ -1,84 +1,83 @@
-version: "3.8"
+version: '3.8'
 
 services:
+    api:
+        build:
+            context: ../
+        image: cbs_services
+        container_name: api_gateway_cbs
+        env_file: docker-compose.env
+        restart: unless-stopped
+        environment:
+            SERVICES: api
+            PORT: 3000
+            REDIS_HOST: redis
+        depends_on:
+            - nats
+            - redis
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.backend=gateway'
+            - 'traefik.port=3000'
+            - 'traefik.frontend.entryPoints=http'
+            - 'traefik.frontend.rule=PathPrefix:/'
+        networks:
+            - internal
 
-  api:
-    build:
-      context: ../
-    image: cbs_services
-    container_name: api_gateway_cbs
-    env_file: docker-compose.env
-    restart: unless-stopped
-    environment:
-      SERVICES: api
-      PORT: 3000
-      REDIS_HOST: redis
-    depends_on:
-      - nats
-      - redis
-    labels:
-      - "traefik.enable=true"
-      - "traefik.backend=gateway"
-      - "traefik.port=3000"
-      - "traefik.frontend.entryPoints=http"
-      - "traefik.frontend.rule=PathPrefix:/"
-    networks:
-      - internal
+    products:
+        build:
+            context: ../
+        image: cbs_services
+        container_name: products_cbs
+        env_file: docker-compose.env
+        environment:
+            SERVICES: products
+            REDIS_HOST: redis
+            MONGO_HOST: mongo
+            MONGO_USER: admin_cbs
+            MONGO_PWD: dAGT5ttW6CLrsTuw
+        labels:
+            - 'traefik.enable=false'
+        depends_on:
+            - nats
+            - redis
+            - mongo
+        networks:
+            - internal
 
-  products:
-    build:
-      context: ../
-    image: cbs_services
-    container_name: products_cbs
-    env_file: docker-compose.env
-    environment:
-      SERVICES: products
-      REDIS_HOST: redis
-      MONGO_HOST: mongo
-      MONGO_USER: admin_cbs
-      MONGO_PWD: dAGT5ttW6CLrsTuw
-    labels:
-      - "traefik.enable=false"
-    depends_on:
-      - nats
-      - redis
-      - mongo
-    networks:
-      - internal
+    nats:
+        image: nats:2
+        networks:
+            - internal
 
-  nats:
-    image: nats:2
-    networks:
-      - internal
+    redis:
+        image: redis:alpine
+        restart: unless-stopped
+        networks:
+            - internal
+        healthcheck:
+            test: ['CWD', 'redis-cli', 'ping']
+            interval: 30s
+            timeout: 10s
+            retries: 5
 
-  redis:
-    image: redis:alpine
-    restart: unless-stopped
-    networks:
-      - internal
-    healthcheck:
-      test: ['CWD', 'redis-cli', 'ping']
-      interval: 30s
-      timeout: 10s
-      retries: 5
+    mongo:
+        image: mongo
+        volumes:
+            - ./db:/data/db
 
-  mongo:
-    image: mongo
-    volumes:
-      - ./db:/data/db
-
-  traefik:
-    image: traefik:1.7
-    command: --web --docker --docker.domain=docker.localhost --logLevel=INFO --docker.exposedbydefault=false
-    ports:
-      - "3000:80"
-      - "3001:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /dev/null:/traefik.toml
+    traefik:
+        image: traefik:1.7
+        command: --web --docker --docker.domain=docker.localhost --logLevel=INFO --docker.exposedbydefault=false
+        ports:
+            - '3000:80'
+            - '3001:8080'
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /dev/null:/traefik.toml
 
 networks:
-  internal:
+    internal:
 
 volumes:
-  data:
+    data:

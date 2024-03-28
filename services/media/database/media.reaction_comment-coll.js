@@ -1,15 +1,15 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("media_reaction_comment", {
+module.exports = DATABASE_MIDDLEWARE('media_reaction_comment', {
     /**
      * Comment
      */
     comment: {
         kind: String,
-        item: { type: Schema.Types.ObjectId, refPath: 'comment.kind' }
+        item: { type: Schema.Types.ObjectId, refPath: 'comment.kind' },
     },
 
     /**
@@ -23,14 +23,14 @@ module.exports  = DATABASE_MIDDLEWARE("media_reaction_comment", {
      */
     type: {
         type: Number,
-        default: 1
+        default: 1,
     },
 
     /**
      *  Người tạo
      */
     author: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'user'
+        type: Schema.Types.ObjectId,
+        ref: 'user',
     },
 })

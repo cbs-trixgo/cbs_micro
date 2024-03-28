@@ -1,4 +1,4 @@
-"use strict";
+'use strict'
 /**
  * ORDER
  * ---Doanh số phân theo tổng doanh số/Doanh số đơn hủy
@@ -6,34 +6,34 @@
  * Đơn hàng T11225, mã hiệu 22556688, giá trị 42.000 VND, đã được thanh toán thành công bởi Winggo Thái Thịnh
  * https://www.mongodb.com/docs/manual/reference/operator/aggregation/dayOfWeek/ok
  */
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
+module.exports = DATABASE_MIDDLEWARE('fnb_order', {
     //_________Công ty
     company: {
         type: Schema.Types.ObjectId,
-        ref: 'company'
+        ref: 'company',
     },
     //_________Đơn vị cơ sở/Cửa hàng
     funda: {
         type: Schema.Types.ObjectId,
-        ref : "funda"
+        ref: 'funda',
     },
     //_________Lĩnh vực kinh doanh (NEW)
     business: {
         type: Schema.Types.ObjectId,
-        ref: "doctype"
+        ref: 'doctype',
     },
     //_________Phân loại kênh bán hàng
     parentChannel: {
         type: Schema.Types.ObjectId,
-        ref: 'doctype'
+        ref: 'doctype',
     },
     //_________Kênh bán hàng
     channel: {
         type: Schema.Types.ObjectId,
-        ref: "doctype"
+        ref: 'doctype',
     },
     /**
      * CẤU TRÚC ĐỆ QUY
@@ -41,11 +41,11 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
     //_________Cha
     parent: {
         type: Schema.Types.ObjectId,
-        ref: "fnb_order"
+        ref: 'fnb_order',
     },
     level: {
         type: Number,
-        default: 1
+        default: 1,
     },
     /**
      * THÔNG TIN
@@ -53,7 +53,7 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
     //_________Mã khách
     customer: {
         type: Schema.Types.ObjectId,
-        ref: "contact"
+        ref: 'contact',
     },
     /**
      * Khách biết tên hay vãng lai
@@ -62,7 +62,7 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     nonResident: {
         type: Number,
-        default: 1
+        default: 1,
     },
     /**
      * Khách mới hay cũ
@@ -72,7 +72,7 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     new: {
         type: Number,
-        default: 1
+        default: 1,
     },
     /**
      * Phân biệt khách hàng hay nhân viên
@@ -81,22 +81,24 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     customerType: {
         type: Number,
-        default: 2
-    },   
+        default: 2,
+    },
     //_________Người giới thiệu
     referrer: {
         type: Schema.Types.ObjectId,
-        ref : 'contact'
-    }, 
+        ref: 'contact',
+    },
     //_________Người thực hiện/Sale
-    assignee: [{
-        type: Schema.Types.ObjectId,
-        ref: "user"
-    }],
+    assignee: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     //_________Phân loại chiến dịch
     campaignType: {
         type: Schema.Types.ObjectId,
-        ref : 'fnb_voucher' 
+        ref: 'fnb_voucher',
     },
     /**
      * Phân loại trong hệ thống hoặc nhượng quyền (cập nhật theo funda)
@@ -105,25 +107,25 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     internal: {
         type: Number,
-        default: 1
-    }, 
+        default: 1,
+    },
     /**
      * Khu vực
      */
     //_________Tỉnh/Thành phố (lấy theo Funda)
     area1: {
         type: Schema.Types.ObjectId,
-        ref : "area"
+        ref: 'area',
     },
     //_________Huyện/Quận (lấy theo Funda)
     area2: {
         type: Schema.Types.ObjectId,
-        ref : "area"
+        ref: 'area',
     },
     //_________Xã/Phường (lấy theo Funda)
     area3: {
         type: Schema.Types.ObjectId,
-        ref : "area"
+        ref: 'area',
     },
     /**
      * Ca làm việc
@@ -132,7 +134,7 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     shift: {
         type: Schema.Types.ObjectId,
-        ref: "fnb_shift"
+        ref: 'fnb_shift',
     },
     /**
      * Phân loại ca làm việc (cập nhật theo Shift)
@@ -142,7 +144,7 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     shiftType: {
         type: Number,
-        default: 1
+        default: 1,
     },
     /**
      * Mùa trong năm (cập nhật theo Shift)
@@ -153,7 +155,7 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     seasons: {
         type: Number,
-        default: 1
+        default: 1,
     },
     /**
      * Phân loại kênh bán hàng
@@ -171,7 +173,7 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     salesChannel: {
         type: Number,
-        default: 1
+        default: 1,
     },
     /**
      * Phân loại nguồn***
@@ -183,7 +185,7 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     sources: {
         type: Number,
-        default: 1
+        default: 1,
     },
     /**
      * Nhân viên chốt sale/kinh doanh***
@@ -194,12 +196,12 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     sale: {
         type: Schema.Types.ObjectId,
-        ref : "user"
+        ref: 'user',
     },
     //_________Affiliate mang lại doanh số***
     affiliate: {
         type: Schema.Types.ObjectId,
-        ref : "contact"
+        ref: 'contact',
     },
     /**
      * Phương thức thanh toán
@@ -208,7 +210,7 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     paymentMethod: {
         type: Number,
-        default: 1
+        default: 1,
     },
     /**
      * Hình thức phục vụ
@@ -218,7 +220,7 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     service: {
         type: Number,
-        default: 1
+        default: 1,
     },
     /**
      * Trạng thái đơn
@@ -232,7 +234,7 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     status: {
         type: Number,
-        default: 5
+        default: 5,
     },
     //_________Ngày tháng đơn hàng
     date: { type: Date, default: Date.now },
@@ -250,7 +252,7 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
     //_________Người quản lý
     manager: {
         type: Schema.Types.ObjectId,
-        ref : "user"
+        ref: 'user',
     },
     /**
      * Số sao đánh giá đơn app
@@ -258,38 +260,40 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     starRating: {
         type: Number,
-        default: 5
+        default: 5,
     },
     //_________Số khiếu nại
     complaint: {
         type: Number,
-        default: 0
-    },  
+        default: 0,
+    },
     /**
      * Phân loại lý do hủy đơn***
      * Phân loại phản hồi của khách
      */
-    complaints: [{
-        type: Schema.Types.ObjectId,
-        ref: "doctype"
-    }],
+    complaints: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'doctype',
+        },
+    ],
     //_________Số lỗi mắc phải (cập nhật sau khi tạo đơn)
     numberOfMistakes: {
         type: Number,
-        default: 0
-    },  
+        default: 0,
+    },
     /**
      * SẢN PHẨM VÀ SIZE
      */
     //______Số size M sử dụng trong ca
     numberOfSizeM: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //______Số size L sử dụng trong ca
     numberOfSizeL: {
         type: Number,
-        default: 0
+        default: 0,
     },
     /**
      * Số lượng sản phẩm
@@ -297,20 +301,22 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     numberOfProducts: {
         type: Number,
-        default: 1
+        default: 1,
     },
     //_________Danh mục sản phẩm
-    products: [{
-        type: Schema.Types.ObjectId,
-        ref: "fnb_product"
-    }],
+    products: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'fnb_product',
+        },
+    ],
     /**
      * GIÁT TRỊ
      */
     //_________Có sử dụng Voucher hay không
     voucher: {
         type: Schema.Types.ObjectId,
-        ref: "fnb_voucher"
+        ref: 'fnb_voucher',
     },
     /**
      * Phân loại voucher
@@ -323,22 +329,22 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     voucherType: {
         type: Number,
-        default: 1
-    }, 
+        default: 1,
+    },
     //______Tổng giá theo các Product của đơn hàng (tổng doanh số)
     total: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Chiết khấu (chỉ áp dụng cho đơn App)
     discount: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Giảm giá (áp dụng cho đơn Off)
     salesoff: {
         type: Number,
-        default : 0
+        default: 0,
     },
     /**
      * Sử dụng credit (tích điểm quy đổi-áp dụng cho đơn Off)
@@ -346,12 +352,12 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     credit: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Sử dụng offer từ voucher (áp dụng cho đơn Off)
     offer: {
         type: Number,
-        default : 0
+        default: 0,
     },
     /**
      * Thành tiền (phải thanh toán) -  Chưa gồm VAT
@@ -359,32 +365,32 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      */
     amount: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Tổng phí ship
     shippingFeeTotal: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Phí ship khách phải
     shippingFee: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______paid tiền khách trả tại quán
     paid: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Tỷ lệ VAT
     vatRate: {
         type: Number,
-        default : 10
+        default: 10,
     },
     //______VAT thành tiền (10%*amount)
     vatAmount: {
         type: Number,
-        default : 0
+        default: 0,
     },
     /**
      * THƯỞNG DOANH SỐ
@@ -392,12 +398,12 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
     //______Số lượng sản phẩm trung bình của mỗi nhân viên
     avgQuantityPerStaff: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Doanh số trung bình tính cho 1 nhân viên
     avgTotalPerStaff: {
         type: Number,
-        default : 0
+        default: 0,
     },
     /**
      * KHÁCH HÀNG
@@ -409,7 +415,7 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
     //______Điểm tích lũy
     loyaltyPoints: {
         type: Number,
-        default : 0
+        default: 0,
     },
     /**
      * QUẢN LÝ THÔNG BÁO
@@ -419,33 +425,39 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_order", {
      * 1-author (khi tạo việc xong thì add vào)
      * 2-members của funda (thành viên đơn vị cơ sở)
      */
-    accessUsers: [{
-        type: Schema.Types.ObjectId,
-        ref: "user"
-    }],
+    accessUsers: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     /**
      * Những user chưa xem công việc
      * - Sẽ thêm user khi có thông báo mới => Chưa xem
      * - Sẽ xóa user khi bấm xem => Đã xem
      */
-    news: [{
-        type: Schema.Types.ObjectId,
-        ref: "user"
-    }],
+    news: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     //_________File/ảnh đính kèm
-    files: [{
-        type: Schema.Types.ObjectId,
-        ref: "file"
-    }],
+    files: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'file',
+        },
+    ],
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

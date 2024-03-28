@@ -1,33 +1,33 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * 1. HẠNG MỤC
  * 2. NHÓM DỮ LIỆU
  * 3. CÔNG VIỆC MỜI THẦU
  * => Số liệu tính toán đều là trước VAT
  */
-module.exports  = DATABASE_MIDDLEWARE("bidding_bill_item", {
+module.exports = DATABASE_MIDDLEWARE('bidding_bill_item', {
     //_________Khu vực (Lấy theo dự án)
     area: {
         type: Schema.Types.ObjectId,
-        ref : "area"
-    },    
+        ref: 'area',
+    },
     //_________Chủ đầu tư (Lấy theo dự án)
     client: {
         type: Schema.Types.ObjectId,
-        ref : "company"
-    }, 
+        ref: 'company',
+    },
     //_________Dự án
     project: {
         type: Schema.Types.ObjectId,
-        ref : "department"
+        ref: 'department',
     },
     //_________Hồ sơ mời thầu
     doc: {
         type: Schema.Types.ObjectId,
-        ref : "bidding_doc"
+        ref: 'bidding_doc',
     },
     /**
      * THÔNG TIN CĂN BẢN
@@ -53,10 +53,10 @@ module.exports  = DATABASE_MIDDLEWARE("bidding_bill_item", {
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

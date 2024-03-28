@@ -1,48 +1,49 @@
-"use strict";
+'use strict'
 
-const BaseModel                         = require('../../../tools/db/base_model');
-const { checkObjectIDs, IsJsonString }
-                                        = require('../../../tools/utils/utils');
-const stringUtils					    = require('../../../tools/utils/string_utils');
-const { KEY_ERROR }			            = require('../../../tools/keys');
-const ObjectID                          = require('mongoose').Types.ObjectId;
-const { RANGE_BASE_PAGINATION_V2 } 	    = require('../../../tools/cursor_base/playground/index');
+const BaseModel = require('../../../tools/db/base_model')
+const { checkObjectIDs, IsJsonString } = require('../../../tools/utils/utils')
+const stringUtils = require('../../../tools/utils/string_utils')
+const { KEY_ERROR } = require('../../../tools/keys')
+const ObjectID = require('mongoose').Types.ObjectId
+const {
+    RANGE_BASE_PAGINATION_V2,
+} = require('../../../tools/cursor_base/playground/index')
 
-const XlsxPopulate                      = require('xlsx-populate');
-const fs                                = require('fs');
-const path                              = require('path');
-const { uploadFileS3 }                  = require('../../../tools/s3');
-const { isValidDate }                   = require('../../../tools/utils/time_utils')
+const XlsxPopulate = require('xlsx-populate')
+const fs = require('fs')
+const path = require('path')
+const { uploadFileS3 } = require('../../../tools/s3')
+const { isValidDate } = require('../../../tools/utils/time_utils')
 
-const { CF_DOMAIN_SERVICES } 		    = require('../../gateway/helper/domain.constant')
-const { CF_ACTIONS_ANALYSIS }           = require('../../analysis/helper/analysis.actions-constant');
-
+const { CF_DOMAIN_SERVICES } = require('../../gateway/helper/domain.constant')
+const {
+    CF_ACTIONS_ANALYSIS,
+} = require('../../analysis/helper/analysis.actions-constant')
 
 /**s
  * import inter-coll, exter-coll
  */
-const FNB_NETWORK_COM_COLL                         = require('../database/fnb.network_com-coll');
+const FNB_NETWORK_COM_COLL = require('../database/fnb.network_com-coll')
 
 /**
  * import inter-model, exter-model
  */
 
 let dataTF = {
-    appID: "61e04971fdebf77b072d1b0f", // FNB
-    menuID: "63af81debe33df0012ecaeca", //
-    type: 1, 
+    appID: '61e04971fdebf77b072d1b0f', // FNB
+    menuID: '63af81debe33df0012ecaeca', //
+    type: 1,
     action: 1, // Xem
 }
 let dataTF2 = {
-    appID: "61e04971fdebf77b072d1b0f", // FNB
-    menuID: "63af81debe33df0012ecaeca", //
+    appID: '61e04971fdebf77b072d1b0f', // FNB
+    menuID: '63af81debe33df0012ecaeca', //
     type: 1,
     action: 2, // Thêm
 }
 class Model extends BaseModel {
-
     constructor() {
-        super(FNB_NETWORK_COM_COLL);
+        super(FNB_NETWORK_COM_COLL)
     }
 
     /**
@@ -50,64 +51,84 @@ class Model extends BaseModel {
      * Author: HiepNH
      * Code: 24/11/2022
      */
-    insert({ userID, companyID, orderID, customerID, saleID, amount, uplineID, level, rate, commission, note }) {
+    insert({
+        userID,
+        companyID,
+        orderID,
+        customerID,
+        saleID,
+        amount,
+        uplineID,
+        level,
+        rate,
+        commission,
+        note,
+    }) {
         // console.log({ userID, companyID, orderID, customerID, saleID, amount, uplineID, level, rate, commission, note })
-        return new Promise(async resolve => {
+        return new Promise(async (resolve) => {
             try {
-                if(!checkObjectIDs(orderID))
-                    return resolve({ error: true, message: 'orderID invalid', keyError: KEY_ERROR.PARAMS_INVALID });
+                if (!checkObjectIDs(orderID))
+                    return resolve({
+                        error: true,
+                        message: 'orderID invalid',
+                        keyError: KEY_ERROR.PARAMS_INVALID,
+                    })
 
-                let dataInsert = { 
+                let dataInsert = {
                     company: companyID,
                     userCreate: userID,
                     order: orderID,
-                };
-
-                if(orderID && checkObjectIDs(orderID)){
-                    dataInsert.order = orderID;
                 }
 
-                if(customerID && checkObjectIDs(customerID)){
-                    dataInsert.customer = customerID;
+                if (orderID && checkObjectIDs(orderID)) {
+                    dataInsert.order = orderID
                 }
 
-                if(saleID && checkObjectIDs(saleID)){
-                    dataInsert.sale = saleID;
+                if (customerID && checkObjectIDs(customerID)) {
+                    dataInsert.customer = customerID
                 }
 
-                if(uplineID && checkObjectIDs(uplineID)){
-                    dataInsert.upline = uplineID;
+                if (saleID && checkObjectIDs(saleID)) {
+                    dataInsert.sale = saleID
                 }
 
-                if(amount && !isNaN(amount)){
-                    dataInsert.amount = Number(amount);
+                if (uplineID && checkObjectIDs(uplineID)) {
+                    dataInsert.upline = uplineID
                 }
 
-                if(level && !isNaN(level)){
-                    dataInsert.level = Number(level);
+                if (amount && !isNaN(amount)) {
+                    dataInsert.amount = Number(amount)
                 }
 
-                if(rate && !isNaN(rate)){
-                    dataInsert.rate = Number(rate);
+                if (level && !isNaN(level)) {
+                    dataInsert.level = Number(level)
                 }
 
-                if(commission && !isNaN(commission)){
-                    dataInsert.commission = Number(commission);
-                }
-                
-                if(note && note != ""){
-                    dataInsert.note = note;
+                if (rate && !isNaN(rate)) {
+                    dataInsert.rate = Number(rate)
                 }
 
-                let infoAfterInsert = await this.insertData(dataInsert);
+                if (commission && !isNaN(commission)) {
+                    dataInsert.commission = Number(commission)
+                }
+
+                if (note && note != '') {
+                    dataInsert.note = note
+                }
+
+                let infoAfterInsert = await this.insertData(dataInsert)
                 if (!infoAfterInsert)
-                    return resolve({ error: true, message: 'Thêm thất bại', keyError: KEY_ERROR.INSERT_FAILED })
+                    return resolve({
+                        error: true,
+                        message: 'Thêm thất bại',
+                        keyError: KEY_ERROR.INSERT_FAILED,
+                    })
 
-                return resolve({ error: false, data: infoAfterInsert });
+                return resolve({ error: false, data: infoAfterInsert })
             } catch (error) {
                 return resolve({ error: true, message: error.message })
             }
-        });
+        })
     }
 
     /**
@@ -115,63 +136,88 @@ class Model extends BaseModel {
      * Author: Depv
      * Code:
      */
-    update({ userID, companyID, networkID, orderID, customerID, saleID, amount, uplineID, level, rate, commission, note }) {
+    update({
+        userID,
+        companyID,
+        networkID,
+        orderID,
+        customerID,
+        saleID,
+        amount,
+        uplineID,
+        level,
+        rate,
+        commission,
+        note,
+    }) {
         // console.log({ cuserID, companyID, networkID, orderID, customerID, saleID, amount, uplineID, level, rate, commission, note })
-        return new Promise(async resolve => {
-            try {      
-                if(!checkObjectIDs(networkID))
-                    return resolve({ error: true, message: 'networkID invalid', keyError: KEY_ERROR.PARAMS_INVALID });
-                    
-                let dataUpdate = { userUpdate: userID, modifyAt: new Date() };
-                
-                if(orderID && checkObjectIDs(orderID)){
-                    dataUpdate.order = orderID;
+        return new Promise(async (resolve) => {
+            try {
+                if (!checkObjectIDs(networkID))
+                    return resolve({
+                        error: true,
+                        message: 'networkID invalid',
+                        keyError: KEY_ERROR.PARAMS_INVALID,
+                    })
+
+                let dataUpdate = { userUpdate: userID, modifyAt: new Date() }
+
+                if (orderID && checkObjectIDs(orderID)) {
+                    dataUpdate.order = orderID
 
                     // let infoParent = await FNB_NETWORK_COM_COLL.findById(parentID);
                     // dataUpdate.parent = parentID;
                     // dataUpdate.level = infoParent.level + 1;
                 }
 
-                if(customerID && checkObjectIDs(customerID)){
-                    dataUpdate.customer = customerID;
+                if (customerID && checkObjectIDs(customerID)) {
+                    dataUpdate.customer = customerID
                 }
 
-                if(saleID && checkObjectIDs(saleID)){
-                    dataUpdate.sale = saleID;
+                if (saleID && checkObjectIDs(saleID)) {
+                    dataUpdate.sale = saleID
                 }
 
-                if(uplineID && checkObjectIDs(uplineID)){
-                    dataUpdate.upline = uplineID;
+                if (uplineID && checkObjectIDs(uplineID)) {
+                    dataUpdate.upline = uplineID
                 }
 
-                if(amount && !isNaN(amount)){
-                    dataUpdate.amount = Number(amount);
+                if (amount && !isNaN(amount)) {
+                    dataUpdate.amount = Number(amount)
                 }
 
-                if(level && !isNaN(level)){
-                    dataUpdate.level = Number(level);
+                if (level && !isNaN(level)) {
+                    dataUpdate.level = Number(level)
                 }
 
-                if(rate && !isNaN(rate)){
-                    dataUpdate.rate = Number(rate);
+                if (rate && !isNaN(rate)) {
+                    dataUpdate.rate = Number(rate)
                 }
 
-                if(commission && !isNaN(commission)){
-                    dataUpdate.commission = Number(commission);
-                }
-                
-                if(note && note != ""){
-                    dataUpdate.note = note;
+                if (commission && !isNaN(commission)) {
+                    dataUpdate.commission = Number(commission)
                 }
 
-                let infoAfterUpdate = await FNB_NETWORK_COM_COLL.findByIdAndUpdate(networkID, dataUpdate, { new: true });
+                if (note && note != '') {
+                    dataUpdate.note = note
+                }
+
+                let infoAfterUpdate =
+                    await FNB_NETWORK_COM_COLL.findByIdAndUpdate(
+                        networkID,
+                        dataUpdate,
+                        { new: true }
+                    )
                 if (!infoAfterUpdate)
-                    return resolve({ error: true, message: 'Cập nhật thất bại', keyError: KEY_ERROR.UPDATE_FAILED });
-                
+                    return resolve({
+                        error: true,
+                        message: 'Cập nhật thất bại',
+                        keyError: KEY_ERROR.UPDATE_FAILED,
+                    })
             } catch (error) {
                 return resolve({ error: true, message: error.message })
             }
-        });
+        })
     }
 
     /**
@@ -179,36 +225,47 @@ class Model extends BaseModel {
      * Author: Depv
      * Code:
      */
-    getInfo({ networkID, select, populates={} }) {
-        return new Promise(async resolve => {
+    getInfo({ networkID, select, populates = {} }) {
+        return new Promise(async (resolve) => {
             try {
-                if(!checkObjectIDs(networkID))
-                    return resolve({ error: true, message: 'param_invalid' });
+                if (!checkObjectIDs(networkID))
+                    return resolve({ error: true, message: 'param_invalid' })
 
                 // populate
-                if(populates && typeof populates === 'string'){
-					if(!IsJsonString(populates))
-						return resolve({ error: true, message: 'Request params populates invalid', status: 400 });
+                if (populates && typeof populates === 'string') {
+                    if (!IsJsonString(populates))
+                        return resolve({
+                            error: true,
+                            message: 'Request params populates invalid',
+                            status: 400,
+                        })
 
-					populates = JSON.parse(populates);
-				}else{
+                    populates = JSON.parse(populates)
+                } else {
                     populates = {
-                        path: "",
-                        select: ""
+                        path: '',
+                        select: '',
                     }
                 }
 
-                let infoPlanGroup = await FNB_NETWORK_COM_COLL.findById(networkID)
-                                    .select(select)
-                                    .populate(populates)
+                let infoPlanGroup = await FNB_NETWORK_COM_COLL.findById(
+                    networkID
+                )
+                    .select(select)
+                    .populate(populates)
 
-                if (!infoPlanGroup) return resolve({ error: true, message: 'cannot_get', keyError: KEY_ERROR.GET_INFO_FAILED });
+                if (!infoPlanGroup)
+                    return resolve({
+                        error: true,
+                        message: 'cannot_get',
+                        keyError: KEY_ERROR.GET_INFO_FAILED,
+                    })
 
-                return resolve({ error: false, data: infoPlanGroup });
+                return resolve({ error: false, data: infoPlanGroup })
             } catch (error) {
                 return resolve({ error: true, message: error.message })
             }
-        });
+        })
     }
 
     /**
@@ -216,55 +273,74 @@ class Model extends BaseModel {
      * Author: HiepNH
      * Code: 24/11/2022
      */
-    getList({ option, userID, contacts, companyID, orderID, customerID, saleID, uplineID, fromDate, toDate, status, keyword, limit = 10, lastestID, select, populates, sortKey }) {
+    getList({
+        option,
+        userID,
+        contacts,
+        companyID,
+        orderID,
+        customerID,
+        saleID,
+        uplineID,
+        fromDate,
+        toDate,
+        status,
+        keyword,
+        limit = 10,
+        lastestID,
+        select,
+        populates,
+        sortKey,
+    }) {
         // console.log('==================getList>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
         // console.log({ option, userID, contacts, companyID, orderID, customerID, saleID, uplineID, fromDate, toDate, status, keyword, limit, lastestID, select, populates, sortKey })
         return new Promise(async (resolve) => {
             try {
-
-                if(Number(limit) > 50){
-                    limit = 50;
-                } else{
-                    limit = +Number(limit);
+                if (Number(limit) > 50) {
+                    limit = 50
+                } else {
+                    limit = +Number(limit)
                 }
 
                 let conditionObj = {}
-                let sortBy;
-                let keys	 = ['date__-1', '_id__-1'];
+                let sortBy
+                let keys = ['date__-1', '_id__-1']
 
                 // Theo userID đang truy cập
-                if(!option){
+                if (!option) {
                     // console.log('========000000000000')
                     let listContacts = []
-                    if(contacts && contacts.length){
-                        listContacts = contacts.map(item => ObjectID(item._id))
+                    if (contacts && contacts.length) {
+                        listContacts = contacts.map((item) =>
+                            ObjectID(item._id)
+                        )
                     }
 
-                    conditionObj.upline = {$in: listContacts}
+                    conditionObj.upline = { $in: listContacts }
                 }
 
                 // Theo hệ thống cụ thể
-                else if(option && option == 1){
+                else if (option && option == 1) {
                     // console.log('========11111111111111')
                     conditionObj.upline = ObjectID(uplineID)
                 }
 
                 // Theo phân vùng
-                else if(option && option == 2){
+                else if (option && option == 2) {
                     // console.log('========22222222222222')
                     conditionObj.company = ObjectID(companyID)
                 }
 
-                if(saleID && checkObjectIDs(saleID)){
+                if (saleID && checkObjectIDs(saleID)) {
                     conditionObj.sale = ObjectID(saleID)
                 }
 
                 // Theo trạng thái
-                if(status && !isNaN(status)){
+                if (status && !isNaN(status)) {
                     conditionObj.status = Number(status)
                 }
 
-                if(isValidDate(fromDate) && isValidDate(toDate)){
+                if (isValidDate(fromDate) && isValidDate(toDate)) {
                     conditionObj.date = {
                         $gte: new Date(fromDate),
                         $lte: new Date(toDate),
@@ -274,24 +350,32 @@ class Model extends BaseModel {
                 // Làm rõ mục đích để làm gì?
                 if (sortKey && typeof sortKey === 'string') {
                     if (!IsJsonString(sortKey))
-                        return resolve({ error: true, message: 'Request params sortKey invalid', status: 400 });
+                        return resolve({
+                            error: true,
+                            message: 'Request params sortKey invalid',
+                            status: 400,
+                        })
 
-                    keys = JSON.parse(sortKey);
+                    keys = JSON.parse(sortKey)
                 }
                 console.log(conditionObj)
 
                 /**
                  * ĐIỀU KIỆN KHÁC
                  */
-                if(populates && typeof populates === 'string'){
-                    if(!IsJsonString(populates))
-                        return resolve({ error: true, message: 'Request params populates invalid', status: 400 });
+                if (populates && typeof populates === 'string') {
+                    if (!IsJsonString(populates))
+                        return resolve({
+                            error: true,
+                            message: 'Request params populates invalid',
+                            status: 400,
+                        })
 
-                    populates = JSON.parse(populates);
-                } else{
+                    populates = JSON.parse(populates)
+                } else {
                     populates = {
-                        path: "",
-                        select: ""
+                        path: '',
+                        select: '',
                     }
                 }
 
@@ -300,7 +384,7 @@ class Model extends BaseModel {
                 //     keyword = keyword.split(" ");
                 //     keyword = '.*' + keyword.join(".*") + '.*';
                 //     const regSearch = new RegExp(keyword, 'i');
-                    
+
                 //     keywordCV = keywordCV.split(" ");
                 //     keywordCV = '.*' + keywordCV.join(".*") + '.*';
                 //     const regCVSearch = new RegExp(keywordCV, 'i');
@@ -308,58 +392,94 @@ class Model extends BaseModel {
                 //     conditionObj.namecv = regCVSearch
                 // }
 
-                if(select && typeof select === 'string'){
-                    if(!IsJsonString(select))
-                        return resolve({ error: true, message: 'Request params select invalid', status: 400 });
+                if (select && typeof select === 'string') {
+                    if (!IsJsonString(select))
+                        return resolve({
+                            error: true,
+                            message: 'Request params select invalid',
+                            status: 400,
+                        })
 
-                    select = JSON.parse(select);
+                    select = JSON.parse(select)
                 }
 
-                let conditionObjOrg = { ...conditionObj };
-                if(lastestID && checkObjectIDs(lastestID)){
-                    let infoData = await FNB_NETWORK_COM_COLL.findById(lastestID);
-                    if(!infoData)
-                        return resolve({ error: true, message: "Can't get info last message", status: 400 });
+                let conditionObjOrg = { ...conditionObj }
+                if (lastestID && checkObjectIDs(lastestID)) {
+                    let infoData =
+                        await FNB_NETWORK_COM_COLL.findById(lastestID)
+                    if (!infoData)
+                        return resolve({
+                            error: true,
+                            message: "Can't get info last message",
+                            status: 400,
+                        })
 
-                    let dataPagingAndSort = RANGE_BASE_PAGINATION_V2({ keys, latestRecord: infoData, objectQuery: conditionObjOrg });
-                    if(!dataPagingAndSort || dataPagingAndSort.error)
-                        return resolve({ error: true, message: "Can't get range pagination", status: 400 });
-                    conditionObj  = dataPagingAndSort.data.find;
-                    sortBy        = dataPagingAndSort.data.sort;
-                }else{
-                    let dataPagingAndSort = RANGE_BASE_PAGINATION_V2({ keys, latestRecord: null, objectQuery: conditionObjOrg });
-                    sortBy                = dataPagingAndSort.data.sort;
+                    let dataPagingAndSort = RANGE_BASE_PAGINATION_V2({
+                        keys,
+                        latestRecord: infoData,
+                        objectQuery: conditionObjOrg,
+                    })
+                    if (!dataPagingAndSort || dataPagingAndSort.error)
+                        return resolve({
+                            error: true,
+                            message: "Can't get range pagination",
+                            status: 400,
+                        })
+                    conditionObj = dataPagingAndSort.data.find
+                    sortBy = dataPagingAndSort.data.sort
+                } else {
+                    let dataPagingAndSort = RANGE_BASE_PAGINATION_V2({
+                        keys,
+                        latestRecord: null,
+                        objectQuery: conditionObjOrg,
+                    })
+                    sortBy = dataPagingAndSort.data.sort
                 }
 
-                let infoDataAfterGet = await FNB_NETWORK_COM_COLL.find(conditionObj)
-                    .limit(limit+1)
+                let infoDataAfterGet = await FNB_NETWORK_COM_COLL.find(
+                    conditionObj
+                )
+                    .limit(limit + 1)
                     .sort(sortBy)
                     .select(select)
                     .populate(populates)
-                    .lean();
+                    .lean()
 
-                if(!infoDataAfterGet)
-                    return resolve({ error: true, message: "Can't get data", status: 403 });
+                if (!infoDataAfterGet)
+                    return resolve({
+                        error: true,
+                        message: "Can't get data",
+                        status: 403,
+                    })
 
-                let nextCursor	= null;
-                if(infoDataAfterGet && infoDataAfterGet.length){
-                    if(infoDataAfterGet.length > limit){
-                        nextCursor = infoDataAfterGet[limit - 1]?._id;
-                        infoDataAfterGet.length = limit;
+                let nextCursor = null
+                if (infoDataAfterGet && infoDataAfterGet.length) {
+                    if (infoDataAfterGet.length > limit) {
+                        nextCursor = infoDataAfterGet[limit - 1]?._id
+                        infoDataAfterGet.length = limit
                     }
                 }
-                let totalRecord = await FNB_NETWORK_COM_COLL.count(conditionObjOrg);
-                let totalPage   = Math.ceil(totalRecord/limit);
+                let totalRecord =
+                    await FNB_NETWORK_COM_COLL.count(conditionObjOrg)
+                let totalPage = Math.ceil(totalRecord / limit)
 
-                return resolve({ error: false, data: {
-                    listRecords: infoDataAfterGet,
-                    limit: limit,
-                    totalRecord,
-                    totalPage,
-                    nextCursor,
-                }, status: 200 });
+                return resolve({
+                    error: false,
+                    data: {
+                        listRecords: infoDataAfterGet,
+                        limit: limit,
+                        totalRecord,
+                        totalPage,
+                        nextCursor,
+                    },
+                    status: 200,
+                })
             } catch (error) {
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
@@ -369,52 +489,72 @@ class Model extends BaseModel {
      * Code: Hiepnh
      * Date  : 10/4/2022
      */
-    getListByProperty({ userID, contacts, option, optionGroup, companyID, orderID, customerID, saleID, uplineID, fromDate, toDate, status, ctx }) {
+    getListByProperty({
+        userID,
+        contacts,
+        option,
+        optionGroup,
+        companyID,
+        orderID,
+        customerID,
+        saleID,
+        uplineID,
+        fromDate,
+        toDate,
+        status,
+        ctx,
+    }) {
         // console.log('==================getListByProperty>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
         // console.log({ userID, contacts, option, optionGroup, companyID, orderID, customerID, saleID, uplineID, fromDate, toDate, status })
-        return new Promise(async resolve => {
+        return new Promise(async (resolve) => {
             try {
                 // Record Traffic
                 //await ctx.call(`${CF_DOMAIN_SERVICES.ANALYSIS}.${CF_ACTIONS_ANALYSIS.HISTORY_TRAFFIC_INSERT}`, dataTF)
 
-                let conditionObj = {}, conditionProject = {}, conditionGroup = {}, conditionObjYear = {}, conditionPopulate = {}
-                let sortBy = {"amount": -1}
+                let conditionObj = {},
+                    conditionProject = {},
+                    conditionGroup = {},
+                    conditionObjYear = {},
+                    conditionPopulate = {}
+                let sortBy = { amount: -1 }
 
                 // Theo userID đang truy cập
-                if(!option){
+                if (!option) {
                     // console.log('========000000000000')
                     let listContacts = []
-                    if(contacts && contacts.length){
-                        listContacts = contacts.map(item => ObjectID(item._id))
+                    if (contacts && contacts.length) {
+                        listContacts = contacts.map((item) =>
+                            ObjectID(item._id)
+                        )
                     }
                     // console.log(listContacts)
 
-                    conditionObj.upline = {$in: listContacts}
+                    conditionObj.upline = { $in: listContacts }
                 }
 
                 // Theo hệ thống cụ thể
-                else if(option && option == 1){
+                else if (option && option == 1) {
                     // console.log('========11111111111111')
                     conditionObj.upline = ObjectID(uplineID)
                 }
 
                 // Theo phân vùng
-                else if(option && option == 2){
+                else if (option && option == 2) {
                     // console.log('========22222222222222')
                     conditionObj.company = ObjectID(companyID)
                 }
 
                 // Theo trạng thái
-                if(status && !isNaN(status)){
+                if (status && !isNaN(status)) {
                     conditionObj.status = Number(status)
                 }
 
                 conditionProject = {
-                    year : {$year : "$date"},
-                    month : {$month : "$date"},
-                    day: { $dayOfMonth: "$date" },
-                    dayOfWeek: { $dayOfWeek: "$date" },
-                    hour : {$hour : "$date"},
+                    year: { $year: '$date' },
+                    month: { $month: '$date' },
+                    day: { $dayOfMonth: '$date' },
+                    dayOfWeek: { $dayOfWeek: '$date' },
+                    hour: { $hour: '$date' },
                     date: 1,
                     order: 1,
                     customer: 1,
@@ -423,11 +563,11 @@ class Model extends BaseModel {
                     level: 1,
                     upline: 1,
                     rate: 1,
-                    commission: 1
+                    commission: 1,
                 }
 
-                if(!optionGroup){
-                    if(isValidDate(fromDate) && isValidDate(toDate)){
+                if (!optionGroup) {
+                    if (isValidDate(fromDate) && isValidDate(toDate)) {
                         conditionObj.date = {
                             $gte: new Date(fromDate),
                             $lte: new Date(toDate),
@@ -435,24 +575,20 @@ class Model extends BaseModel {
                     }
 
                     conditionGroup = {
-                        _id: {  },
+                        _id: {},
                         quantity: { $sum: 1 },
-                        commission: { $sum: "$commission" },
-                        amount: { $sum: "$amount" },
+                        commission: { $sum: '$commission' },
+                        amount: { $sum: '$amount' },
                     }
-                }
-
-                else if(optionGroup && optionGroup == 1){
+                } else if (optionGroup && optionGroup == 1) {
                     conditionGroup = {
-                        _id: { year: "$year" },
+                        _id: { year: '$year' },
                         quantity: { $sum: 1 },
-                        commission: { $sum: "$commission" },
-                        amount: { $sum: "$amount" },
+                        commission: { $sum: '$commission' },
+                        amount: { $sum: '$amount' },
                     }
-                }
-
-                else if(optionGroup && optionGroup == 2){
-                    if(isValidDate(fromDate) && isValidDate(toDate)){
+                } else if (optionGroup && optionGroup == 2) {
+                    if (isValidDate(fromDate) && isValidDate(toDate)) {
                         conditionObj.date = {
                             $gte: new Date(fromDate),
                             $lte: new Date(toDate),
@@ -460,15 +596,13 @@ class Model extends BaseModel {
                     }
 
                     conditionGroup = {
-                        _id: { month: "$month" },
+                        _id: { month: '$month' },
                         quantity: { $sum: 1 },
-                        commission: { $sum: "$commission" },
-                        amount: { $sum: "$amount" },
+                        commission: { $sum: '$commission' },
+                        amount: { $sum: '$amount' },
                     }
-                }
-
-                else if(optionGroup && optionGroup == 3){
-                    if(isValidDate(fromDate) && isValidDate(toDate)){
+                } else if (optionGroup && optionGroup == 3) {
+                    if (isValidDate(fromDate) && isValidDate(toDate)) {
                         conditionObj.date = {
                             $gte: new Date(fromDate),
                             $lte: new Date(toDate),
@@ -476,15 +610,13 @@ class Model extends BaseModel {
                     }
 
                     conditionGroup = {
-                        _id: { day: "$day" },
+                        _id: { day: '$day' },
                         quantity: { $sum: 1 },
-                        commission: { $sum: "$commission" },
-                        amount: { $sum: "$amount" },
+                        commission: { $sum: '$commission' },
+                        amount: { $sum: '$amount' },
                     }
-                }
-
-                else if(optionGroup && optionGroup == 4){
-                    if(isValidDate(fromDate) && isValidDate(toDate)){
+                } else if (optionGroup && optionGroup == 4) {
+                    if (isValidDate(fromDate) && isValidDate(toDate)) {
                         conditionObj.date = {
                             $gte: new Date(fromDate),
                             $lte: new Date(toDate),
@@ -492,15 +624,13 @@ class Model extends BaseModel {
                     }
 
                     conditionGroup = {
-                        _id: { dayOfWeek: "$dayOfWeek" },
+                        _id: { dayOfWeek: '$dayOfWeek' },
                         quantity: { $sum: 1 },
-                        commission: { $sum: "$commission" },
-                        amount: { $sum: "$amount" },
+                        commission: { $sum: '$commission' },
+                        amount: { $sum: '$amount' },
                     }
-                }
-
-                else if(optionGroup && optionGroup == 5){
-                    if(isValidDate(fromDate) && isValidDate(toDate)){
+                } else if (optionGroup && optionGroup == 5) {
+                    if (isValidDate(fromDate) && isValidDate(toDate)) {
                         conditionObj.date = {
                             $gte: new Date(fromDate),
                             $lte: new Date(toDate),
@@ -508,26 +638,26 @@ class Model extends BaseModel {
                     }
 
                     conditionGroup = {
-                        _id: { hour: "$hour" },
+                        _id: { hour: '$hour' },
                         quantity: { $sum: 1 },
-                        commission: { $sum: "$commission" },
-                        amount: { $sum: "$amount" },
+                        commission: { $sum: '$commission' },
+                        amount: { $sum: '$amount' },
                     }
                 }
-               
+
                 // console.log('==================')
                 // console.log(conditionObj)
                 // console.log(conditionGroup)
 
                 let listData = await FNB_NETWORK_COM_COLL.aggregate([
                     {
-                        $match: conditionObj
+                        $match: conditionObj,
                     },
                     {
-                        $project: conditionProject
+                        $project: conditionProject,
                     },
                     {
-                        $group: conditionGroup
+                        $group: conditionGroup,
                     },
                     // {
                     //     $sort: sortBy
@@ -547,28 +677,42 @@ class Model extends BaseModel {
      * Date: 8/12/2022
      */
     downloadTemplateExcel({ companyID, userID }) {
-        return new Promise(async resolve => {
+        return new Promise(async (resolve) => {
             try {
                 // Modify the workbook.
-                XlsxPopulate.fromFileAsync(path.resolve(__dirname, ('../../../files/templates/excels/fnb_product_template_import.xlsx')))
-                .then(async workbook => {
+                XlsxPopulate.fromFileAsync(
+                    path.resolve(
+                        __dirname,
+                        '../../../files/templates/excels/fnb_product_template_import.xlsx'
+                    )
+                ).then(async (workbook) => {
+                    const now = new Date()
+                    const filePath = '../../../files/temporary_uploads/'
+                    const fileName = `Template_import_product_${now.getTime()}.xlsx`
+                    const pathWriteFile = path.resolve(
+                        __dirname,
+                        filePath,
+                        fileName
+                    )
 
-                    const now = new Date();
-                    const filePath = '../../../files/temporary_uploads/';
-                    const fileName = `Template_import_product_${now.getTime()}.xlsx`;
-                    const pathWriteFile = path.resolve(__dirname, filePath, fileName);
+                    await workbook.toFileAsync(pathWriteFile)
+                    const result = await uploadFileS3(pathWriteFile, fileName)
 
-                    await workbook.toFileAsync(pathWriteFile);
-                    const result = await uploadFileS3(pathWriteFile, fileName);
-
-                    fs.unlinkSync(pathWriteFile);
+                    fs.unlinkSync(pathWriteFile)
                     // console.log({ result })
-                    return resolve({ error: false, data: result?.Location, status: 200 });
-                });
-
+                    return resolve({
+                        error: false,
+                        data: result?.Location,
+                        status: 200,
+                    })
+                })
             } catch (error) {
                 console.log({ error })
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
@@ -580,17 +724,17 @@ class Model extends BaseModel {
      */
     importFromExcel({ companyID, dataImport, userID }) {
         const that = this
-        return new Promise(async resolve => {
+        return new Promise(async (resolve) => {
             try {
-                const dataImportJSON = JSON.parse(dataImport);
+                const dataImportJSON = JSON.parse(dataImport)
                 // console.log('=============Log data===================');
                 // return console.log({ dataImportJSON });
-                let index = 0;
-                let errorNumber = 0;
+                let index = 0
+                let errorNumber = 0
 
                 for (const data of dataImportJSON) {
                     // Chỉ lấy dữ liệu từ mẩu tin thứ 2 trở đi
-                    if(index > 0){
+                    if (index > 0) {
                         let dataInsert = {
                             companyID,
                             userID,
@@ -606,25 +750,29 @@ class Model extends BaseModel {
                             parentID: data?.__EMPTY_9,
                         }
                         // console.log(dataInsert);
-                    
-                        let infoAfterInsert = await that.insert(dataInsert);
+
+                        let infoAfterInsert = await that.insert(dataInsert)
                         // console.log(infoAfterInsert);
-                        if(infoAfterInsert.error){
-                            errorNumber++;
+                        if (infoAfterInsert.error) {
+                            errorNumber++
                         }
                     }
-                    index ++;
+                    index++
                 }
-                if(errorNumber != 0)
-                    return resolve({ error: true, message: "Import failed" });
+                if (errorNumber != 0)
+                    return resolve({ error: true, message: 'Import failed' })
 
-                return resolve({ error: false, message: "Import successfull" });
+                return resolve({ error: false, message: 'Import successfull' })
             } catch (error) {
                 console.log({ error })
-                return resolve({ error: true, message: error.message, status: 500 });
+                return resolve({
+                    error: true,
+                    message: error.message,
+                    status: 500,
+                })
             }
         })
     }
 }
 
-exports.MODEL = new Model;
+exports.MODEL = new Model()

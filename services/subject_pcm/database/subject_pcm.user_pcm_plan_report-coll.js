@@ -1,29 +1,29 @@
-"use strict";
+'use strict'
 
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * COLLECTION PHÂN QUYỀN TRUY CÂP NHÓM, CHỦ ĐỀ
  */
 
-module.exports  = DATABASE_MIDDLEWARE("user_pcm_plan_report", {
+module.exports = DATABASE_MIDDLEWARE('user_pcm_plan_report', {
     //____Người dùng
     user: {
         type: Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'user',
     },
     //____Nhóm hoặc chủ đề
     subject: {
         type: Schema.Types.ObjectId,
-        ref: 'pcm_plan_report'
+        ref: 'pcm_plan_report',
     },
 
     //____Nếu chủ để thì parent là id nhóm
     parent: {
         type: Schema.Types.ObjectId,
-        ref: 'pcm_plan_report'
+        ref: 'pcm_plan_report',
     },
 
     /**
@@ -35,11 +35,10 @@ module.exports  = DATABASE_MIDDLEWARE("user_pcm_plan_report", {
         type: Number,
         default: 2,
     },
-    
+
     //____Thông tin người tạo
     author: {
         type: Schema.Types.ObjectId,
-        ref : "user"
+        ref: 'user',
     },
-   
-});
+})

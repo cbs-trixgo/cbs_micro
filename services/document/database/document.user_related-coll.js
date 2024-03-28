@@ -1,19 +1,19 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
 /**
  *  User được chia sẻ văn bản
  */
-module.exports  = DATABASE_MIDDLEWARE("document_user_related", {
+module.exports = DATABASE_MIDDLEWARE('document_user_related', {
     document: {
         type: Schema.Types.ObjectId,
-        ref: "document_doc"
+        ref: 'document_doc',
     },
     user: {
         type: Schema.Types.ObjectId,
-        ref: "user"
+        ref: 'user',
     },
     /**
      * Quyền hạn
@@ -23,6 +23,6 @@ module.exports  = DATABASE_MIDDLEWARE("document_user_related", {
      */
     permission: {
         type: Number,
-        default: 2
-    }
-});
+        default: 2,
+    },
+})

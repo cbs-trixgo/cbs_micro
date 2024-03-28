@@ -1,43 +1,43 @@
-"use strict";
+'use strict'
 /**
  * NETWORK COMMISSION
  * https://hocvien.haravan.com/blogs/thuat-ngu/kinh-doanh-theo-mang
  */
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("fnb_network_com", {
+module.exports = DATABASE_MIDDLEWARE('fnb_network_com', {
     //_________Công ty bán sản phẩm
     company: {
         type: Schema.Types.ObjectId,
-        ref: 'company'
+        ref: 'company',
     },
     //_________Đơn vị cơ sở/Cửa hàng
     funda: {
         type: Schema.Types.ObjectId,
-        ref : "funda"
+        ref: 'funda',
     },
     //_________Kênh bán hàng
     channel: {
         type: Schema.Types.ObjectId,
-        ref: "doctype"
+        ref: 'doctype',
     },
     //_________Trạng thái đơn
     status: {
         type: Number,
-        default: 5
+        default: 5,
     },
     //_________Ngày tháng đơn hàng
     date: { type: Date, default: Date.now },
     //_________Đơn hàng bán ra
     order: {
         type: Schema.Types.ObjectId,
-        ref: "fnb_order"
+        ref: 'fnb_order',
     },
     //_________Khách mua hàng
     customer: {
         type: Schema.Types.ObjectId,
-        ref: "contact"
+        ref: 'contact',
     },
     /**
      * Nhân viên bán hàng trực tiếp
@@ -46,12 +46,12 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_network_com", {
      */
     sale: {
         type: Schema.Types.ObjectId,
-        ref : "contact"
+        ref: 'contact',
     },
     //_________Giá trị đơn hàng
     amount: {
         type: Number,
-        default : 0
+        default: 0,
     },
     /**
      * CƠ CHẾ TRẢ THƯỞNG
@@ -59,22 +59,22 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_network_com", {
     //_________Level cấp trên
     level: {
         type: Number,
-        default: 1
+        default: 1,
     },
     //_________Cấp trên được hưởng hoa hồng
     upline: {
         type: Schema.Types.ObjectId,
-        ref : "contact"
+        ref: 'contact',
     },
     //_________Tỷ lệ hoa hồng
     rate: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //_________Tiền hoa hồng
     commission: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //_________Ghi chú
     note: String,
@@ -83,10 +83,10 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_network_com", {
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

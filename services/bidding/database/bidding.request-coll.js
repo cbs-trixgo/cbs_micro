@@ -1,33 +1,33 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * YÊU CẦU KỸ THUẬT
  */
-module.exports  = DATABASE_MIDDLEWARE("bidding_request", {
+module.exports = DATABASE_MIDDLEWARE('bidding_request', {
     /**
      * THÔNG TIN CHUNG => LẤY TỪ BIDDING_PLAN SANG
      */
     //_________Chủ đầu tư
     client: {
         type: Schema.Types.ObjectId,
-        ref : "company"
-    }, 
+        ref: 'company',
+    },
     //_________Dự án
     project: {
         type: Schema.Types.ObjectId,
-        ref : "department"
+        ref: 'department',
     },
     //_________Kế hoạch đầu thầu
     plan: {
         type: Schema.Types.ObjectId,
-        ref: "bidding_plan"
+        ref: 'bidding_plan',
     },
     //_________Hồ sơ mời thầu
     doc: {
         type: Schema.Types.ObjectId,
-        ref : "bidding_doc"
+        ref: 'bidding_doc',
     },
     /**
      * YÊU CẦU KỸ THUẬT
@@ -45,7 +45,7 @@ module.exports  = DATABASE_MIDDLEWARE("bidding_request", {
      * 9-Yêu cầu khác
      * 10-Điều khoản hợp đồng
      */
-    type: { type: Number, default: 1 }, 
+    type: { type: Number, default: 1 },
     //________Số hiệu thư mời thầu
     invitationLetter: String,
     //________Tên bên mời thầu
@@ -70,29 +70,29 @@ module.exports  = DATABASE_MIDDLEWARE("bidding_request", {
     documentIntroduction: String,
     //________Ngôn ngữ hồ sơ dự thầu
     language: String,
-    //________Đồng tiền dự thầu	
+    //________Đồng tiền dự thầu
     currency: String,
-    //________Cách thức tổ chức và chuẩn bị hồ sơ dự thầu	
+    //________Cách thức tổ chức và chuẩn bị hồ sơ dự thầu
     method: String,
-    //________Hiệu lực của hồ sơ dự thầu	
+    //________Hiệu lực của hồ sơ dự thầu
     validity: { type: Date, default: null },
-    //________Giá trị đảm bảo dự thầu	
+    //________Giá trị đảm bảo dự thầu
     security: Number,
-    //________Thời gian hiệu lực của đảm bảo dự thầu	
+    //________Thời gian hiệu lực của đảm bảo dự thầu
     securityValidity: { type: Date, default: null },
-    //________Về việc làm rõ hồ sơ mời thầu	
+    //________Về việc làm rõ hồ sơ mời thầu
     bidsClarification: String,
-    //________Về việc làm rõ hồ sơ dự thầu trong quá trình chấm thầu	
+    //________Về việc làm rõ hồ sơ dự thầu trong quá trình chấm thầu
     documentsClarification: String,
-    //________Về việc đề xuất phương án thay thế	
+    //________Về việc đề xuất phương án thay thế
     alternative: String,
-    //________Về việc sử dụng thầu phụ	
+    //________Về việc sử dụng thầu phụ
     subcontractor: String,
-    //________Thời hạn nộp hồ sơ dự thầu	
+    //________Thời hạn nộp hồ sơ dự thầu
     deadline: { type: Date, default: null },
-    //________Nguyên tắc lựa chọn nhà thầu của chủ đầu tư	
+    //________Nguyên tắc lựa chọn nhà thầu của chủ đầu tư
     evaluation: String,
-    //________Về việc thương thảo hợp đồng	
+    //________Về việc thương thảo hợp đồng
     negotiation: String,
     //________Về cách thức
     biddingSolution: String,
@@ -108,8 +108,8 @@ module.exports  = DATABASE_MIDDLEWARE("bidding_request", {
     //_________Thứ tự, dùng để sắp xếp
     order: {
         type: Number,
-        default: 1
-    }, 
+        default: 1,
+    },
     //_________Nội dung
     name: String,
     //_________Vị trí, khu vực
@@ -121,27 +121,31 @@ module.exports  = DATABASE_MIDDLEWARE("bidding_request", {
     //_________Ghi chú/Thương hiệu, xuất xứ
     note: String,
     //_________Tài liệu, ảnh đính kèm
-    attachs: [{
-        type: Schema.Types.ObjectId,
-        ref: "file"
-    }],
+    attachs: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'file',
+        },
+    ],
     /**
      * HỒ SƠ DỰ THẦU CỦA NHÀ THẦU
      * Một yêu cầu sẽ có nhiều nhà thầu tham dự
      */
-    details: [{
-        type: Schema.Types.ObjectId,
-        ref: "bidding_apply"
-    }],
+    details: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'bidding_apply',
+        },
+    ],
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

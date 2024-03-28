@@ -1,6 +1,6 @@
 //FILE CONFIG || VARIABLE CONSTANT
 
- /**
+/**
  * PHÂN LOẠI
     1-Văn Bản Lĩnh vực hồ sơ
     2-Văn Bản Tính chất hồ sơ
@@ -26,7 +26,10 @@
     23-Theo service (áp dụng cho message nps)(Không hài lòng)
     24-Kênh bán hàng
 */
-exports.DOCTYPE_TYPE = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22, 23,24];
+exports.DOCTYPE_TYPE = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+    22, 23, 24,
+]
 
 exports.CONTACT_CLASSIFY = [
     { value: 1, text: 'Nhân viên' },

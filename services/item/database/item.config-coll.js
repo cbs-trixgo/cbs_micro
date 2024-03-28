@@ -1,7 +1,7 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
 /**
  * CẤU HÌNH MÔI TRƯỜNG
@@ -9,11 +9,11 @@ const Schema                = require('mongoose').Schema;
  * - Biến môi trường cho Facebook
  * ...
  */
-module.exports  = DATABASE_MIDDLEWARE("config", {
+module.exports = DATABASE_MIDDLEWARE('config', {
     //_________Công ty của user đang truy cập
     company: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     /**
      * Tên/mô tả
@@ -40,7 +40,7 @@ module.exports  = DATABASE_MIDDLEWARE("config", {
      * clientId (Facebook)
      */
     template: String,
-     /**
+    /**
      * secretKey
      * ...
      */
@@ -61,10 +61,10 @@ module.exports  = DATABASE_MIDDLEWARE("config", {
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

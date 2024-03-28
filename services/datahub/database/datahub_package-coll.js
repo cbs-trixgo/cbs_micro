@@ -1,38 +1,38 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * DATAHUB-GÓI THẦU CỦA DỰ ÁN
  */
-module.exports  = DATABASE_MIDDLEWARE("datahub_package", {
+module.exports = DATABASE_MIDDLEWARE('datahub_package', {
     //_________Dự án
     project: {
         type: Schema.Types.ObjectId,
-        ref : "datahub_project"
+        ref: 'datahub_project',
     },
     /**
      * CÁC THÔNG TIN LẤY TỪ PROJECT
      */
     //_________Chủ đầu tư/khách hàng
-    client: { 
+    client: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     //_________Tỉnh/Thành phố
     area1: {
         type: Schema.Types.ObjectId,
-        ref : "area"
+        ref: 'area',
     },
     //_________Huyện/Quận
     area2: {
         type: Schema.Types.ObjectId,
-        ref : "area"
+        ref: 'area',
     },
     //_________Xã/Phường
     area3: {
         type: Schema.Types.ObjectId,
-        ref : "area"
+        ref: 'area',
     },
     //_________Nhóm dự án
     projectType: { type: Number, default: 1 },
@@ -47,16 +47,16 @@ module.exports  = DATABASE_MIDDLEWARE("datahub_package", {
     //_________Số tầng cao
     floorNumber: { type: Number, default: 0 },
     //_________Diện tích tầng cao
-    floorArea: { type: Number, default: 0 }, 
+    floorArea: { type: Number, default: 0 },
     //_________Lĩnh vực (type=1)
     field: {
         type: Schema.Types.ObjectId,
-        ref : "datahub_type"
+        ref: 'datahub_type',
     },
     //_________Nhà thầu
     contractor: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     //_________Tên
     name: String,
@@ -67,7 +67,7 @@ module.exports  = DATABASE_MIDDLEWARE("datahub_package", {
     //_________Giá trị hợp đồng trước VAT
     value: { type: Number, default: 0 },
     //_________Giá trị phần VAT
-    vatValue: { type: Number, default: 0 },  
+    vatValue: { type: Number, default: 0 },
     //_________Ngày ký
     date: { type: Date, default: null },
     //_________Thực hiện từ ngày
@@ -85,19 +85,21 @@ module.exports  = DATABASE_MIDDLEWARE("datahub_package", {
     //_________Đánh giá chất lượng
     quality: { type: Number, default: 0, max: 5 },
     //_________Tài liệu đính kèm
-    files: [{
-        type: Schema.Types.ObjectId,
-        ref: "file"
-    }],
+    files: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'file',
+        },
+    ],
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

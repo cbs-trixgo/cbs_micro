@@ -1,26 +1,28 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * DATAHUB KHU VỰC-LĨNH VỰC-NHÀ THẦU (Bỏ => Sử dụng datahub_package)
  */
-module.exports  = DATABASE_MIDDLEWARE("datahub_contractor", {
+module.exports = DATABASE_MIDDLEWARE('datahub_contractor', {
     //_________Lĩnh vực(*)
     field: {
         type: Schema.Types.ObjectId,
-        ref : "datahub_type"
-    }, 
+        ref: 'datahub_type',
+    },
     //_________Nhà thầu thực hiện dịch vụ/lĩnh vực(*)
     contractor: {
         type: Schema.Types.ObjectId,
-        ref : "company"  
-    }, 
+        ref: 'company',
+    },
     //_________Xã/Phường (chỉ lưu area3)
-    areas: [{
-        type: Schema.Types.ObjectId,
-        ref : "area" 
-    }],
+    areas: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'area',
+        },
+    ],
     //_________Xếp hạng (1-5)
     ranking: { type: Number, default: 1 },
     //_________Ghi chú
@@ -32,10 +34,10 @@ module.exports  = DATABASE_MIDDLEWARE("datahub_contractor", {
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

@@ -1,12 +1,11 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * TIỆN ÍCH XUNG QUANH
  */
-module.exports  = DATABASE_MIDDLEWARE("utility", {
-
+module.exports = DATABASE_MIDDLEWARE('utility', {
     //________Tên tiện ích
     name: String,
 
@@ -19,11 +18,11 @@ module.exports  = DATABASE_MIDDLEWARE("utility", {
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref: "user"
+        ref: 'user',
     },
 
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref: "user"
-    }
+        ref: 'user',
+    },
 })

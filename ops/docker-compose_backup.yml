@@ -1,87 +1,86 @@
-version: "3.3"
+version: '3.3'
 
 services:
+    gateway:
+        build:
+            context: ../
+        image: cbs_services
+        container_name: api_gateway_cbs
+        env_file: docker-compose.env
+        environment:
+            SERVICES: gateway
+            PORT: 3000
+        depends_on:
+            - nats
+            - redis
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.backend=gateway'
+            - 'traefik.port=3000'
+            - 'traefik.frontend.entryPoints=http'
+            - 'traefik.frontend.rule=PathPrefix:/'
+        networks:
+            - internal
 
-  gateway:
-    build:
-      context: ../
-    image: cbs_services
-    container_name: api_gateway_cbs
-    env_file: docker-compose.env
-    environment:
-      SERVICES: gateway
-      PORT: 3000
-    depends_on:
-      - nats
-      - redis
-    labels:
-      - "traefik.enable=true"
-      - "traefik.backend=gateway"
-      - "traefik.port=3000"
-      - "traefik.frontend.entryPoints=http"
-      - "traefik.frontend.rule=PathPrefix:/"
-    networks:
-      - internal
+    products:
+        build:
+            context: ../
+        image: cbs_services
+        container_name: products_cbs
+        env_file: docker-compose.env
+        environment:
+            SERVICES: products
+        labels:
+            - 'traefik.enable=false'
+        depends_on:
+            - nats
+            - redis
+            - mongo
+        networks:
+            - internal
 
-  products:
-    build:
-      context: ../
-    image: cbs_services
-    container_name: products_cbs
-    env_file: docker-compose.env
-    environment:
-      SERVICES: products
-    labels:
-      - "traefik.enable=false"
-    depends_on:
-      - nats
-      - redis
-      - mongo
-    networks:
-      - internal
+    categories:
+        build:
+            context: ../
+        image: cbs_services
+        container_name: categories_cbs
+        env_file: docker-compose.env
+        environment:
+            SERVICES: categories
+        labels:
+            - 'traefik.enable=false'
+        depends_on:
+            - nats
+            - redis
+            - mongo
+        networks:
+            - internal
 
-  categories:
-    build:
-      context: ../
-    image: cbs_services
-    container_name: categories_cbs
-    env_file: docker-compose.env
-    environment:
-      SERVICES: categories
-    labels:
-      - "traefik.enable=false"
-    depends_on:
-      - nats
-      - redis
-      - mongo
-    networks:
-      - internal
+    nats:
+        image: nats:2
+        networks:
+            - internal
 
-  nats:
-    image: nats:2
-    networks:
-      - internal
-
-  redis:
-    image: redis:alpine
-    networks:
-      - internal
-  mongo:
-    image: mongo
-    volumes:
-      - ./db:/data/db
-  traefik:
-    image: traefik:1.7
-    command: --web --docker --docker.domain=docker.localhost --logLevel=INFO --docker.exposedbydefault=false
-    ports:
-      - "3000:80"
-      - "3001:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /dev/null:/traefik.toml
+    redis:
+        image: redis:alpine
+        networks:
+            - internal
+    mongo:
+        image: mongo
+        volumes:
+            - ./db:/data/db
+    traefik:
+        image: traefik:1.7
+        command: --web --docker --docker.domain=docker.localhost --logLevel=INFO --docker.exposedbydefault=false
+        ports:
+            - '3000:80'
+            - '3001:8080'
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /dev/null:/traefik.toml
 
 networks:
-  internal:
+    internal:
 
 volumes:
-  data:
+    data:

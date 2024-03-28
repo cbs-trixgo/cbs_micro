@@ -1,21 +1,21 @@
-"use strict";
+'use strict'
 
 /**
  * KHÁCH HÀNG QUAN TÂM ZALO OA
  */
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("zalooa_follower", {
+module.exports = DATABASE_MIDDLEWARE('zalooa_follower', {
     //_________Công ty
     company: {
         type: Schema.Types.ObjectId,
-        ref: 'company'
+        ref: 'company',
     },
     //_________User hệ thống
     user: {
         type: Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'user',
     },
 
     //_________Tên khách hàng
@@ -58,13 +58,13 @@ module.exports  = DATABASE_MIDDLEWARE("zalooa_follower", {
      */
     status: {
         type: Number,
-        default: 1
+        default: 1,
     },
     /**
      * THÔNG TIN NGƯỜI CẬP NHẬT
      */
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

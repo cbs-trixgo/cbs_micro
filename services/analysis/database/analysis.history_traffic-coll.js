@@ -1,9 +1,9 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("history_traffic", {
+module.exports = DATABASE_MIDDLEWARE('history_traffic', {
     /**
      * PHÂN LOẠI THIẾT BỊ
      * 1-Web
@@ -12,7 +12,7 @@ module.exports  = DATABASE_MIDDLEWARE("history_traffic", {
      */
     type: {
         type: Number,
-        default: 1
+        default: 1,
     },
     /**
      * HÀNH ĐỘNG
@@ -22,26 +22,26 @@ module.exports  = DATABASE_MIDDLEWARE("history_traffic", {
      */
     action: {
         type: Number,
-        default: 1
+        default: 1,
     },
     //_______Ứng dụng
     app: {
         type: Schema.Types.ObjectId,
-        ref : 'app' 
+        ref: 'app',
     },
     //_______Tính năng
     menu: {
         type: Schema.Types.ObjectId,
-        ref : 'app_menu' 
+        ref: 'app_menu',
     },
     //_________Công ty của người truy cập
     companyOfAuthor: {
         type: Schema.Types.ObjectId,
-        ref: 'company'
+        ref: 'company',
     },
     //_________User truy cập
     userCreate: {
-        type    : Schema.Types.ObjectId,
-        ref     : 'user'
+        type: Schema.Types.ObjectId,
+        ref: 'user',
     },
-})   
+})

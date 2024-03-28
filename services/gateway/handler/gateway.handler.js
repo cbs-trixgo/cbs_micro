@@ -5,12 +5,13 @@ module.exports = {
                 // console.log(ctx);
                 console.log({ error: false, message: 'healthy' })
                 return {
-                   error: false, message: 'healthy'
+                    error: false,
+                    message: 'healthy',
                 }
             } catch (error) {
-                return { error:  true, message: error.message };
+                return { error: true, message: error.message }
             }
-        }
+        },
     },
 
     checkVersion: {
@@ -18,16 +19,17 @@ module.exports = {
             try {
                 try {
                     return {
-                       error: false, data: {
-                           currentVersion: 'non version /api' 
-                       }
+                        error: false,
+                        data: {
+                            currentVersion: 'non version /api',
+                        },
                     }
                 } catch (error) {
-                    return { error:  true, message: error.message };
+                    return { error: true, message: error.message }
                 }
             } catch (error) {
-                return { error:  true, message: error.message };
+                return { error: true, message: error.message }
             }
-        }
+        },
     },
 }

@@ -1,18 +1,18 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("training_subject", {
+module.exports = DATABASE_MIDDLEWARE('training_subject', {
     //_________Phân loại chính (Do hệ thống quy định)
-    type:  {
+    type: {
         type: Number,
-        default: 1
+        default: 1,
     },
-    //_________Chủ đề cha 
+    //_________Chủ đề cha
     parent: {
-        type    : Schema.Types.ObjectId,
-        ref     : 'training_subject'
+        type: Schema.Types.ObjectId,
+        ref: 'training_subject',
     },
     //_________Tên chủ đề, tên bài viết
     name: String,
@@ -22,48 +22,48 @@ module.exports  = DATABASE_MIDDLEWARE("training_subject", {
     content: String,
     //_________Ảnh đại diện cho chủ đề
     image: {
-        type    : Schema.Types.ObjectId,
-        ref     : 'file'
+        type: Schema.Types.ObjectId,
+        ref: 'file',
     },
     //_________Số lượng bài viết trong chủ đề
     amountLessions: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //_________Số lượt xem (Tổng của các bài viết) hoặc tổng của 1 bài viết
     amountViews: {
         type: Number,
-        default: 0
+        default: 0,
     },
 
     //_________Tổng số user đã xem bài viết
     amountUserViews: {
         type: Number,
-        default: 0
+        default: 0,
     },
 
     //_________Số lượng comment của 1 bài viết
     amountComments: {
-        type: Number, 
-        default: 0 
+        type: Number,
+        default: 0,
     },
     //_________Số lượng like bài viết
     amountReaction: {
         type: Number,
-        default: 0
+        default: 0,
     },
-  
+
     //_________Số sao đánh giá trung bình
     amountStars: {
         type: Number,
-        default: 5
+        default: 5,
     },
     userCreate: {
-        type    : Schema.Types.ObjectId,
-        ref     : 'user'
+        type: Schema.Types.ObjectId,
+        ref: 'user',
     },
     userUpdate: {
-        type    : Schema.Types.ObjectId,
-        ref     : 'user'
-    }
-})   
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+    },
+})

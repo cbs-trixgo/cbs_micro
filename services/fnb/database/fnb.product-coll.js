@@ -1,34 +1,36 @@
-"use strict";
+'use strict'
 /**
  * PRODUCT
  */
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("fnb_product", {
+module.exports = DATABASE_MIDDLEWARE('fnb_product', {
     //_________Công ty
     company: {
         type: Schema.Types.ObjectId,
-        ref: 'company'
+        ref: 'company',
     },
     //_________Đơn vị cơ sở/Cửa hàng
-    fundas: [{
-        type: Schema.Types.ObjectId,
-        ref : "funda"
-    }],
+    fundas: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'funda',
+        },
+    ],
     //_________Phân loại dịch vụ
     doctype: {
         type: Schema.Types.ObjectId,
-        ref: "doctype"
+        ref: 'doctype',
     },
     //_________Cha
     parent: {
         type: Schema.Types.ObjectId,
-        ref: "fnb_product"
+        ref: 'fnb_product',
     },
     level: {
         type: Number,
-        default: 1
+        default: 1,
     },
     /**
      * THÔNG TIN
@@ -40,7 +42,7 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_product", {
      */
     type: {
         type: Number,
-        default : 1
+        default: 1,
     },
     /**
      * Kích cỡ
@@ -49,7 +51,7 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_product", {
      */
     size: {
         type: Number,
-        default : 1
+        default: 1,
     },
     //_________Nội dung
     name: String,
@@ -58,7 +60,7 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_product", {
     //_________Mã hiệu
     sign: String,
     //_________Đơn vị tính
-    unit: String, 
+    unit: String,
     //_________Ghi chú
     note: String,
     /**
@@ -67,42 +69,44 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_product", {
     //______Khối lượng
     quantity: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Đơn giá: M, Off
     unitPrice: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Đơn giá 2: M, App
     unitPrice2: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Đơn giá 3: L, Off
     unitPrice3: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Đơn giá 4: L, App
     unitPrice4: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //______Thành tiền
     amount: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //_________Ảnh đại diện
-    images: [{
-        type: Schema.Types.ObjectId,
-        ref: "file"
-    }],
+    images: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'file',
+        },
+    ],
     //_________Số lượng phần tử con
     amountChilds: {
         type: Number,
-        default: 0 
+        default: 0,
     },
     /**
      * 1-Khu Hà Nội
@@ -110,22 +114,22 @@ module.exports  = DATABASE_MIDDLEWARE("fnb_product", {
      */
     convertOption: {
         type: Number,
-        default : 1
+        default: 1,
     },
     //______Trạng thái (1-ON, 2-OFF)
     status: {
         type: Number,
-        default : 1
+        default: 1,
     },
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

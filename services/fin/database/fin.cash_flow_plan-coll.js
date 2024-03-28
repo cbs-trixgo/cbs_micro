@@ -1,11 +1,11 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * KẾ HOẠCH DÒNG TIỀN
  */
-module.exports  = DATABASE_MIDDLEWARE("cash_flow_plan", {
+module.exports = DATABASE_MIDDLEWARE('cash_flow_plan', {
     /**
      * THÔNG TIN LẤY TỪ HỢP ĐỒNG
      */
@@ -17,79 +17,83 @@ module.exports  = DATABASE_MIDDLEWARE("cash_flow_plan", {
     outin: {
         type: Number,
         default: 1,
-        enum: [1,2]
+        enum: [1, 2],
     },
     //_________Phân loại NA (Thực/Gửi dấu) (CONTRACT_TA in cf_constant)
     real: { type: Number, default: 1 },
     //_________Phân loại theo lĩnh vực (type = 3) (POSTMAN -> ITEM - > DOCTYPE)
     field: {
         type: Schema.Types.ObjectId,
-        ref : "doctype"
-    },  
+        ref: 'doctype',
+    },
     //_________Phân loại theo chủ trì (POSTMAN ITEM -> CONTACT)
     chair: {
         type: Schema.Types.ObjectId,
-        ref : 'contact'
+        ref: 'contact',
     },
     //_________Phân loại theo phụ trách (POSTMAN ITEM -> CONTACT)
     personInCharge: {
         type: Schema.Types.ObjectId,
-        ref : 'contact'
-    },    
+        ref: 'contact',
+    },
     //_________Bên mua (POSTMAN ITEM > CONTACT)
     buyerInfo: {
         type: Schema.Types.ObjectId,
-        ref: "contact"
+        ref: 'contact',
     },
     //_________Bên bán (POSTMAN ITEM > CONTACT)
     sellerInfo: {
         type: Schema.Types.ObjectId,
-        ref: "contact"
+        ref: 'contact',
     },
     //_________Công ty-Được xác định theo CONTACT(*)
     company: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
-    //_________Dự án-Được xác định theo CONTACT(*) 
+    //_________Dự án-Được xác định theo CONTACT(*)
     project: {
         type: Schema.Types.ObjectId,
-        ref : "department"
+        ref: 'department',
     },
     //_________Hợp đồng-Được xác định theo CONTACT(*)
     contract: {
         type: Schema.Types.ObjectId,
-        ref : "contract"
+        ref: 'contract',
     },
     /**
      * THÔNG TIN CHUNG
      */
     //_________Đơn vị cơ sở(*)
-    funda : {
+    funda: {
         type: Schema.Types.ObjectId,
-        ref : "funda"
+        ref: 'funda',
     },
     //_________ID cash_flow_plan cha
     parent: {
         type: Schema.Types.ObjectId,
-        ref : "cash_flow_plan"
+        ref: 'cash_flow_plan',
     },
     //_________Số cấp
     level: {
         type: Number,
         default: 1,
-        enum: [1, 2]
+        enum: [1, 2],
     },
     //_________Admin (được quyền xem, sửa)
-    admins : [{
-        type   : Schema.Types.ObjectId,
-        ref: 'user'
-    }],
+    admins: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     //_________Thành viên (được quyền xem)
-    members : [{
-        type   : Schema.Types.ObjectId,
-        ref: 'user'
-    }],
+    members: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'user',
+        },
+    ],
     /**
      * Phân loại:
      * 1-Kế hoạch năm
@@ -102,7 +106,7 @@ module.exports  = DATABASE_MIDDLEWARE("cash_flow_plan", {
     type: {
         type: Number,
         default: 5,
-        enum: [1,2,3,4,5,6]
+        enum: [1, 2, 3, 4, 5, 6],
     },
     /**
      * Tính chất
@@ -113,7 +117,7 @@ module.exports  = DATABASE_MIDDLEWARE("cash_flow_plan", {
     property: {
         type: Number,
         default: 3,
-        enum: [1, 2, 3]
+        enum: [1, 2, 3],
     },
     //_________Tên(*)
     name: String,
@@ -128,25 +132,25 @@ module.exports  = DATABASE_MIDDLEWARE("cash_flow_plan", {
      */
     priority: {
         type: Number,
-        default: 1
-    }, 
+        default: 1,
+    },
     /**
-     * Trạng thái phê duyệt 
+     * Trạng thái phê duyệt
      * 1-Chưa phê duyệt
      * 2-Đã phê duyệt
-     */   
+     */
     status: {
         type: Number,
-        default: 1
+        default: 1,
     },
     //_________Người phê duyệt
     approver: {
         type: Schema.Types.ObjectId,
-        ref : "user"
+        ref: 'user',
     },
     //_________Thời gian phê duyệt
     timeApproved: {
-        type: Date
+        type: Date,
     },
     //_________Ngày dự kiến/kế hoạch
     date: { type: Date, default: Date.now },
@@ -159,22 +163,22 @@ module.exports  = DATABASE_MIDDLEWARE("cash_flow_plan", {
     //__________Dự kiến
     value: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //__________Thực tế
     realValue: {
         type: Number,
-        default: 0
+        default: 0,
     },
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

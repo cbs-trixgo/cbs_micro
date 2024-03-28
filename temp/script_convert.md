@@ -1,74 +1,78 @@
-<!-- CONVERT ENDTIME FROM APP_COMPANIES TO APP_USERS -->(xong)
---------------------------------------------------------
+## <!-- CONVERT ENDTIME FROM APP_COMPANIES TO APP_USERS -->(xong)
+
 let listAppCompany = db.app_companies.find({}).select("app company endTime").toArray()
 for(let appCompany of listAppCompany){
-    let { app, company, endTime } = appCompany;
-    db.app_users.updateMany({  app: ObjectId(app), company: ObjectId(company) }, { $set: { endTime } })
+let { app, company, endTime } = appCompany;
+db.app_users.updateMany({ app: ObjectId(app), company: ObjectId(company) }, { $set: { endTime } })
 }
---------------------------------------------------------
 
-<!-- UPDATE VALUE TRƯỜNG NÀY CHO TRƯỜNG KIA -->(Xong)
---------------------------------------------------------
-db.files.updateMany({nameOrg: {$exists: false}}, [{$set: { nameOrg: "$name" }}]);
---------------------------------------------------------
+---
 
-<!-- CONVERT FILE TO DOCUMENT_FILE -->(Xong)
---------------------------------------------------------
+## <!-- UPDATE VALUE TRƯỜNG NÀY CHO TRƯỜNG KIA -->(Xong)
+
+## db.files.updateMany({nameOrg: {$exists: false}}, [{$set: { nameOrg: "$name" }}]);
+
+## <!-- CONVERT FILE TO DOCUMENT_FILE -->(Xong)
+
 let fileDocuments = db.files.find({ document: {$exists: true, $ne: null} }).toArray()
 for(let file of fileDocuments) {
-    const { _id, createAt, modifyAt, company, project, author, document, name, type } = file;
-    db.document_files.save({
-        company,
-        project,
-        document,
-        file: _id,
-        type,
-        nameOrg: name,
-        name,
-        author,
-        createAt,
-        modifyAt,
-        isDataConvert: 1
-    })
+const { \_id, createAt, modifyAt, company, project, author, document, name, type } = file;
+db.document_files.save({
+company,
+project,
+document,
+file: \_id,
+type,
+nameOrg: name,
+name,
+author,
+createAt,
+modifyAt,
+isDataConvert: 1
+})
 }
---------------------------------------------------------
 
-<!-- Update numberFinishOfDocs cho department -->
---------------------------------------------------------
-let listDepartment = db.departments.find({}).select("_id");
+---
+
+## <!-- Update numberFinishOfDocs cho department -->
+
+let listDepartment = db.departments.find({}).select("\_id");
 
 listDepartment.forEach(department => {
-    let numberFinishOfDocs =  db.document_docs.count({ project: ObjectId(department._id), parent: { $exists: false }, completeStatus: 1 })
-    db.departments.findOneAndUpdate({ _id: department._id}, { $set: { numberFinishOfDocs } })
+let numberFinishOfDocs = db.document_docs.count({ project: ObjectId(department.\_id), parent: { $exists: false }, completeStatus: 1 })
+db.departments.findOneAndUpdate({ \_id: department.\_id}, { $set: { numberFinishOfDocs } })
 })
---------------------------------------------------------
 
-<!-- Update numberOfDocs cho document_package -->
---------------------------------------------------------
-let listDocumentPackages = db.document_packages.find({}).select("_id");
+---
+
+## <!-- Update numberOfDocs cho document_package -->
+
+let listDocumentPackages = db.document_packages.find({}).select("\_id");
 
 listDocumentPackages.forEach(documentPackage => {
-    let numberOfDocs =  db.document_docs.count({ package: ObjectId(documentPackage._id), parent: { $exists: false }})
-    db.document_packages.findOneAndUpdate({ _id: documentPackage._id}, { $set: {numberOfDocs} })
+let numberOfDocs = db.document_docs.count({ package: ObjectId(documentPackage.\_id), parent: { $exists: false }})
+db.document_packages.findOneAndUpdate({ \_id: documentPackage.\_id}, { $set: {numberOfDocs} })
 })
---------------------------------------------------------
 
-<!-- Update numberOfDocs cho department-coll -->
---------------------------------------------------------
-let listDepartment = db.departments.find({}).select("_id");
+---
+
+## <!-- Update numberOfDocs cho department-coll -->
+
+let listDepartment = db.departments.find({}).select("\_id");
 
 listDepartment.forEach(department => {
-    let numberOfDocs =  db.document_docs.count({ project: ObjectId(department._id), parent: { $exists: false }})
-    db.departments.findOneAndUpdate({ _id: department._id}, { $set: {numberOfDocs} })
+let numberOfDocs = db.document_docs.count({ project: ObjectId(department.\_id), parent: { $exists: false }})
+db.departments.findOneAndUpdate({ \_id: department.\_id}, { $set: {numberOfDocs} })
 })
---------------------------------------------------------
 
+---
 
 <!-- CONVERT COMMENT PCM -->(Xong)
+
 let listcommentPCM = db.comments.find({ task: { $exists: true, $ne: null } }).toArray();
 
 for (const comment of listcommentPCM) {
-    let { _id: commentCoreID, content, task, parent, childs, type, official, subType, files, author, userUpdate, createAt, modifyAt } = comment;
+let { \_id: commentCoreID, content, task, parent, childs, type, official, subType, files, author, userUpdate, createAt, modifyAt } = comment;
 
     let dataInsert = { official, type, task, author, userUpdate, createAt, modifyAt, isDataConvert: 1, commentCoreID, files: [], images: []};
 
@@ -111,31 +115,36 @@ for (const comment of listcommentPCM) {
     }
 
     db.pcm_comments.save(dataInsert);
+
 }
 
 <!-- CONVERT FILE PCM -->(Xong)
+
 let listFilePCM = db.files.find({ planTask: { $exists: true, $ne: null }}).toArray();
 
 for (const file of listFilePCM) {
-    let { _id: fileCoreID, company, project, planGroup: group, planTask: task, type, name , author, createAt, modifyAt } = file;
-    db.pcm_files.save({ company, project, group, task, file: fileCoreID, type, nameOrg: name, name, author, isDataConvert: 1, createAt, modifyAt });
+let { \_id: fileCoreID, company, project, planGroup: group, planTask: task, type, name , author, createAt, modifyAt } = file;
+db.pcm_files.save({ company, project, group, task, file: fileCoreID, type, nameOrg: name, name, author, isDataConvert: 1, createAt, modifyAt });
 }
 
 <!-- CẬP NHẬT SỐ LƯỢNG CONTACT_DOCUMENT CHO CONTACT-->(Xong)
-let listContact = db.contacts.find({}).select("_id")
+
+let listContact = db.contacts.find({}).select("\_id")
 
 listContact.forEach(contact => {
-    let amountWorkHistory =  db.contact_documents.count({ contact: ObjectId(contact._id), type: 1 });
-    let amountProjectHistory =  db.contact_documents.count({ contact: ObjectId(contact._id), type: 2 });
-    let amountContractHistory =  db.contact_documents.count({ contact: ObjectId(contact._id), type: 3 });
-    let amountEducationHistory =  db.contact_documents.count({ contact: ObjectId(contact._id), type: 4 });
-    let amountCertificateHistory =  db.contact_documents.count({ contact: ObjectId(contact._id), type: 5 });
+let amountWorkHistory = db.contact_documents.count({ contact: ObjectId(contact.\_id), type: 1 });
+let amountProjectHistory = db.contact_documents.count({ contact: ObjectId(contact.\_id), type: 2 });
+let amountContractHistory = db.contact_documents.count({ contact: ObjectId(contact.\_id), type: 3 });
+let amountEducationHistory = db.contact_documents.count({ contact: ObjectId(contact.\_id), type: 4 });
+let amountCertificateHistory = db.contact_documents.count({ contact: ObjectId(contact.\_id), type: 5 });
 
     db.contacts.findOneAndUpdate({ _id: contact._id}, { $set: {amountWorkHistory, amountProjectHistory, amountContractHistory, amountEducationHistory,  amountCertificateHistory } })
+
 })
 
 <!-- PRECALCULATE FOR TASK-->(Xong)
-let listTask=  db.pcm_plan_tasks.find({}).toArray();
+
+let listTask= db.pcm_plan_tasks.find({}).toArray();
 
 for (const task of listTask) {
 
@@ -169,18 +178,20 @@ for (const task of listTask) {
             }
         ]
     );
+
 }
 
 <!-- UPDATE CONVERSATION-->(Xong)
-let listConversations  = db.message_conversations.find({}).toArray();
+
+let listConversations = db.message_conversations.find({}).toArray();
 
 listConversations.forEach(conversation => {
-    let { _id, name, description, members, author, lastMessage, logo, pin, arrMissMessage, arrUserMuteMessage  } = conversation;
-    let company = null;
-    if(author && author[0]){
-        let infoAuthor = db.users.findOne({ _id: ObjectId(author[0])})
-        company = infoAuthor?.company;
-    }
+let { \_id, name, description, members, author, lastMessage, logo, pin, arrMissMessage, arrUserMuteMessage } = conversation;
+let company = null;
+if(author && author[0]){
+let infoAuthor = db.users.findOne({ \_id: ObjectId(author[0])})
+company = infoAuthor?.company;
+}
 
     let isPrivate = true;
 
@@ -204,29 +215,33 @@ listConversations.forEach(conversation => {
             _id, company, authors: author, avatar: logo, messagesPin: pin, usersMissMessage: arrMissMessage, isPrivate, isRename, config,  isDataConvert: 1
         }
     })
+
 })
 
 <!-- UPDATE MESSAGE-->(Xong)
+
 let listMessage = db.message_messages.find({}).toArray();
 for(const messageInfo of listMessage){
-    let usersSeen = messageInfo.listSeen?.map(item => item);
-    if(!usersSeen){
-        usersSeen = []
-    }
-    db.message_messages.findOneAndUpdate({ _id: messageInfo._id }, { $set: { usersSeen, isDataConvert: 1, type: 0 }})
+let usersSeen = messageInfo.listSeen?.map(item => item);
+if(!usersSeen){
+usersSeen = []
+}
+db.message_messages.findOneAndUpdate({ \_id: messageInfo.\_id }, { $set: { usersSeen, isDataConvert: 1, type: 0 }})
 }
 
 <!-- XOÁ TẤT CẢ DỮ LIỆU THÔNG BÁO THÁNG 1 TRỞ VỀ TRƯỚC-->(Xong)
+
 let dateRemove = new Date("2022-2-1");
 db.notifications.deleteMany({ createAt: { $lt: dateRemove }})
 
 <!--CONVERT NOTIFICATION-->(Xong)
+
 let listNotification = db.notifications.find({}).toArray();
 for(let noti of listNotification){
-    let { _id, status, url, type } = noti;
-    let taskID = url.substr(18, 24);
-    let path = `/pcm/detail/${taskID}`
-    let languageKey = type;
+let { \_id, status, url, type } = noti;
+let taskID = url.substr(18, 24);
+let path = `/pcm/detail/${taskID}`
+let languageKey = type;
 
     // Api pcm
     let app = '5dfe4b9051dc622100bb9d89';
@@ -243,32 +258,34 @@ for(let noti of listNotification){
     let isDataConvert = 1;
     let dataUpdate = { path, languageKey, app, status, mainColl, isDataConvert }
     db.notifications.findOneAndUpdate({ _id: ObjectId(_id)}, { $set: dataUpdate })
+
 }
 
 <!--CONVERT APP USER-->(Xong)
-let listUser = db.users.find({}).select("company _id").toArray();
+
+let listUser = db.users.find({}).select("company \_id").toArray();
 let listApp = ["61e049c9fdebf77b072d1b13", "5e47867080019357cce04746", "5dfe4c1b51dc622100bb9d8f", "5dfe4b9051dc622100bb9d89","5df4ce16506d9b3c587948ca"];
 let createAt = new Date();
 for(let user of listUser){
-    let {_id, company } = user;
-    for(let appID of listApp){
-         db.app_users.insert({ company, app: ObjectId(appID), user: _id, endTime: new Date("2022-12-31"), level: 1, numLog: 0, userCreate: ObjectId("6078102a1283502250f8ba12"), createAt, isDataConvert: 1  })
-    }
+let {\_id, company } = user;
+for(let appID of listApp){
+db.app_users.insert({ company, app: ObjectId(appID), user: \_id, endTime: new Date("2022-12-31"), level: 1, numLog: 0, userCreate: ObjectId("6078102a1283502250f8ba12"), createAt, isDataConvert: 1 })
+}
 }
 
+/\*\*
 
-/**
-* ============================ ********************************* ==============================
-* ============================ 	 CONVERT MESSAGE CONVERSATION  	 ==============================
-* ============================ ********************************* ==============================
-*/
+-   ============================ ****************\***************** ==============================
+-   ============================ CONVERT MESSAGE CONVERSATION ==============================
+-   ============================ ****************\***************** ==============================
+    \*/
 
 let listMessages = db.message_messages.find({}).toArray();
 
 for(const infoMessage of listMessages){
-    let { _id, listSeen, status, files } = infoMessage;
-    let listFiles = [];
-    let isImage = false;
+let { \_id, listSeen, status, files } = infoMessage;
+let listFiles = [];
+let isImage = false;
 
     if(files && files.length) {
         files.map(file => {
@@ -328,30 +345,31 @@ for(const infoMessage of listMessages){
             isDataConvert: 1,
         }
     }, { returnNewDocument: true })
+
 }
 
+/\*\*
 
-/**
-* ============================ **************************==============================
-* ============================ 	 CONVERT CONVERSATION  	 ==============================
-* ============================ **************************==============================
-*/
+-   ============================ ************\*\*************==============================
+-   ============================ CONVERT CONVERSATION ==============================
+-   ============================ ************\*\*************==============================
+    \*/
 
-let listConversations  = db.message_conversations.find({}).toArray();
+let listConversations = db.message_conversations.find({}).toArray();
 
 let config = {
-    configHighlight: 1,
-    configSeeOldMessage: 1,
-    configEditInfo: 1,
-    configCreateNote: 1,
-    configCreatePoll: 1,
-    configPinMessage: 1,
-    configSendMessage: 1
+configHighlight: 1,
+configSeeOldMessage: 1,
+configEditInfo: 1,
+configCreateNote: 1,
+configCreatePoll: 1,
+configPinMessage: 1,
+configSendMessage: 1
 }
 
 listConversations.forEach(conversation => {
-    let { _id, name, description, members, author, lastMessage, logo, pin, arrMissMessage, arrUserMuteMessage  } = conversation;
-    let company = null;
+let { \_id, name, description, members, author, lastMessage, logo, pin, arrMissMessage, arrUserMuteMessage } = conversation;
+let company = null;
 
     if(author && author.length && author[0]){
         let infoAuthor = db.users.findOne({ _id: ObjectId(author[0]) })
@@ -402,21 +420,20 @@ listConversations.forEach(conversation => {
             isDataConvert: 1
         }
     }, { returnNewDocument: true })
+
 })
 
+/\*\*
 
-
-/**
-* ============================ *************************************** ===============================
-* ============================ 	 CONVERT MEMBERS OF CONVERSATION  	   ===============================
-* ============================ *************************************** ===============================
-*/
-
+-   ============================ ******************\*\*\******************* ===============================
+-   ============================ CONVERT MEMBERS OF CONVERSATION ===============================
+-   ============================ ******************\*\*\******************* ===============================
+    \*/
 
 const conversations = db.message_conversations.find({}).toArray()
 
 for(let conversation of conversations) {
-    let { _id: conversationID, members, authors, author } = conversation;
+let { \_id: conversationID, members, authors, author } = conversation;
 
     if(authors && authors.length) {
         members = [...members, ...authors]
@@ -449,21 +466,22 @@ for(let conversation of conversations) {
             }
         }
     }
+
 }
 
+/\*\*
 
-/**
-* ============================ ******************************************************* ===============================
-* ============================ 	 UPDATE CONTRACT, PROJECT, GROUP FOR PCM_COMMENT  	   ===============================
-* ============================ ******************************************************* ===============================
-*/
+-   ============================ **************************\*\*\*************************** ===============================
+-   ============================ UPDATE CONTRACT, PROJECT, GROUP FOR PCM_COMMENT ===============================
+-   ============================ **************************\*\*\*************************** ===============================
+    \*/
 
 const comments = db.pcm_comments.find({}).toArray();
 
 for(let comment of comments) {
-    const infoTask = db.pcm_plan_tasks.findOne({ _id: comment.task })
-    if(infoTask) {
-        const { contract, project, group } = infoTask;
+const infoTask = db.pcm_plan_tasks.findOne({ \_id: comment.task })
+if(infoTask) {
+const { contract, project, group } = infoTask;
 
         if(!comment.contract) {
             db.pcm_comments.updateOne({ _id: comment._id }, {
@@ -484,39 +502,39 @@ for(let comment of comments) {
         }
 
     }
+
 }
 
+/\*\*
 
-/**
-* ============================ ********************************* ==============================
-* ============================ 	 CONVERT FILE IN PCM_COMMENT  	 ==============================
-* ============================ ********************************* ==============================
-*/
+-   ============================ ****************\***************** ==============================
+-   ============================ CONVERT FILE IN PCM_COMMENT ==============================
+-   ============================ ****************\***************** ==============================
+    \*/
 
 const listComments = db.pcm_comments.find({
-    task: { $exists: true, $ne: null },
+task: { $exists: true, $ne: null },
     $or: [
         {
             $expr: {
                 $gt: [
                     { $size: "$images" }, 0
-                ]
-            }
-        },
-        {
-            $expr: {
+]
+}
+},
+{
+$expr: {
                 $gt: [
                     { $size: "$files" }, 0
-                ]
-            }
-        }
-    ]
+]
+}
+}
+]
 })
 .toArray();
 
-
 const convertAsync = listComments.map(comment => {
-    const { _id: commentID, task, files, images } = comment;
+const { \_id: commentID, task, files, images } = comment;
 
     const taskInfo = db.pcm_plan_tasks.findOne({ _id: task });
 
@@ -594,20 +612,22 @@ const convertAsync = listComments.map(comment => {
             }, dataUpdate)
         }
     }
+
 })
 
 Promise.all(convertAsync)
 
-/**
-* ============================ ************************* ==============================
-* ============================ 	 UPDATE PATH PCM FILE  	 ==============================
-* ============================ ************************* ==============================
-*/
+/\*\*
+
+-   ============================ ************\************* ==============================
+-   ============================ UPDATE PATH PCM FILE ==============================
+-   ============================ ************\************* ==============================
+    \*/
 
 const filesPcm = db.pcm_files.find({ isDataConvert: 1 }).toArray();
 
 const convertAsync = filesPcm.map(f => {
-    const infoFile = db.files.findOne({ _id: f.file });
+const infoFile = db.files.findOne({ \_id: f.file });
 
     if(infoFile) {
         db.pcm_files.updateOne({
@@ -619,20 +639,21 @@ const convertAsync = filesPcm.map(f => {
             }
         })
     }
+
 })
 
 Promise.all(convertAsync)
 
+/\*\*
 
-/**
-* ============================ ************************* ==============================
-* ============================ 	 UPDATE ACCESS_USERS  	 ==============================
-* ============================ ************************* ==============================
-*/
-const listTasks = db.pcm_plan_tasks.find({}).projection({}).toArray()
+-   ============================ ************\************* ==============================
+-   ============================ UPDATE ACCESS_USERS ==============================
+-   ============================ ************\************* ==============================
+    \*/
+    const listTasks = db.pcm_plan_tasks.find({}).projection({}).toArray()
 
 const arrPromise = listTasks.map(task => {
-    const { _id: taskId, related, author, assignee, accessUsers } = task;
+const { \_id: taskId, related, author, assignee, accessUsers } = task;
 
     if(!accessUsers || !accessUsers.length) {
         const accessUsers = [author, assignee, ...related];
@@ -643,26 +664,27 @@ const arrPromise = listTasks.map(task => {
             }
         })
     }
+
 })
 
 Promise.all(arrPromise)
 
+/\*\*
 
-/**
-* ================ ******************************************* ====================
-* ================ 	 UPDATE COMPANY_OF_AUTHOR FOR PCM_COMMENT  ====================
-* ================ ******************************************* ====================
-*/
-const listAuthors = db.pcm_comments.aggregate([
+-   ================ ********************\*\*\********************* ====================
+-   ================ UPDATE COMPANY_OF_AUTHOR FOR PCM_COMMENT ====================
+-   ================ ********************\*\*\********************* ====================
+    \*/
+    const listAuthors = db.pcm_comments.aggregate([
     {
-        $group: {
-            _id: "$author"
-        }
+    $group: {
+    _id: "$author"
+    }
     },
-])
+    ])
 
-const arrPromise = listAuthors.map(({ _id: userId }) => {
-    const infoUser = db.users.findOne({ _id: userId }, { company: 1 })
+const arrPromise = listAuthors.map(({ \_id: userId }) => {
+const infoUser = db.users.findOne({ \_id: userId }, { company: 1 })
 
     if(infoUser) {
         db.pcm_comments.updateMany({
@@ -673,25 +695,27 @@ const arrPromise = listAuthors.map(({ _id: userId }) => {
             }
         })
     }
+
 })
 
 Promise.all(arrPromise);
 
-/**
-* ================ **************************************** ====================
-* ================ 	 UPDATE COMPANY_OF_AUTHOR FOR PCM_FILE  ====================
-* ================ **************************************** ====================
-*/
-const listAuthors = db.pcm_files.aggregate([
-    {
-        $group: {
-            _id: "$author"
-        }
-    },
-])
+/\*\*
 
-const arrPromise = listAuthors.map(({ _id: userId }) => {
-    const infoUser = db.users.findOne({ _id: userId }, { company: 1 })
+-   ================ ******************\*\*\*\******************* ====================
+-   ================ UPDATE COMPANY_OF_AUTHOR FOR PCM_FILE ====================
+-   ================ ******************\*\*\*\******************* ====================
+    \*/
+    const listAuthors = db.pcm_files.aggregate([
+    {
+    $group: {
+    _id: "$author"
+    }
+    },
+    ])
+
+const arrPromise = listAuthors.map(({ \_id: userId }) => {
+const infoUser = db.users.findOne({ \_id: userId }, { company: 1 })
 
     if(infoUser) {
         db.pcm_files.updateMany({
@@ -702,6 +726,7 @@ const arrPromise = listAuthors.map(({ _id: userId }) => {
             }
         })
     }
+
 })
 
 Promise.all(arrPromise);

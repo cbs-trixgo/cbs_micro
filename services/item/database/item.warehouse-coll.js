@@ -1,30 +1,30 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
 
-const Schema    = require('mongoose').Schema;
+const Schema = require('mongoose').Schema
 /**
  *  Hợp đồng kinh tế
  */
-module.exports  = DATABASE_MIDDLEWARE("warehouse", {
-    //_________Thuộc về công ty nào  
+module.exports = DATABASE_MIDDLEWARE('warehouse', {
+    //_________Thuộc về công ty nào
     company: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     //_________Phần tử cha
     parent: {
         type: Schema.Types.ObjectId,
-        ref: "warehouse"
+        ref: 'warehouse',
     },
     level: {
         type: Number,
-        default: 1 
+        default: 1,
     },
     // Số lượng phần tử con
     amountChilds: {
         type: Number,
-        default: 0 
+        default: 0,
     },
     //_________Tên
     name: String,
@@ -33,14 +33,14 @@ module.exports  = DATABASE_MIDDLEWARE("warehouse", {
     //_________Link Funda
     funda: {
         type: Schema.Types.ObjectId,
-        ref : "funda"
+        ref: 'funda',
     },
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

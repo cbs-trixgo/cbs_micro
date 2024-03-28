@@ -1,9 +1,9 @@
-"use strict";
+'use strict'
 
-const timeUtils = require('../utils/time_utils');
-const { checkObjectIDs } = require('../utils/utils');
-const PROMISE   = require('bluebird');
-const OBJECT_ID = require('mongoose').Types.ObjectId;
+const timeUtils = require('../utils/time_utils')
+const { checkObjectIDs } = require('../utils/utils')
+const PROMISE = require('bluebird')
+const OBJECT_ID = require('mongoose').Types.ObjectId
 
 class BaseModel {
     /**
@@ -35,7 +35,7 @@ class BaseModel {
     }
 
     constructor(collection) {
-        this.coll = collection;
+        this.coll = collection
     }
 
     /**
@@ -44,19 +44,19 @@ class BaseModel {
      * @param {*} authorID user tạo || add
      */
     insertData(data) {
-        let coll = this.coll;
+        let coll = this.coll
         return new PROMISE(function (resolve) {
-            data.modifyAt = timeUtils.getCurrentTime();
-            data.createAt = timeUtils.getCurrentTime();
+            data.modifyAt = timeUtils.getCurrentTime()
+            data.createAt = timeUtils.getCurrentTime()
 
-            (new coll(data)).save(function (error, result) {
-                if(error) {
-                    console.info('insertData error:');
-                    console.error(error);
+            new coll(data).save(function (error, result) {
+                if (error) {
+                    console.info('insertData error:')
+                    console.error(error)
                 }
-                return resolve(result, error);
-            });
-        });
+                return resolve(result, error)
+            })
+        })
     }
 
     /**
@@ -65,13 +65,17 @@ class BaseModel {
      * @param {*} updatedata giá trị cập nhật
      */
     updateById(id, updatedata, opts = { new: true }) {
-        return new Promise(async resolve => {
-            if(!checkObjectIDs(id)) return resolve(null);
+        return new Promise(async (resolve) => {
+            if (!checkObjectIDs(id)) return resolve(null)
 
-            updatedata.modifyAt = timeUtils.getCurrentTime();
+            updatedata.modifyAt = timeUtils.getCurrentTime()
 
-            const infoAfterUpdate = await this.coll.findByIdAndUpdate(id, updatedata, opts);
-            resolve(infoAfterUpdate);
+            const infoAfterUpdate = await this.coll.findByIdAndUpdate(
+                id,
+                updatedata,
+                opts
+            )
+            resolve(infoAfterUpdate)
         })
     }
 
@@ -82,158 +86,210 @@ class BaseModel {
      * @param {*} authorID   người cập nhật
      */
     updateWhereClause(condition, updatedata) {
-        return new Promise(async resolve => {
-            updatedata.modifyAt = timeUtils.getCurrentTime();
+        return new Promise(async (resolve) => {
+            updatedata.modifyAt = timeUtils.getCurrentTime()
 
-            const infoAfterUpdate = await this.coll.findOneAndUpdate(condition, updatedata, { new: true });
-            resolve(infoAfterUpdate);
+            const infoAfterUpdate = await this.coll.findOneAndUpdate(
+                condition,
+                updatedata,
+                { new: true }
+            )
+            resolve(infoAfterUpdate)
         })
     }
 
     getAllData() {
-        let coll = this.coll;
+        let coll = this.coll
         return new PROMISE(function (resolve) {
-            coll.find({}).lean().exec().then(function (result) {
-                return resolve(result);
-            })
-        });
+            coll.find({})
+                .lean()
+                .exec()
+                .then(function (result) {
+                    return resolve(result)
+                })
+        })
     }
 
     getDocumentLatestUpdate() {
-        let coll = this.coll;
+        let coll = this.coll
         return new PROMISE(function (resolve) {
-            coll.findOne({}).sort({modifyAt: -1}).lean().exec().then(function (result) {
-                return resolve(result);
-            })
-        });
+            coll.findOne({})
+                .sort({ modifyAt: -1 })
+                .lean()
+                .exec()
+                .then(function (result) {
+                    return resolve(result)
+                })
+        })
     }
 
     getDocumentLatestUpdateWhere(condition) {
-        let coll = this.coll;
+        let coll = this.coll
         return new PROMISE(function (resolve) {
-            coll.findOne(condition).sort({modifyAt: -1}).lean().exec().then(function (result) {
-                return resolve(result);
-            })
-        });
+            coll.findOne(condition)
+                .sort({ modifyAt: -1 })
+                .lean()
+                .exec()
+                .then(function (result) {
+                    return resolve(result)
+                })
+        })
     }
 
     getDocumentOldUpdate() {
-        let coll = this.coll;
+        let coll = this.coll
         return new PROMISE(function (resolve) {
-            coll.findOne({}).sort({modifyAt: 1}).lean().exec().then(function (result) {
-                return resolve(result);
-            })
-        });
+            coll.findOne({})
+                .sort({ modifyAt: 1 })
+                .lean()
+                .exec()
+                .then(function (result) {
+                    return resolve(result)
+                })
+        })
     }
 
     getDocumentLatestCreate() {
-        let coll = this.coll;
+        let coll = this.coll
         return new PROMISE(function (resolve) {
-            coll.findOne({}).sort({createAt: -1}).lean().exec().then(function (result) {
-                return resolve(result);
-            })
-        });
+            coll.findOne({})
+                .sort({ createAt: -1 })
+                .lean()
+                .exec()
+                .then(function (result) {
+                    return resolve(result)
+                })
+        })
     }
 
     getDocumentOldCreate() {
-        let coll = this.coll;
+        let coll = this.coll
         return new PROMISE(function (resolve) {
-            coll.findOne({}).sort({createAt: 1}).lean().exec().then(function (result) {
-                return resolve(result);
-            })
-        });
+            coll.findOne({})
+                .sort({ createAt: 1 })
+                .lean()
+                .exec()
+                .then(function (result) {
+                    return resolve(result)
+                })
+        })
     }
 
     countDataWhere(condition) {
-        let coll = this.coll;
+        let coll = this.coll
         return new PROMISE(function (resolve) {
             coll.count(condition, function (error, count) {
-                return resolve(count);
+                return resolve(count)
             })
-        });
+        })
     }
 
-
     getDataById(id) {
-        let coll = this.coll;
+        let coll = this.coll
         return new PROMISE(function (resolve) {
-            if(!checkObjectIDs(id)) return resolve(null);
+            if (!checkObjectIDs(id)) return resolve(null)
 
-            coll.find({_id: OBJECT_ID(id)}).lean().exec().then(function (result) {
-                if (result === null) {
-                    return resolve(null);
-                } else {
-                    return resolve(result[0]);
-                }
-            })
-        });
+            coll.find({ _id: OBJECT_ID(id) })
+                .lean()
+                .exec()
+                .then(function (result) {
+                    if (result === null) {
+                        return resolve(null)
+                    } else {
+                        return resolve(result[0])
+                    }
+                })
+        })
     }
 
     getDataWhere(whereClause, findType, sort = null, limit = null) {
-        let coll = this.coll;
+        let coll = this.coll
         return new PROMISE(function (resolve) {
             if (BaseModel.FIND_ONE == findType) {
                 if (sort != null) {
-                    coll.findOne(whereClause).sort(sort).lean().exec().then(function (result) {
-                        return resolve(result);
-                    })
+                    coll.findOne(whereClause)
+                        .sort(sort)
+                        .lean()
+                        .exec()
+                        .then(function (result) {
+                            return resolve(result)
+                        })
                 } else {
-                    coll.findOne(whereClause).sort(sort).lean().exec().then(function (result) {
-                        return resolve(result);
-                    })
+                    coll.findOne(whereClause)
+                        .sort(sort)
+                        .lean()
+                        .exec()
+                        .then(function (result) {
+                            return resolve(result)
+                        })
                 }
-
             } else if (BaseModel.FIND_MANY == findType) {
                 if (sort != null) {
                     if (limit != null) {
-                        coll.find(whereClause).sort(sort).limit(limit).lean().exec().then(function (result) {
-                            return resolve(result);
-                        })
+                        coll.find(whereClause)
+                            .sort(sort)
+                            .limit(limit)
+                            .lean()
+                            .exec()
+                            .then(function (result) {
+                                return resolve(result)
+                            })
                     } else {
-                        coll.find(whereClause).sort(sort).lean().exec().then(function (result) {
-                            return resolve(result);
-                        })
+                        coll.find(whereClause)
+                            .sort(sort)
+                            .lean()
+                            .exec()
+                            .then(function (result) {
+                                return resolve(result)
+                            })
                     }
-
                 } else {
                     if (limit != null) {
-                        coll.find(whereClause).sort(sort).limit(limit).lean().exec().then(function (result) {
-                            return resolve(result);
-                        })
+                        coll.find(whereClause)
+                            .sort(sort)
+                            .limit(limit)
+                            .lean()
+                            .exec()
+                            .then(function (result) {
+                                return resolve(result)
+                            })
                     } else {
-                        coll.find(whereClause).sort(sort).lean().exec().then(function (result) {
-                            return resolve(result);
-                        })
+                        coll.find(whereClause)
+                            .sort(sort)
+                            .lean()
+                            .exec()
+                            .then(function (result) {
+                                return resolve(result)
+                            })
                     }
                 }
             }
-        });
+        })
     }
 
     removeDataWhere(condition) {
-        let coll = this.coll;
+        let coll = this.coll
         return new PROMISE(function (resolve) {
             coll.remove(condition, function (error) {
-                return resolve();
+                return resolve()
             })
-        });
+        })
     }
 
     removeDataById(id) {
-        let coll = this.coll;
+        let coll = this.coll
         return new PROMISE(function (resolve) {
-            if(!checkObjectIDs(id)) return resolve(null);
+            if (!checkObjectIDs(id)) return resolve(null)
 
-            coll.remove({_id: OBJECT_ID(id)}, function (error) {
-                return resolve();
+            coll.remove({ _id: OBJECT_ID(id) }, function (error) {
+                return resolve()
             })
         }).catch(function () {
             return new PROMISE(function (resolve) {
-                return resolve(null);
+                return resolve(null)
             })
-        });
+        })
     }
-
 }
 
-module.exports = BaseModel;
+module.exports = BaseModel

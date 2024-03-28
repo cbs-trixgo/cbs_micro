@@ -1,15 +1,15 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * DATAHUB BÁO CÁO TÀI CHÍNH
  */
-module.exports  = DATABASE_MIDDLEWARE("datahub_finreport", {
+module.exports = DATABASE_MIDDLEWARE('datahub_finreport', {
     //_________Nhà thầu
     contractor: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     //_________Năm tài chính
     fiscalYear: { type: Number, default: 0 },
@@ -34,19 +34,21 @@ module.exports  = DATABASE_MIDDLEWARE("datahub_finreport", {
     //_________Lợi nhuận sau thuế (lợi nhuận dòng: = Tổng DT-Tổng CP-Thuế TNDN)
     grossProfitAfterTax: { type: Number, default: 0 },
     //_________Tài liệu đính kèm
-    files: [{
-        type: Schema.Types.ObjectId,
-        ref: "file"
-    }],
+    files: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'file',
+        },
+    ],
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

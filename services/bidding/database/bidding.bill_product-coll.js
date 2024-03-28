@@ -1,31 +1,31 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  *  DANH MỤC VẬT TƯ GÓI THẦU
  * => Số liệu tính toán đều là trước VAT
  */
-module.exports  = DATABASE_MIDDLEWARE("bidding_bill_product", {  
+module.exports = DATABASE_MIDDLEWARE('bidding_bill_product', {
     //_________Khu vực (xã/phường)
     area: {
         type: Schema.Types.ObjectId,
-        ref : "area"
-    },    
+        ref: 'area',
+    },
     //_________Chủ đầu tư
     client: {
         type: Schema.Types.ObjectId,
-        ref : "company"
-    }, 
+        ref: 'company',
+    },
     //_________Dự án
     project: {
         type: Schema.Types.ObjectId,
-        ref : "department"
+        ref: 'department',
     },
     //_________Hồ sơ mời thầu (gói thầu)
     doc: {
         type: Schema.Types.ObjectId,
-        ref : "bidding_doc"
+        ref: 'bidding_doc',
     },
     /**
      * Nhà thầu trúng thầu
@@ -33,7 +33,7 @@ module.exports  = DATABASE_MIDDLEWARE("bidding_bill_product", {
      */
     bidder: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     /**
      * THÔNG TIN CĂN BẢN
@@ -48,7 +48,7 @@ module.exports  = DATABASE_MIDDLEWARE("bidding_bill_product", {
     //_________Mã sản phẩm theo hệ thống
     product: {
         type: Schema.Types.ObjectId,
-        ref: "datahub_product"
+        ref: 'datahub_product',
     },
     //_________Đơn giá
     unitprice: { type: Number, default: 0 },
@@ -59,10 +59,10 @@ module.exports  = DATABASE_MIDDLEWARE("bidding_bill_product", {
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

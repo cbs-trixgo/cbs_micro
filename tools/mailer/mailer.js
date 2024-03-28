@@ -1,7 +1,7 @@
-"use strict";
+'use strict'
 
-const mailer = require("nodemailer");
-const cfMailer = require('./config/cf_mailer');
+const mailer = require('nodemailer')
+const cfMailer = require('./config/cf_mailer')
 
 module.exports = function (to, subject, content, callback, from) {
     let smtpTransport = mailer.createTransport({
@@ -9,8 +9,8 @@ module.exports = function (to, subject, content, callback, from) {
         auth: {
             user: cfMailer.email,
             pass: cfMailer.password,
-        }
-    });
+        },
+    })
 
     let mail = {
         from: from || 'TRIXGO <noreply.trixgo@gmail.com>',
@@ -31,22 +31,22 @@ module.exports = function (to, subject, content, callback, from) {
         //         path: `${__dirname}/01bc9e16217201af5672b64c5f1c088c.jpg` // stream this file
         //     },
         // ]
-    };
+    }
 
     smtpTransport.sendMail(mail, function (error, response) {
         console.log({ error, response })
         if (error) {
-            if (callback == null || typeof callback == "undefined") {
+            if (callback == null || typeof callback == 'undefined') {
             } else {
-                callback({error: true, message: "send mail error!"});
+                callback({ error: true, message: 'send mail error!' })
             }
         } else {
-            if (callback == null || typeof callback == "undefined") {
+            if (callback == null || typeof callback == 'undefined') {
             } else {
-                callback({error: false, message: "send mail success!"});
+                callback({ error: false, message: 'send mail success!' })
             }
         }
 
-        smtpTransport.close();
-    });
-};
+        smtpTransport.close()
+    })
+}

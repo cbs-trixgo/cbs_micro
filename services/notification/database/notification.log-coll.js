@@ -1,9 +1,9 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("notification", {
+module.exports = DATABASE_MIDDLEWARE('notification', {
     /**
      * PHÂN LOẠI THÔNG BÁO ĐỂ PHỤC VỤ CÁC NHU CẦU KHÁC NHAU
      * 1 - InApp (Socket)
@@ -14,7 +14,7 @@ module.exports  = DATABASE_MIDDLEWARE("notification", {
      */
     type: {
         type: Number,
-        require: true
+        require: true,
     },
     /**
      * QUẢN LÝ TRẠNG THÁI CỦA CÁC THÔNG BÁO
@@ -23,35 +23,35 @@ module.exports  = DATABASE_MIDDLEWARE("notification", {
      *  3: Đã xem
      */
     status: {
-        type: Number
+        type: Number,
     },
     //_________Key để xử lý ngôn ngữ (services\notification\helper\notification.keys-constant.js)
     languageKey: {
-        type: String 
+        type: String,
     },
     //_________Thuộc dự án
     project: {
         type: Schema.Types.ObjectId,
-        ref: 'department'
+        ref: 'department',
     },
     //_______Hợp đồng (option, chỉ khi truy cập vào contract thì mới có trường này)
     contract: {
         type: Schema.Types.ObjectId,
-        ref : 'contract' 
+        ref: 'contract',
     },
     //_________Người gửi
     sender: {
         type: Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'user',
     },
     //_________Người nhận
     receiver: {
         type: Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'user',
     },
     //_________Nội dung (mô tả ngắn nội dung)
     content: {
-        type: String
+        type: String,
     },
     /**
      * Đường dẫn truy cập
@@ -61,27 +61,27 @@ module.exports  = DATABASE_MIDDLEWARE("notification", {
      * (Làm việc với Tuấn)
      */
     path: {
-        type: String
+        type: String,
     },
     /**
      * appID
      */
     app: {
         type: Schema.Types.ObjectId,
-        ref: 'app'
+        ref: 'app',
     },
     /**
      * mainCollID (VD: mediaID, taskID,...)
      */
     mainColl: {
         kind: String,
-        item: { type: Schema.Types.ObjectId, refPath: 'mainColl.kind' }
+        item: { type: Schema.Types.ObjectId, refPath: 'mainColl.kind' },
     },
     /**
      * subCollID (VD: commentID, checklistID,...)
      */
     subColl: {
         kind: String,
-        item: { type: Schema.Types.ObjectId, refPath: 'subColl.kind' }
+        item: { type: Schema.Types.ObjectId, refPath: 'subColl.kind' },
     },
 })

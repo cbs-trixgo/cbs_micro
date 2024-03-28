@@ -1,67 +1,87 @@
 /**
  * TOOLS
  */
- const { renderStatusCodeAndResponse }           = require('../../../tools/utils/status_code');
+const {
+    renderStatusCodeAndResponse,
+} = require('../../../tools/utils/status_code')
 
 /**
  * MODELS
  */
-const DATAHUB_PROFILE_MODEL                   = require('../model/datahub.datahub_profile-model').MODEL;
+const DATAHUB_PROFILE_MODEL =
+    require('../model/datahub.datahub_profile-model').MODEL
 
 module.exports = {
     /**
-	 * Dev: HiepNH
-	 * Func: Thêm datahub profile
-	 */
+     * Dev: HiepNH
+     * Func: Thêm datahub profile
+     */
     insert: {
         params: {
-            company             : { type: "string" },
-            name                : { type: "string" },
-            files             : { type: "array",  optional: true },
+            company: { type: 'string' },
+            name: { type: 'string' },
+            files: { type: 'array', optional: true },
         },
         async handler(ctx) {
             try {
-                await this.validateEntity(ctx.params);
-                let { company, name, files } = ctx.params;
-				const { _id: userID } = ctx.meta.infoUser;
+                await this.validateEntity(ctx.params)
+                let { company, name, files } = ctx.params
+                const { _id: userID } = ctx.meta.infoUser
 
-                let resultAfterCallHandler = await DATAHUB_PROFILE_MODEL.insert({
-                    company, name, files, userID
-                });
+                let resultAfterCallHandler = await DATAHUB_PROFILE_MODEL.insert(
+                    {
+                        company,
+                        name,
+                        files,
+                        userID,
+                    }
+                )
 
-                return renderStatusCodeAndResponse({ resultAfterCallHandler, ctx });
+                return renderStatusCodeAndResponse({
+                    resultAfterCallHandler,
+                    ctx,
+                })
             } catch (error) {
-                return { error:  true, message: error.message };
+                return { error: true, message: error.message }
             }
-        }
+        },
     },
 
     /**
-	 * Dev: HiepNH
-	 * Func: Sửa datahub profile
-	 */
+     * Dev: HiepNH
+     * Func: Sửa datahub profile
+     */
     update: {
         params: {
-            datahubProfileID    : { type: "string" },
-            name                : { type: "string",  optional: true },
-            files               : { type: "array",   optional: true  },
-            filesRemove         : { type: "array",   optional: true  },
+            datahubProfileID: { type: 'string' },
+            name: { type: 'string', optional: true },
+            files: { type: 'array', optional: true },
+            filesRemove: { type: 'array', optional: true },
         },
         async handler(ctx) {
             try {
-                await this.validateEntity(ctx.params);
-                let {  datahubProfileID, name, files, filesRemove } = ctx.params;
-				const { _id: userID } = ctx.meta.infoUser;
+                await this.validateEntity(ctx.params)
+                let { datahubProfileID, name, files, filesRemove } = ctx.params
+                const { _id: userID } = ctx.meta.infoUser
 
-                let resultAfterCallHandler = await DATAHUB_PROFILE_MODEL.update({
-                    datahubProfileID, name, files, filesRemove, userID
-                });
+                let resultAfterCallHandler = await DATAHUB_PROFILE_MODEL.update(
+                    {
+                        datahubProfileID,
+                        name,
+                        files,
+                        filesRemove,
+                        userID,
+                    }
+                )
 
-                return renderStatusCodeAndResponse({ resultAfterCallHandler, ctx });
+                return renderStatusCodeAndResponse({
+                    resultAfterCallHandler,
+                    ctx,
+                })
             } catch (error) {
-                return { error:  true, message: error.message };
+                return { error: true, message: error.message }
             }
-        }
+        },
     },
 
     /**
@@ -70,23 +90,28 @@ module.exports = {
      */
     remove: {
         params: {
-            datahubProfileID: { type: "string" },
+            datahubProfileID: { type: 'string' },
         },
         async handler(ctx) {
             try {
-                await this.validateEntity(ctx.params);
-                let { datahubProfileID } = ctx.params;
-				const { _id: userID } = ctx.meta.infoUser;
+                await this.validateEntity(ctx.params)
+                let { datahubProfileID } = ctx.params
+                const { _id: userID } = ctx.meta.infoUser
 
-                let resultAfterCallHandler = await DATAHUB_PROFILE_MODEL.remove({
-                    datahubProfileID
-                });
+                let resultAfterCallHandler = await DATAHUB_PROFILE_MODEL.remove(
+                    {
+                        datahubProfileID,
+                    }
+                )
 
-                return renderStatusCodeAndResponse({ resultAfterCallHandler, ctx });
+                return renderStatusCodeAndResponse({
+                    resultAfterCallHandler,
+                    ctx,
+                })
             } catch (error) {
-                return { error:  true, message: error.message };
+                return { error: true, message: error.message }
             }
-        }
+        },
     },
 
     /**
@@ -95,37 +120,58 @@ module.exports = {
      */
     getInfoAndGetList: {
         params: {
-            datahubProfileID    : { type: "string", optional: true },
-            contractorID        : { type: "string", optional: true },
+            datahubProfileID: { type: 'string', optional: true },
+            contractorID: { type: 'string', optional: true },
 
             // Field mặc định
-            keyword             : { type: "string", optional: true },
-            limit               : { type: "string", optional: true },
-            lastestID           : { type: "string", optional: true },
-            select              : { type: "string", optional: true },
-            populates           : { type: "string", optional: true },
+            keyword: { type: 'string', optional: true },
+            limit: { type: 'string', optional: true },
+            lastestID: { type: 'string', optional: true },
+            select: { type: 'string', optional: true },
+            populates: { type: 'string', optional: true },
         },
         async handler(ctx) {
             try {
-                await this.validateEntity(ctx.params);
-                let { datahubProfileID, contractorID, lastestID, keyword, limit, select, populates } = ctx.params;
-				const { _id: userID } = ctx.meta.infoUser;
+                await this.validateEntity(ctx.params)
+                let {
+                    datahubProfileID,
+                    contractorID,
+                    lastestID,
+                    keyword,
+                    limit,
+                    select,
+                    populates,
+                } = ctx.params
+                const { _id: userID } = ctx.meta.infoUser
 
-                let resultAfterCallHandler;
-                if(datahubProfileID){
-                    resultAfterCallHandler = await DATAHUB_PROFILE_MODEL.getInfo({
-                        datahubProfileID, select, populates
-                    });
-                }else{
-                    resultAfterCallHandler = await DATAHUB_PROFILE_MODEL.getList({
-                        contractorID, userID, lastestID, keyword, limit: +limit, select, populates
-                    });
+                let resultAfterCallHandler
+                if (datahubProfileID) {
+                    resultAfterCallHandler =
+                        await DATAHUB_PROFILE_MODEL.getInfo({
+                            datahubProfileID,
+                            select,
+                            populates,
+                        })
+                } else {
+                    resultAfterCallHandler =
+                        await DATAHUB_PROFILE_MODEL.getList({
+                            contractorID,
+                            userID,
+                            lastestID,
+                            keyword,
+                            limit: +limit,
+                            select,
+                            populates,
+                        })
                 }
 
-                return renderStatusCodeAndResponse({ resultAfterCallHandler, ctx });
+                return renderStatusCodeAndResponse({
+                    resultAfterCallHandler,
+                    ctx,
+                })
             } catch (error) {
-                return { error:  true, message: error.message };
+                return { error: true, message: error.message }
             }
-        }
+        },
     },
 }

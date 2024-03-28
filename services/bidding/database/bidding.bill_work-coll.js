@@ -1,33 +1,33 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 /**
  * 1. HẠNG MỤC
  * 2. NHÓM DỮ LIỆU
  * 3. CÔNG VIỆC MỜI THẦU
  * => Số liệu tính toán đều là trước VAT
  */
-module.exports  = DATABASE_MIDDLEWARE("bidding_bill_work", {  
+module.exports = DATABASE_MIDDLEWARE('bidding_bill_work', {
     //_________Khu vực (Lấy theo dự án)
     area: {
         type: Schema.Types.ObjectId,
-        ref : "area"
-    },    
+        ref: 'area',
+    },
     //_________Chủ đầu tư (Lấy theo dự án)
     client: {
         type: Schema.Types.ObjectId,
-        ref : "company"
-    }, 
+        ref: 'company',
+    },
     //_________Dự án
     project: {
         type: Schema.Types.ObjectId,
-        ref : "department"
+        ref: 'department',
     },
     //_________Hồ sơ mời thầu
     doc: {
         type: Schema.Types.ObjectId,
-        ref : "bidding_doc"
+        ref: 'bidding_doc',
     },
     /**
      * THÔNG TIN CĂN BẢN
@@ -35,23 +35,23 @@ module.exports  = DATABASE_MIDDLEWARE("bidding_bill_work", {
     //_________Hạng mục
     item: {
         type: Schema.Types.ObjectId,
-        ref : "bidding_bill_item"
+        ref: 'bidding_bill_item',
     },
     //_________Nhóm dữ liệu
     group: {
         type: Schema.Types.ObjectId,
-        ref : "bidding_bill_group"
+        ref: 'bidding_bill_group',
     },
     //_________Mã công tác trong DataHub
     datahubJob: {
         type: Schema.Types.ObjectId,
-        ref : "datahub_job"
+        ref: 'datahub_job',
     },
     // //_________Nhà thầu trúng thầu
     // bidder: {
     //     type: Schema.Types.ObjectId,
     //     ref : "company"
-    // },    
+    // },
     //_________Tên
     name: String,
     //_________Ký hiệu
@@ -68,7 +68,7 @@ module.exports  = DATABASE_MIDDLEWARE("bidding_bill_work", {
      * 2 - PS được tính với CĐT
      * 3 - PS không được tính với CĐT
      */
-    plus: { type: Number, default: 1},
+    plus: { type: Number, default: 1 },
     //_________Khối lượng
     quantity: { type: Number, default: 0 },
     //_________Khối lượng cập nhật sau chào thầu
@@ -92,10 +92,10 @@ module.exports  = DATABASE_MIDDLEWARE("bidding_bill_work", {
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

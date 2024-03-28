@@ -1,23 +1,23 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports  = DATABASE_MIDDLEWARE("contact_document", {
+module.exports = DATABASE_MIDDLEWARE('contact_document', {
     //_________Công ty
     company: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     //_________Dự án đang triển khai
     project: {
         type: Schema.Types.ObjectId,
-        ref : "datahub_project"
+        ref: 'datahub_project',
     },
     //_________Nhân sự
     contact: {
         type: Schema.Types.ObjectId,
-        ref : "contact"
+        ref: 'contact',
     },
     //_________Phân loại (1-6)
     /**
@@ -46,17 +46,17 @@ module.exports  = DATABASE_MIDDLEWARE("contact_document", {
     //_________Tỉnh/Thành phố
     currentArea1: {
         type: Schema.Types.ObjectId,
-        ref : "area"
+        ref: 'area',
     },
     //_________Huyện/Quận
     currentArea2: {
         type: Schema.Types.ObjectId,
-        ref : "area"
+        ref: 'area',
     },
     //_________Xã/Phường
     currentArea3: {
         type: Schema.Types.ObjectId,
-        ref : "area"
+        ref: 'area',
     },
     //_________Gói thầu/Hạng mục tham gia
     item: String,
@@ -67,12 +67,12 @@ module.exports  = DATABASE_MIDDLEWARE("contact_document", {
     //_________Vị trí đảm nhận/Chức vụ tham gia (/item/doctypes/?tab=13)
     position2: {
         type: Schema.Types.ObjectId,
-        ref : "doctype"
+        ref: 'doctype',
     },
     //_________Thuộc hợp đồng
     contract: {
         type: Schema.Types.ObjectId,
-        ref : "contract"
+        ref: 'contract',
     },
     //_________Có phải là nơi làm việc hiện tại không (1-Không/2-Có)
     currentStatus: { type: Number, default: 1 },
@@ -103,49 +103,51 @@ module.exports  = DATABASE_MIDDLEWARE("contact_document", {
      */
     field2: {
         type: Schema.Types.ObjectId,
-        ref : "doctype"
+        ref: 'doctype',
     },
     //_________Trình độ học vấn
     educationalBackground2: {
         type: Schema.Types.ObjectId,
-        ref : "doctype"
+        ref: 'doctype',
     },
-    //_________Loại chứng chỉ 
+    //_________Loại chứng chỉ
     certificateType: {
         type: Schema.Types.ObjectId,
-        ref : "doctype"
+        ref: 'doctype',
     },
     //_________Nội dung lĩnh vực chứng chỉ
     certificateName: {
         type: Schema.Types.ObjectId,
-        ref : "doctype"
+        ref: 'doctype',
     },
     //_________Hạng chứng chỉ (1/2/3/4-Nếu)
     certificateGrade: { type: Number, default: 1 },
     // Thời gian huy động
-    timeMobilize : {
+    timeMobilize: {
         type: Number,
-        default: 0
+        default: 0,
     },
     // Hệ số
-    factor : {
+    factor: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //_________Tài liệu đính kèm
-    files: [{
-        type: Schema.Types.ObjectId,
-        ref : "file"
-    }],
+    files: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'file',
+        },
+    ],
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

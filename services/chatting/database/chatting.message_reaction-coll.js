@@ -1,9 +1,9 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-module.exports = DATABASE_MIDDLEWARE("message_message_reaction", {
+module.exports = DATABASE_MIDDLEWARE('message_message_reaction', {
     /**
      * Loại tương tác, like, tim, haha ...
      * { value: 1, text: 'Thích', image: '1f44d.png' },
@@ -15,20 +15,20 @@ module.exports = DATABASE_MIDDLEWARE("message_message_reaction", {
      */
     type: {
         type: Number,
-        default: 1
+        default: 1,
     },
-	/**
+    /**
      * Tin nhắn
      */
- 	message: {
-		type    : Schema.Types.ObjectId,
-		ref     : 'message_message'
-	},
+    message: {
+        type: Schema.Types.ObjectId,
+        ref: 'message_message',
+    },
     /**
      *  Người reaction
      */
     author: {
-        type    :  Schema.Types.ObjectId,
-        ref     : 'user'
-    }
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+    },
 })

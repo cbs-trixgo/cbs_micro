@@ -1,13 +1,13 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
 /**
  * SẢN LƯỢNG
  */
 
-module.exports  = DATABASE_MIDDLEWARE("contract_production", {
+module.exports = DATABASE_MIDDLEWARE('contract_production', {
     /**
      * START THÔNG TIN LẤY TỪ HỢP ĐỒNG
      */
@@ -20,55 +20,55 @@ module.exports  = DATABASE_MIDDLEWARE("contract_production", {
     //_________Phân loại theo lĩnh vực (type = 3) (POSTMAN -> ITEM - > DOCTYPE)
     field: {
         type: Schema.Types.ObjectId,
-        ref : "doctype"
-    },  
-    
+        ref: 'doctype',
+    },
+
     //_________Phân loại theo Đơn vị (POSTMAN ITEM -> CONTACT)
     dependentUnit: {
         type: Schema.Types.ObjectId,
-        ref : 'contact'
+        ref: 'contact',
     },
 
     //_________Phân loại theo Phụ trách (POSTMAN ITEM -> CONTACT)
     personInCharge: {
         type: Schema.Types.ObjectId,
-        ref : 'contact'
-    }, 
+        ref: 'contact',
+    },
 
     //_________Phân loại theo Chủ trì (POSTMAN ITEM -> CONTACT)
     chair: {
         type: Schema.Types.ObjectId,
-        ref : 'contact'
-    },    
+        ref: 'contact',
+    },
 
     //_________Bên mua (POSTMAN ITEM > CONTACT)
     buyerInfo: {
         type: Schema.Types.ObjectId,
-        ref: "contact"
+        ref: 'contact',
     },
 
     //_________Bên bán (POSTMAN ITEM > CONTACT)
     sellerInfo: {
         type: Schema.Types.ObjectId,
-        ref: "contact"
+        ref: 'contact',
     },
 
     //_________Công ty-Được xác định theo IPC(*)
     company: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
 
-    //_________Dự án-Được xác định theo IPC(*) 
+    //_________Dự án-Được xác định theo IPC(*)
     project: {
         type: Schema.Types.ObjectId,
-        ref : "department"
+        ref: 'department',
     },
 
     //_________Hợp đồng-Được xác định theo IPC(*)
     contract: {
         type: Schema.Types.ObjectId,
-        ref : "contract"
+        ref: 'contract',
     },
 
     /**
@@ -79,26 +79,26 @@ module.exports  = DATABASE_MIDDLEWARE("contract_production", {
      * 1-Kế hoạch
      * 2-Thực tế
      */
-    plan: { type: Number, default: 1, enum: [1,2] },    
+    plan: { type: Number, default: 1, enum: [1, 2] },
     //_________Ngày hoạch toán(*)
     date: { type: Date, default: Date.now },
-    
+
     //_________Tên(*)
     name: String,
-    
+
     //_________Ký hiệu
     sign: String,
 
     //_________Mô tả
     description: String,
-    
+
     //_________Ghi chú
     note: String,
 
     /**
      * Sản lượng thực hiện
      */
-   
+
     //_________Sản lượng trước VAT
     produce: { type: Number, default: 0 },
 
@@ -110,16 +110,16 @@ module.exports  = DATABASE_MIDDLEWARE("contract_production", {
 
     //_________Sản lượng phát sinh phần VAT
     vatPlusProduce: { type: Number, default: 0 },
-    
+
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })

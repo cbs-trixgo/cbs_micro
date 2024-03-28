@@ -1,13 +1,12 @@
+'use strict'
 
-"use strict";
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
-
-module.exports  = DATABASE_MIDDLEWARE("facebook_conversation", {
+module.exports = DATABASE_MIDDLEWARE('facebook_conversation', {
     contactID: {
         type: Schema.Types.ObjectId,
-        ref: "contact"
+        ref: 'contact',
     },
 
     id: {
@@ -16,4 +15,4 @@ module.exports  = DATABASE_MIDDLEWARE("facebook_conversation", {
         require: true,
     },
     time: String,
-});
+})

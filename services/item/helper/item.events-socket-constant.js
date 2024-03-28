@@ -1,4 +1,4 @@
-const ITEM = 'ITEM';
+const ITEM = 'ITEM'
 
 // danh sách events socket
 exports.EVENT_SOCKET_CONSTANT_ITEM = {

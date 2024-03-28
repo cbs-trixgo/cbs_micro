@@ -1,12 +1,12 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema    = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
 /**
  *  PHÂN LOẠI KHÁC
  */
-module.exports  = DATABASE_MIDDLEWARE("doctype", {
+module.exports = DATABASE_MIDDLEWARE('doctype', {
     /** PHÂN LOẠI
     1-Văn Bản Lĩnh vực hồ sơ
     2-Văn Bản Tính chất hồ sơ
@@ -38,27 +38,29 @@ module.exports  = DATABASE_MIDDLEWARE("doctype", {
     //_________Công ty
     company: {
         type: Schema.Types.ObjectId,
-        ref : "company"
+        ref: 'company',
     },
     //_________Phòng ban/dự án
     project: {
         type: Schema.Types.ObjectId,
-        ref : "department"
+        ref: 'department',
     },
     //_________Phần tử cha
     parent: {
         type: Schema.Types.ObjectId,
-        ref: "doctype"
+        ref: 'doctype',
     },
     level: {
         type: Number,
-        default: 1
+        default: 1,
     },
     //_________Phần tử con (Sử dụng dụng cho phân loại của Message NPS)
-    childs: [{
-        type: Schema.Types.ObjectId,
-        ref: "doctype"
-    }],
+    childs: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'doctype',
+        },
+    ],
     //_________Tên
     name: String,
     //_________Tên
@@ -72,12 +74,12 @@ module.exports  = DATABASE_MIDDLEWARE("doctype", {
     //_________Giá trị
     amount: {
         type: Number,
-        default: 0
+        default: 0,
     },
     //_________Nhắc trước thời hạn (giờ)
     alert: {
         type: Number,
-        default: 0
+        default: 0,
     },
     /**
      * Phân loại kênh bán hàng => Để mapping với data cũ
@@ -91,27 +93,27 @@ module.exports  = DATABASE_MIDDLEWARE("doctype", {
      */
     salesChannel: {
         type: Number,
-        default: 1
+        default: 1,
     },
     //_________Số phần tử con
-    amountChilds:  {
+    amountChilds: {
         type: Number,
-        default : 0
+        default: 0,
     },
     //_________Link tới Item khác
     linkItem: {
         type: Schema.Types.ObjectId,
-        ref: "doctype"
+        ref: 'doctype',
     },
     /**
      * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
      */
     userCreate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
+        ref: 'user',
     },
     userUpdate: {
         type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+        ref: 'user',
+    },
 })
