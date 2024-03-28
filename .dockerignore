@@ -1,15 +1,24 @@
-temp
-test
-ops
 .vscode
 .idea
 .git
+.vim
+.github
+.DS_Store
+
+.env
+.env.example
+
+.gitignore
+.dockerignore
+Dockerfile
 
 README.md
 note.md
 api.http
-.env.example
-.DS_Store
 
-Dockerfile
 files/temporary_uploads/*
+node_modules
+public
+temp
+test
+ops
