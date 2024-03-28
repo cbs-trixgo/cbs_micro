@@ -149,7 +149,7 @@ class Model extends BaseModel {
                         statusText: response.statusText
                     });
                 }
-                
+
                 return resolve({ error: false, message: "OK" })
             } catch(error) {
                 return resolve({ error: true, message: error.message })
