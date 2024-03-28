@@ -1,0 +1,15 @@
+temp
+test
+ops
+.vscode
+.idea
+.git
+
+README.md
+note.md
+api.http
+.env.example
+.DS_Store
+
+Dockerfile
+files/temporary_uploads/*

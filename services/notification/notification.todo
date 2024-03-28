@@ -1,0 +1,4 @@
+1/ Bổ sung Socket client 
+    https://github.com/tiaod/moleculer-io
+    -> call từ service notification ---> realtime (tại service realtime cần list event)
+2/ Bổ sung các phần kết nối tích hợp CLOUD_MESSAGING, WebPush, ...

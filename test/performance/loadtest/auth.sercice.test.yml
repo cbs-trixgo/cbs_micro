@@ -1,0 +1,21 @@
+#https://artillery.io/docs/guides/guides/test-script-reference.html
+
+# B1: export TOKEN="..."
+# B2: artillery run my-test.yaml
+
+# https://dev.to/tios/quick-loadtests-with-artillery-1g65
+config:
+  target: 'http://localhost:3003/api'
+  phases:
+   - duration: 60 #total time for run
+     arrivalRate: 15 #15rps
+scenarios:
+ - flow:
+   - log: "SEARCH FULL_TEXT SEARCH"
+   - get:
+      headers:
+        Authorization: 'Bearer {{ $processEnvironment.TOKEN }}'
+      url: '/auth/users/search-with-fulltext?key=TRX số 3'
+      expect:
+        - statusCode: 200
+      

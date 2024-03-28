@@ -1,0 +1,44 @@
+// UPDATE amountChilds CHO DANH BẠ done
+-------------------------------------------------------------------------------------
+let listContact = db.contacts.find({}).toArray();
+listContact.forEach(item => {
+    let amountChilds = item.childs?.length || 0;
+    db.contacts.updateOne({ _id: ObjectId(item._id)}, { $set: { amountChilds }});
+})
+-------------------------------------------------------------------------------------
+
+// UPDATE amountChilds CHO Storage done
+-------------------------------------------------------------------------------------
+let listStorage = db.storages.find({}).toArray();
+listStorage.forEach(item => {
+    let amountChilds = db.storages.count({ parent: ObjectId(item._id)});
+    db.storages.updateOne({ _id: ObjectId(item._id)}, { $set: { amountChilds }});
+})
+-------------------------------------------------------------------------------------
+
+// UPDATE amountChilds CHO accounts Done
+-------------------------------------------------------------------------------------
+let listaccounts = db.accounts.find({}).toArray();
+listaccounts.forEach(item => {
+    let amountChilds = db.accounts.count({ parent: ObjectId(item._id)});
+    db.accounts.updateOne({ _id: ObjectId(item._id)}, { $set: { amountChilds }});
+})
+-------------------------------------------------------------------------------------
+
+// UPDATE amountChilds CHO funda Done
+-------------------------------------------------------------------------------------
+let listfundas = db.fundas.find({}).toArray();
+listfundas.forEach(item => {
+    let amountChilds = db.fundas.count({ parent: ObjectId(item._id)});
+    db.fundas.updateOne({ _id: ObjectId(item._id)}, { $set: { amountChilds }});
+})
+-------------------------------------------------------------------------------------
+// UPDATE amountChilds CHO warehouses
+-------------------------------------------------------------------------------------
+
+let listwarehouses = db.warehouses.find({}).toArray();
+listwarehouses.forEach(item => {
+    let amountChilds = db.warehouses.count({ parent: ObjectId(item._id)});
+    db.warehouses.updateOne({ _id: ObjectId(item._id)}, { $set: { amountChilds }});
+})
+-------------------------------------------------------------------------------------

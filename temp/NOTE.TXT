@@ -1,0 +1,9 @@
+Trường hợp comment trong công việc
+Lưu trường files trong comment referent đến fileCore nhưng vẫn tạo bảng phụ để sau này dễ truy vẫn, nhưng chỉ giới hạn 10 đến 20 file trong 1 comment
+
+----KHÁNH 03/03/2022----
+1/ Update CBS App: update device với env là 3
+2/ Chuyển
+	- App CBS
+	- Web CBS
+		=> chuyển CBS sang ID chung OneSignal cùng Teaser: '79acfc09-966a-48f5-a9ea-44d90410014f'
