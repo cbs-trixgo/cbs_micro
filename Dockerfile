@@ -16,6 +16,8 @@ COPY . .
 
 FROM gcr.io/distroless/nodejs16-debian11 as runner
 
+ENV NODE_ENV=production
+
 WORKDIR /app
 
 COPY --from=builder /app .
