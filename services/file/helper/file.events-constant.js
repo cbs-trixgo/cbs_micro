@@ -1,4 +1,4 @@
- /*-------------------------------------
+/*-------------------------------------
  * file định nghĩa các constant EVENT của SERVICE (EXAMPLE) emit đi
  */
 /**
@@ -6,39 +6,39 @@
  *      - service notification (mail, cloud messaging)
  *      - service user
  */
- exports.EXAMPLE__CASE1_SUCCESS    = `EXAMPLE__CASE1_SUCCESS`;
- /**
-  * @TARGET: (những service sẽ subscribe event của EXAMPLE service)
-  *      - service notification (mail, cloud messaging)
-  *      - service user
-  *      - //TODO service reminder: nhắc sau bao lâu không thanh toán (chỉ là ví dụ)
-  */
- exports.EXAMPLE__CASE1_FAIL       = `EXAMPLE__CASE1_FAIL`;
+exports.EXAMPLE__CASE1_SUCCESS = `EXAMPLE__CASE1_SUCCESS`
+/**
+ * @TARGET: (những service sẽ subscribe event của EXAMPLE service)
+ *      - service notification (mail, cloud messaging)
+ *      - service user
+ *      - //TODO service reminder: nhắc sau bao lâu không thanh toán (chỉ là ví dụ)
+ */
+exports.EXAMPLE__CASE1_FAIL = `EXAMPLE__CASE1_FAIL`
 
- // ----------------------------------------------------------------------------------------------- //
+// ----------------------------------------------------------------------------------------------- //
 
- /**
-  * định nghĩa các EVENT mà SERVICE(EXAMPLE) sẽ subscribe (nhận job từ các service khác)
-  */
- exports.LIST_EVENTS_SUBSCRIBE = {
-     // VD: khi có user nào đó request tạo đơn hàng mới order.create (chỉ là ví dụ)
-     /**
-      * @target:
-      *  - user_service: nhận event và cập nhật thông tin  (thông tin gói sử dụng)
-      *  - mail_service: nhận event và gửi mail
-      */
-     "ORDER__CREATE": {
-         handler(ctx) {
-             /**
-              * 1/ lấy dữ liệu đầu vào
-              * 2/ thực hiện công việc
-              *      + update process (db, redis)
-              */
-             console.log("Payload:", ctx.params);
-             console.log("Sender:", ctx.nodeID);
-             console.log("Metadata:", ctx.meta);
-             console.log("The called event name:", ctx.eventName);
-             // ctx.emit("accounts.created", { user: ctx.params.user });
-         }
-     }
- }
+/**
+ * định nghĩa các EVENT mà SERVICE(EXAMPLE) sẽ subscribe (nhận job từ các service khác)
+ */
+exports.LIST_EVENTS_SUBSCRIBE = {
+  // VD: khi có user nào đó request tạo đơn hàng mới order.create (chỉ là ví dụ)
+  /**
+   * @target:
+   *  - user_service: nhận event và cập nhật thông tin  (thông tin gói sử dụng)
+   *  - mail_service: nhận event và gửi mail
+   */
+  ORDER__CREATE: {
+    handler(ctx) {
+      /**
+       * 1/ lấy dữ liệu đầu vào
+       * 2/ thực hiện công việc
+       *      + update process (db, redis)
+       */
+      console.log('Payload:', ctx.params)
+      console.log('Sender:', ctx.nodeID)
+      console.log('Metadata:', ctx.meta)
+      console.log('The called event name:', ctx.eventName)
+      // ctx.emit("accounts.created", { user: ctx.params.user });
+    },
+  },
+}

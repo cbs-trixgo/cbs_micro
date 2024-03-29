@@ -1,7 +1,6 @@
-version: "3.8"
+version: '3.8'
 
 services:
-
   api:
     build:
       context: ../
@@ -17,11 +16,11 @@ services:
       - nats
       - redis
     labels:
-      - "traefik.enable=true"
-      - "traefik.backend=gateway"
-      - "traefik.port=3000"
-      - "traefik.frontend.entryPoints=http"
-      - "traefik.frontend.rule=PathPrefix:/"
+      - 'traefik.enable=true'
+      - 'traefik.backend=gateway'
+      - 'traefik.port=3000'
+      - 'traefik.frontend.entryPoints=http'
+      - 'traefik.frontend.rule=PathPrefix:/'
     networks:
       - internal
 
@@ -38,7 +37,7 @@ services:
       MONGO_USER: admin_cbs
       MONGO_PWD: dAGT5ttW6CLrsTuw
     labels:
-      - "traefik.enable=false"
+      - 'traefik.enable=false'
     depends_on:
       - nats
       - redis
@@ -71,8 +70,8 @@ services:
     image: traefik:1.7
     command: --web --docker --docker.domain=docker.localhost --logLevel=INFO --docker.exposedbydefault=false
     ports:
-      - "3000:80"
-      - "3001:8080"
+      - '3000:80'
+      - '3001:8080'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /dev/null:/traefik.toml

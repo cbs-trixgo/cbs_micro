@@ -4,8 +4,8 @@
 // /**
 //  * FUNCTION gửi noti từ cloud messaging
 //  * @param {*} arrReceiver danh sách userID (danh sách người nhận noti)
-//  * @param {*} message 
-//  * @param {*} body 
+//  * @param {*} message
+//  * @param {*} body
 //  * @param {*} senderID người gửi
 //  */
 // function sendMessageMobile({ title, description: message, arrReceiverID, body, senderID: userID }){

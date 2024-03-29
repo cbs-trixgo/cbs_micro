@@ -106,23 +106,23 @@ const AUTH__USER_MODEL                          = require
 
 ```javascript
 function printStudents(startValue, nPerPage) {
-	let endValue = null;
-	db.students
-		.find({ _id: { $lt: startValue } })
-		.sort({ _id: -1 })
-		.limit(nPerPage)
-		.forEach((student) => {
-			console.log(student.name);
-			endValue = student._id;
-		});
-	return endValue;
+  let endValue = null
+  db.students
+    .find({ _id: { $lt: startValue } })
+    .sort({ _id: -1 })
+    .limit(nPerPage)
+    .forEach((student) => {
+      console.log(student.name)
+      endValue = student._id
+    })
+  return endValue
 }
 
-let MaxKey = 100;
+let MaxKey = 100
 
-let currentKey = MaxKey;
+let currentKey = MaxKey
 while (currentKey !== null) {
-	currentKey = printStudents(currentKey, 10);
+  currentKey = printStudents(currentKey, 10)
 }
 ```
 

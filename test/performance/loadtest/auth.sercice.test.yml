@@ -7,15 +7,14 @@
 config:
   target: 'http://localhost:3003/api'
   phases:
-   - duration: 60 #total time for run
-     arrivalRate: 15 #15rps
+    - duration: 60 #total time for run
+      arrivalRate: 15 #15rps
 scenarios:
- - flow:
-   - log: "SEARCH FULL_TEXT SEARCH"
-   - get:
-      headers:
-        Authorization: 'Bearer {{ $processEnvironment.TOKEN }}'
-      url: '/auth/users/search-with-fulltext?key=TRX số 3'
-      expect:
-        - statusCode: 200
-      
+  - flow:
+      - log: 'SEARCH FULL_TEXT SEARCH'
+      - get:
+          headers:
+            Authorization: 'Bearer {{ $processEnvironment.TOKEN }}'
+          url: '/auth/users/search-with-fulltext?key=TRX số 3'
+          expect:
+            - statusCode: 200

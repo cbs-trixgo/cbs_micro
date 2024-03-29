@@ -1,42 +1,42 @@
-exports.sendNotificationviaOneSignal = function(data) {
-    console.log({ env: process.env.NODE_ENV })
-    if(process.env.NODE_ENV === "development") {
-      return;
-    }
+exports.sendNotificationviaOneSignal = function (data) {
+  console.log({ env: process.env.NODE_ENV })
+  if (process.env.NODE_ENV === 'development') {
+    return
+  }
 
-    let headers = {
-      "Content-Type": "application/json; charset=utf-8",
-      "Authorization": "NDFlZGFiOTMtYjM1My00ZWIyLTg4MmItYmNhMTBiMGUxYjQz",
-    };
+  let headers = {
+    'Content-Type': 'application/json; charset=utf-8',
+    Authorization: 'NDFlZGFiOTMtYjM1My00ZWIyLTg4MmItYmNhMTBiMGUxYjQz',
+  }
 
-    let options = {
-      host: "onesignal.com",
-      port: 443,
-      path: "/api/v1/notifications",
-      method: "POST",
-      headers: headers
-    };
+  let options = {
+    host: 'onesignal.com',
+    port: 443,
+    path: '/api/v1/notifications',
+    method: 'POST',
+    headers: headers,
+  }
 
-    let https = require('https');
-    let req = https.request(options, function(res) {
-        res.on('data', function(data) {
-          try {
-            console.log("Response:", data);
-            // console.log(JSON.parse(data));
-          } catch (error) {
-            console.error(error);
-          }
-        });
-    });
+  let https = require('https')
+  let req = https.request(options, function (res) {
+    res.on('data', function (data) {
+      try {
+        console.log('Response:', data)
+        // console.log(JSON.parse(data));
+      } catch (error) {
+        console.error(error)
+      }
+    })
+  })
 
-    req.on('error', function(e) {
-      console.error("ERROR: (noti.send.js)");
-      console.error(e);
-    });
+  req.on('error', function (e) {
+    console.error('ERROR: (noti.send.js)')
+    console.error(e)
+  })
 
-    req.write(JSON.stringify(data));
-    req.end();
-};
+  req.write(JSON.stringify(data))
+  req.end()
+}
 
 // let message = {
 //     // app_id: "79acfc09-966a-48f5-a9ea-44d90410014f",

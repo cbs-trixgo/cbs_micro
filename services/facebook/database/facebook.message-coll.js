@@ -1,25 +1,24 @@
+'use strict'
 
-"use strict";
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema                = require('mongoose').Schema;
+module.exports = DATABASE_MIDDLEWARE('facebook_message', {
+  mid: {
+    type: String,
+    unique: true,
+    require: true,
+  },
 
-module.exports  = DATABASE_MIDDLEWARE("facebook_message", {
-    mid: {
-        type: String,
-        unique: true,
-        require: true,
-    },
+  conversationId: String,
 
-    conversationId: String,
+  message: String,
 
-    message: String,
+  phones: [String],
 
-    phones: [String],
+  senderId: String,
 
-    senderId: String,
+  recipientId: String,
 
-    recipientId: String,
-
-    timestamp: String,
-});
+  timestamp: String,
+})

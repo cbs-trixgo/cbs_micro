@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   prometheus:
@@ -8,8 +8,8 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
     ports:
-      - "9090:9090"
-    command: ["--enable-feature=otlp-write-receiver"]
+      - '9090:9090'
+    command: ['--enable-feature=otlp-write-receiver']
     volumes:
       - prometheus-data:/prometheus
       - ./provisioning/prometheus/config.yml:/prometheus/prometheus.yml
@@ -21,7 +21,7 @@ services:
     extra_hosts:
       - host.docker.internal:host-gateway
     ports:
-      - "9091:3000"
+      - '9091:3000'
     volumes:
       - grafana-data:/var/lib/grafana
 

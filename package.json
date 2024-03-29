@@ -9,7 +9,10 @@
     "cli": "moleculer connect NATS",
     "ci": "jest --watch",
     "test": "jest --coverage",
-    "lint": "eslint services",
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write .",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "dc:up": "docker-compose up --build -d",
     "dc:logs": "docker-compose logs -f",
     "dc:down": "docker-compose down"
@@ -24,7 +27,8 @@
     "jest": "^26.4.2",
     "jest-cli": "^26.4.2",
     "moleculer-repl": "^0.6.4",
-    "ngrok": "^5.0.0-beta.2"
+    "ngrok": "^5.0.0-beta.2",
+    "prettier": "^3.2.5"
   },
   "dependencies": {
     "@auth0/s3": "^1.0.0",

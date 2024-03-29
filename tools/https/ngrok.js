@@ -1,48 +1,46 @@
-require("dotenv").config();
-const ngrok = require('ngrok');
+require('dotenv').config()
+const ngrok = require('ngrok')
 
-(async function() {
-    await ngrok.connect({
-        authtoken: process.env.NGROK_AUTHTOKEN,
-        onStatusChange: status => {
-            console.log(`Tunnel status: `, status)
-        },
-        onLogEvent: data => {
-            console.log(`Tunnel event: `, data)
-        }
-    })
-    console.log(`Ingress established at: ${ngrok.getUrl()}`);
+;(async function () {
+  await ngrok.connect({
+    authtoken: process.env.NGROK_AUTHTOKEN,
+    onStatusChange: (status) => {
+      console.log(`Tunnel status: `, status)
+    },
+    onLogEvent: (data) => {
+      console.log(`Tunnel event: `, data)
+    },
+  })
+  console.log(`Ingress established at: ${ngrok.getUrl()}`)
 
-    const api = ngrok.getApi();
+  const api = ngrok.getApi()
 
-    // const { tunnels } = await api.listTunnels();
-    // tunnels.map(tunnel => {
-    //     console.log({ tunnel })
-    // })
+  // const { tunnels } = await api.listTunnels();
+  // tunnels.map(tunnel => {
+  //     console.log({ tunnel })
+  // })
 
-    await api.startTunnel({
-        addr: 3003,
-        name: "cbs_micro",
-        labels: ["edge=edghts_2b9oZEWwtoUuNoCePUJnkvmSzyY"],
-        onStatusChange: status => {
-            console.log(`Tunnel status: `, status)
-        },
-        onLogEvent: data => {
-            console.log(`Tunnel event: `, data)
-        }
-    })
+  await api.startTunnel({
+    addr: 3003,
+    name: 'cbs_micro',
+    labels: ['edge=edghts_2b9oZEWwtoUuNoCePUJnkvmSzyY'],
+    onStatusChange: (status) => {
+      console.log(`Tunnel status: `, status)
+    },
+    onLogEvent: (data) => {
+      console.log(`Tunnel event: `, data)
+    },
+  })
 
-    const disconnect = async () => {
-        console.warn("Ngrok session close!!");
-        await api.stopTunnel("cbs_micro");
-        await ngrok.disconnect();
-        await ngrok.kill();
-    }
+  const disconnect = async () => {
+    console.warn('Ngrok session close!!')
+    await api.stopTunnel('cbs_micro')
+    await ngrok.disconnect()
+    await ngrok.kill()
+  }
 
-    process
-        .once("SIGINT", disconnect)
-        .once("SIGTERM", disconnect)
-  })();
+  process.once('SIGINT', disconnect).once('SIGTERM', disconnect)
+})()
 
 // (async () => {
 //     const sessionBuilder = new ngrok.SessionBuilder()

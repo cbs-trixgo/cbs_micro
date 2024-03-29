@@ -1,187 +1,218 @@
-"use strict";
+'use strict'
 
-const BaseModel                         = require('../../../tools/db/base_model');
-const { checkObjectIDs, IsJsonString }  = require('../../../tools/utils/utils');
+const BaseModel = require('../../../tools/db/base_model')
+const { checkObjectIDs, IsJsonString } = require('../../../tools/utils/utils')
 
 /**
  * COLLECTION
  */
-const REACTION__COMMENT_CORE_COLL       = require('../database/reaction.comment_core-coll');
+const REACTION__COMMENT_CORE_COLL = require('../database/reaction.comment_core-coll')
 
 class Model extends BaseModel {
-    constructor() {
-        super(REACTION__COMMENT_CORE_COLL);
-    }
+  constructor() {
+    super(REACTION__COMMENT_CORE_COLL)
+  }
 
-    /**
-     * Name: Thêm comment core
-     * Author: Depv
-     * Code: F0271
-     */
-    insert({ content, files, images, userID }) {
-        const that = this;
-        return new Promise(async (resolve) => {
-             try {
-                /**
-                 * DECALARTION VARIABLE (1)
-                 */
-                let dataInsert = {};
-                /** 
-                 * VALIDATION STEP (2)
-                 *  - kiểm tra valid từ các input
-                 *  - kiểm tra valid từ database (ví dụ: đảm bảo foreign_key hoặc các điều kiện của coll)
-                 */
-                if(!checkObjectIDs(userID))
-                  return resolve({ error: true, message: "Request params userID invalid" });
+  /**
+   * Name: Thêm comment core
+   * Author: Depv
+   * Code: F0271
+   */
+  insert({ content, files, images, userID }) {
+    const that = this
+    return new Promise(async (resolve) => {
+      try {
+        /**
+         * DECALARTION VARIABLE (1)
+         */
+        let dataInsert = {}
+        /**
+         * VALIDATION STEP (2)
+         *  - kiểm tra valid từ các input
+         *  - kiểm tra valid từ database (ví dụ: đảm bảo foreign_key hoặc các điều kiện của coll)
+         */
+        if (!checkObjectIDs(userID))
+          return resolve({
+            error: true,
+            message: 'Request params userID invalid',
+          })
 
-                if(!content)
-                    return resolve({ error: true, message: "Request params content invalid" })
-                
-                /**
-                 * LOGIC STEP (3)
-                 *  3.1: convert type + update name (ví dụ: string -> number)
-                 *  3.2: operation database
-                 */    
+        if (!content)
+          return resolve({
+            error: true,
+            message: 'Request params content invalid',
+          })
 
-                dataInsert.content  = content;
-                dataInsert.author   = userID;
+        /**
+         * LOGIC STEP (3)
+         *  3.1: convert type + update name (ví dụ: string -> number)
+         *  3.2: operation database
+         */
 
-                if(checkObjectIDs(files)){
-                    dataInsert.files    = files;
-                }
+        dataInsert.content = content
+        dataInsert.author = userID
 
-                if(checkObjectIDs(images)){
-                    dataInsert.images    = images;
-                }
+        if (checkObjectIDs(files)) {
+          dataInsert.files = files
+        }
 
-                let infoAfterInsert = await that.insertData(dataInsert);
-                if(!infoAfterInsert)
-                    return resolve({ error: true, message: 'cannot_insert' });
-                return resolve({ error: false, data: infoAfterInsert});
-            } catch (error) {
-                return resolve({ error: true, message: error.message });
-            }
-        })
-    }
+        if (checkObjectIDs(images)) {
+          dataInsert.images = images
+        }
 
-    /**
-     * Name: Sửa comment core
-     * Author: Depv
-     * Code: F0272
-     */
-    update({ commentCoreID, authorID, content, files, images, amountCommentReply, amountReaction }) {
-        return new Promise(async (resolve) => {
-            try {
-               /**
-                * DECALARTION VARIABLE (1)
-                */
-               let dataUpdate = {};
+        let infoAfterInsert = await that.insertData(dataInsert)
+        if (!infoAfterInsert)
+          return resolve({ error: true, message: 'cannot_insert' })
+        return resolve({ error: false, data: infoAfterInsert })
+      } catch (error) {
+        return resolve({ error: true, message: error.message })
+      }
+    })
+  }
 
-               /** 
-                * VALIDATION STEP (2)
-                *  - kiểm tra valid từ các input
-                *  - kiểm tra valid từ database (ví dụ: đảm bảo foreign_key hoặc các điều kiện của coll)
-                */
-                if(!checkObjectIDs(commentCoreID))
-                    return resolve({ error: true, message: "Request params commentCoreID invalid" });
+  /**
+   * Name: Sửa comment core
+   * Author: Depv
+   * Code: F0272
+   */
+  update({
+    commentCoreID,
+    authorID,
+    content,
+    files,
+    images,
+    amountCommentReply,
+    amountReaction,
+  }) {
+    return new Promise(async (resolve) => {
+      try {
+        /**
+         * DECALARTION VARIABLE (1)
+         */
+        let dataUpdate = {}
 
-                if(!checkObjectIDs(authorID))
-                    return resolve({ error: true, message: "Request params authorID invalid" });
+        /**
+         * VALIDATION STEP (2)
+         *  - kiểm tra valid từ các input
+         *  - kiểm tra valid từ database (ví dụ: đảm bảo foreign_key hoặc các điều kiện của coll)
+         */
+        if (!checkObjectIDs(commentCoreID))
+          return resolve({
+            error: true,
+            message: 'Request params commentCoreID invalid',
+          })
 
-               /**
-                * LOGIC STEP (3)
-                *  3.1: convert type + update name (ví dụ: string -> number)
-                *  3.2: operation database
-                */    
-                content && (dataUpdate.content = content);
+        if (!checkObjectIDs(authorID))
+          return resolve({
+            error: true,
+            message: 'Request params authorID invalid',
+          })
 
-                if(amountCommentReply){
-                    dataUpdate.$inc = {
-                        amountCommentReply
-                    }
-                }
+        /**
+         * LOGIC STEP (3)
+         *  3.1: convert type + update name (ví dụ: string -> number)
+         *  3.2: operation database
+         */
+        content && (dataUpdate.content = content)
 
-                if(amountReaction){
-                    dataUpdate.$inc = {
-                        amountReaction
-                    }
-                }
+        if (amountCommentReply) {
+          dataUpdate.$inc = {
+            amountCommentReply,
+          }
+        }
 
-                // CẬP NHẬT FILE MỚI
-                if(checkObjectIDs(files)){
-                    dataUpdate.files = files;
-                } else{
-                    dataUpdate.files = [];
-                }
+        if (amountReaction) {
+          dataUpdate.$inc = {
+            amountReaction,
+          }
+        }
 
-                // CẬP NHẬT HÌNH ẢNH MỚI
-                if(checkObjectIDs(images)){
-                    dataUpdate.images = images;
-                } else{
-                    dataUpdate.images = [];
-                }
+        // CẬP NHẬT FILE MỚI
+        if (checkObjectIDs(files)) {
+          dataUpdate.files = files
+        } else {
+          dataUpdate.files = []
+        }
 
-                let infoAfterAction = await REACTION__COMMENT_CORE_COLL.findOneAndUpdate({
-                    _id: commentCoreID,
-                    author: authorID
-                }, dataUpdate);
+        // CẬP NHẬT HÌNH ẢNH MỚI
+        if (checkObjectIDs(images)) {
+          dataUpdate.images = images
+        } else {
+          dataUpdate.images = []
+        }
 
-                if(!infoAfterAction)
-                    return resolve({ error: true, message: 'cannot_update' });
+        let infoAfterAction =
+          await REACTION__COMMENT_CORE_COLL.findOneAndUpdate(
+            {
+              _id: commentCoreID,
+              author: authorID,
+            },
+            dataUpdate
+          )
 
-                infoAfterAction = await REACTION__COMMENT_CORE_COLL
-                    .findById(infoAfterAction._id)
-                    .populate({
-                        path: 'files images author',
-                        select: '_id name path size type fullname image',
-                    })
-                    .lean();
+        if (!infoAfterAction)
+          return resolve({ error: true, message: 'cannot_update' })
 
-                return resolve({ error: false, data: infoAfterAction });
-            } catch (error) {
-                console.error(error);
-                return resolve({ error: true, message: error.message });
-            }
-       })
-    }
+        infoAfterAction = await REACTION__COMMENT_CORE_COLL.findById(
+          infoAfterAction._id
+        )
+          .populate({
+            path: 'files images author',
+            select: '_id name path size type fullname image',
+          })
+          .lean()
 
-    /**
-     * Name: Lấy thông tin comment core 
-     * Author: Depv
-     * Code: 
-     */
-    getInfo({ commentCoreID, select, populates }){
-        return new Promise(async resolve => {
-            try {
+        return resolve({ error: false, data: infoAfterAction })
+      } catch (error) {
+        console.error(error)
+        return resolve({ error: true, message: error.message })
+      }
+    })
+  }
 
-                if (!checkObjectIDs(commentCoreID))
-                    return resolve({ error: true, message: 'param_invalid' });
+  /**
+   * Name: Lấy thông tin comment core
+   * Author: Depv
+   * Code:
+   */
+  getInfo({ commentCoreID, select, populates }) {
+    return new Promise(async (resolve) => {
+      try {
+        if (!checkObjectIDs(commentCoreID))
+          return resolve({ error: true, message: 'param_invalid' })
 
-                // populates
-                if(populates && typeof populates === 'string'){
-					if(!IsJsonString(populates))
-						return resolve({ error: true, message: 'Request params populates invalid', status: 400 });
+        // populates
+        if (populates && typeof populates === 'string') {
+          if (!IsJsonString(populates))
+            return resolve({
+              error: true,
+              message: 'Request params populates invalid',
+              status: 400,
+            })
 
-					populates = JSON.parse(populates);
-				}else{
-					populates = {
-                        path: "",
-                        select: ""
-                    }
-                }
+          populates = JSON.parse(populates)
+        } else {
+          populates = {
+            path: '',
+            select: '',
+          }
+        }
 
-                let infoComment = await REACTION__COMMENT_CORE_COLL.findById(taskID)
-                                .select(select)
-                                .populate(populates)
+        let infoComment = await REACTION__COMMENT_CORE_COLL.findById(taskID)
+          .select(select)
+          .populate(populates)
 
-				if (!infoComment) return resolve({ error: true, message: 'cannot_get_info_comment' });
+        if (!infoComment)
+          return resolve({
+            error: true,
+            message: 'cannot_get_info_comment',
+          })
 
-                return resolve({ error: false, data: infoComment });
-            } catch (error) {
-                return resolve({ error: true, message: error.message });
-            }
-        })
-    }
-
+        return resolve({ error: false, data: infoComment })
+      } catch (error) {
+        return resolve({ error: true, message: error.message })
+      }
+    })
+  }
 }
-exports.MODEL = new Model;
+exports.MODEL = new Model()

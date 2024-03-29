@@ -8,11 +8,11 @@ RUN yarn global add pm2
 
 COPY package.json yarn.lock ./
 
-RUN yarn --silent --frozen-lockfile --production
-
-RUN wget https://gobinaries.com/tj/node-prune --output-document - | /bin/sh && node-prune
+RUN yarn --silent --prefer-offline --frozen-lockfile --production
 
 COPY . .
+
+RUN wget https://gobinaries.com/tj/node-prune --output-document - | /bin/sh && node-prune
 
 FROM gcr.io/distroless/nodejs16-debian11 as runner
 

@@ -6,12 +6,11 @@ kind: ConfigMap
 metadata:
   name: common-env
 data:
-  NAMESPACE: ""
+  NAMESPACE: ''
   LOGLEVEL: info
   SERVICEDIR: services
   TRANSPORTER: nats://nats:4222
   CACHER: redis://redis:6379
-  
 
 ---
 #########################################################
@@ -25,8 +24,8 @@ spec:
   selector:
     app: api
   ports:
-  - port: 3000
-    targetPort: 3000
+    - port: 3000
+      targetPort: 3000
 
 ---
 #########################################################
@@ -38,13 +37,13 @@ metadata:
   name: ingress
 spec:
   rules:
-  - host: trx_micro.127.0.0.1.nip.io
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: api
-          servicePort: 3000
+    - host: trx_micro.127.0.0.1.nip.io
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: api
+              servicePort: 3000
 
 ---
 #########################################################
@@ -65,14 +64,14 @@ spec:
         app: api
     spec:
       containers:
-      - name: api
-        image: trx_micro
-        envFrom:
-        - configMapRef:
-            name: common-env
-        env:
-          - name: SERVICES
-            value: api
+        - name: api
+          image: trx_micro
+          envFrom:
+            - configMapRef:
+                name: common-env
+          env:
+            - name: SERVICES
+              value: api
 
 ---
 #########################################################
@@ -93,15 +92,14 @@ spec:
         app: greeter
     spec:
       containers:
-      - name: greeter
-        image: trx_micro
-        envFrom:
-        - configMapRef:
-            name: common-env
-        env:
-          - name: SERVICES
-            value: greeter
-
+        - name: greeter
+          image: trx_micro
+          envFrom:
+            - configMapRef:
+                name: common-env
+          env:
+            - name: SERVICES
+              value: greeter
 
 ---
 #########################################################
@@ -115,9 +113,9 @@ spec:
   selector:
     app: nats
   ports:
-  - port: 4222
-    name: nats
-    targetPort: 4222
+    - port: 4222
+      name: nats
+      targetPort: 4222
 
 ---
 #########################################################
@@ -140,11 +138,11 @@ spec:
         app: nats
     spec:
       containers:
-      - name: nats
-        image: nats
-        ports:
-        - containerPort: 4222
-          name: nats
+        - name: nats
+          image: nats
+          ports:
+            - containerPort: 4222
+              name: nats
 
 ---
 #########################################################
@@ -158,9 +156,9 @@ spec:
   selector:
     app: redis
   ports:
-  - port: 6379
-    name: redis
-    targetPort: 6379
+    - port: 6379
+      name: redis
+      targetPort: 6379
 
 ---
 #########################################################
@@ -183,13 +181,8 @@ spec:
         app: redis
     spec:
       containers:
-      - name: redis
-        image: redis
-        ports:
-        - containerPort: 6379
-          name: redis
-
-
-
-
-
+        - name: redis
+          image: redis
+          ports:
+            - containerPort: 6379
+              name: redis

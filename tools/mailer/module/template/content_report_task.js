@@ -1,30 +1,30 @@
-"use strict";
+'use strict'
 
-const { nl2p }   = require('../../../utils/string_utils');
-let { socket_product }  = require('../../config/cf_mode');
+const { nl2p } = require('../../../utils/string_utils')
+let { socket_product } = require('../../config/cf_mode')
 
 // Thông báo công việc
 exports.infoReportPcm = ({ content }) => {
-    try {
-        let taskName = content.infoTask.name;
-        let taskAuthorName = content.infoTask.author.fullname;
-        let taskAuthorImage = content.infoTask.author.image;
+  try {
+    let taskName = content.infoTask.name
+    let taskAuthorName = content.infoTask.author.fullname
+    let taskAuthorImage = content.infoTask.author.image
 
-        let taskProjectImage = content.infoTask.project.name;
+    let taskProjectImage = content.infoTask.project.name
 
-        let linkServerS3 = "https://trx-demo-003.s3-ap-southeast-1.amazonaws.com";
+    let linkServerS3 = 'https://trx-demo-003.s3-ap-southeast-1.amazonaws.com'
 
-        if(String(socket_product) == 'true') {
-            linkServerS3 = "https://dntdurzwr12tp.cloudfront.net";
-        } else {
-            linkServerS3 = "https://trx-demo-003.s3-ap-southeast-1.amazonaws.com";
-        }
+    if (String(socket_product) == 'true') {
+      linkServerS3 = 'https://dntdurzwr12tp.cloudfront.net'
+    } else {
+      linkServerS3 = 'https://trx-demo-003.s3-ap-southeast-1.amazonaws.com'
+    }
 
-        if(content.infoTask.expiredTime){
-            taskExpired = `${ new Date(content.infoTask.expiredTime).getDate()}/${new Date(content.infoTask.expiredTime).getMonth()+1}/${ new Date(content.infoTask.expiredTime).getFullYear()}`;
-        }
+    if (content.infoTask.expiredTime) {
+      taskExpired = `${new Date(content.infoTask.expiredTime).getDate()}/${new Date(content.infoTask.expiredTime).getMonth() + 1}/${new Date(content.infoTask.expiredTime).getFullYear()}`
+    }
 
-        return `<td>
+    return `<td>
             <p>Sender/Người gửi: <b>${content.sender.fullname} (${content.sender.email})</b></p>
             <p>Notice/Nội dung lưu ý: <b style="color:#0066ff;">${content.notice && nl2p(content.notice)}</b></p>
             <p>==============================================</p>
@@ -40,8 +40,8 @@ exports.infoReportPcm = ({ content }) => {
             <hr>
             <p><i>This email is sent from TRIXGO. <span style="color: orange;">Please click Star (*)</span> to receive other important email relate to you</i></p>
             <p><i>Email này được gửi từ hệ thống TRIXGO. <span style="color: orange;">Vui lòng bấm Star (*)</span> để nhận được các email quan trọng khác liên quan tới bạn</i></p>
-        </td>`;
-    } catch (error) {
-        return console.log(error)
-    }
+        </td>`
+  } catch (error) {
+    return console.log(error)
+  }
 }

@@ -1,63 +1,70 @@
-"use strict";
+'use strict'
 
-const { nl2p }   = require('../../../utils/string_utils');
-const moment     = require('moment')
+const { nl2p } = require('../../../utils/string_utils')
+const moment = require('moment')
 
 // Thông báo công việc
 exports.infoTaskContent = ({ content, comments }) => {
-    let taskName = content.infoTask.name;
-    let taskAuthorName = content.infoTask.author.fullname;
-    let taskAuthorImage = content.infoTask.author.image;
-    let taskAssigneeName = content.infoTask.assignee.fullname;
-    let taskAssigneeImage = content.infoTask.assignee.image;
-    let taskProjectImage = content.infoTask.project.name;
-    let taskExpired = '';
-    let subtypeTask = content.infoTask.subtype
-    let txtAuthorTask = ``;
-    let txtAssigneeTask = ``;
-    let txtComments = ``;
+  let taskName = content.infoTask.name
+  let taskAuthorName = content.infoTask.author.fullname
+  let taskAuthorImage = content.infoTask.author.image
+  let taskAssigneeName = content.infoTask.assignee.fullname
+  let taskAssigneeImage = content.infoTask.assignee.image
+  let taskProjectImage = content.infoTask.project.name
+  let taskExpired = ''
+  let subtypeTask = content.infoTask.subtype
+  let txtAuthorTask = ``
+  let txtAssigneeTask = ``
+  let txtComments = ``
 
-    if([0,1,6,7,8,10,11].includes(Number(subtypeTask))){
-        txtAuthorTask = `Author/Người tạo việc`;
-        txtAssigneeTask = `Assignee/Người thực hiện`;
-    } else{
-        if(Number(subtypeTask) === 4 && Number(content.infoTask.level) === 2){
-            txtAuthorTask = `Đơn vị mời thầu`;
-            txtAssigneeTask = `Đơn vị dự thầu`;
-        } else{
-            txtAuthorTask = `Submitter/Người đệ trình`;
-            txtAssigneeTask = `Approver/Người phê duyệt`;
-        }
+  if ([0, 1, 6, 7, 8, 10, 11].includes(Number(subtypeTask))) {
+    txtAuthorTask = `Author/Người tạo việc`
+    txtAssigneeTask = `Assignee/Người thực hiện`
+  } else {
+    if (Number(subtypeTask) === 4 && Number(content.infoTask.level) === 2) {
+      txtAuthorTask = `Đơn vị mời thầu`
+      txtAssigneeTask = `Đơn vị dự thầu`
+    } else {
+      txtAuthorTask = `Submitter/Người đệ trình`
+      txtAssigneeTask = `Approver/Người phê duyệt`
+    }
+  }
+
+  const linkServerS3 =
+    process.env.AWS_BUCKET_URL || 'https://dntdurzwr12tp.cloudfront.net'
+
+  for (const item of comments) {
+    txtComments =
+      txtComments +
+      `<p style="margin-bottom: 1px;"><span style="color: #1B75D0;">${item.author.fullname}</span><span style="color: grey"> - ${moment(item.createAt).format('DD/MM/YYYY HH:mm')} (${moment(item.createAt).fromNow()})</span></p>`
+
+    txtComments = txtComments + `<div style="color: grey"><i>To: `
+    for (const subitem of item.receivers) {
+      txtComments = txtComments + `<span>${subitem.fullname}</span>, `
+    }
+    txtComments = txtComments + `</i></div>`
+
+    txtComments = txtComments + `<p>${item.content}</p>`
+
+    for (const subitem of item.files) {
+      txtComments =
+        txtComments +
+        `<p><a href="${linkServerS3}${subitem.path}" target="_blank">${subitem.nameOrg} | ${moment(subitem.createAt).format('DD/MM/YYYY HH:mm')} ${moment(subitem.createAt).fromNow()}</a></p>`
+    }
+    for (const subitem of item.images) {
+      txtComments =
+        txtComments +
+        `<a href="${linkServerS3}${subitem.path}" target="_blank"><img width="90" height="90" src="${linkServerS3}${subitem.path}"></a>`
     }
 
-    const linkServerS3 = process.env.AWS_BUCKET_URL || "https://dntdurzwr12tp.cloudfront.net";
+    txtComments = txtComments + ` <hr style="color: grey">`
+  }
 
-    for(const item of comments){
-        txtComments = txtComments + `<p style="margin-bottom: 1px;"><span style="color: #1B75D0;">${item.author.fullname}</span><span style="color: grey"> - ${moment(item.createAt).format('DD/MM/YYYY HH:mm')} (${moment(item.createAt).fromNow()})</span></p>`;
+  if (content.infoTask.actualFinishTime) {
+    taskExpired = `${new Date(content.infoTask.actualFinishTime).getDate()}/${new Date(content.infoTask.actualFinishTime).getMonth() + 1}/${new Date(content.infoTask.actualFinishTime).getFullYear()}`
+  }
 
-        txtComments = txtComments + `<div style="color: grey"><i>To: `
-        for(const subitem of item.receivers){
-            txtComments = txtComments + `<span>${subitem.fullname}</span>, `
-        }
-        txtComments = txtComments + `</i></div>`
-
-        txtComments = txtComments + `<p>${item.content}</p>`;
-
-        for(const subitem of item.files){
-            txtComments = txtComments + `<p><a href="${linkServerS3}${subitem.path}" target="_blank">${subitem.nameOrg} | ${moment(subitem.createAt).format('DD/MM/YYYY HH:mm')} ${moment(subitem.createAt).fromNow()}</a></p>`
-        }
-        for(const subitem of item.images){
-            txtComments = txtComments + `<a href="${linkServerS3}${subitem.path}" target="_blank"><img width="90" height="90" src="${linkServerS3}${subitem.path}"></a>`
-        }
-
-        txtComments = txtComments + ` <hr style="color: grey">`
-    }
-
-    if(content.infoTask.actualFinishTime){
-        taskExpired = `${new Date(content.infoTask.actualFinishTime).getDate()}/${ new Date(content.infoTask.actualFinishTime).getMonth()+1}/${ new Date(content.infoTask.actualFinishTime).getFullYear()}`;
-    }
-
-    return `<td>
+  return `<td>
         <p>Sender/Người gửi: <b>${content.sender.fullname} (${content.sender.email})</b></p>
         <p>Notice/Nội dung lưu ý: <b style="color:#0066ff;">${nl2p(content.notice)}</b></p>
         <p>==============================================</p>

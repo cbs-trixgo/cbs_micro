@@ -7,7 +7,7 @@ const PromisePool = require('@supercharge/promise-pool')
  *  - PromisePool: giả sử batch1(5 task), task 1 trong batch1 done -> sẽ chạy task1 của batch2 (chứ ko chờ batch1 hoàn thành tất cả như PromiseAll)
  */
 
-const users = [  
+const users = [
   { id: 1, name: 'Marcus', timer: 1000 },
   { id: 2, name: 'Norman', timer: 2000 },
   { id: 3, name: 'Christian', timer: 1000 },
@@ -17,12 +17,12 @@ const users = [
 ]
 
 const fakePromise = (user, timeer) => {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            return resolve({ ...user, timer: user.timer })
-        }, user.timer);
-    })
-} 
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      return resolve({ ...user, timer: user.timer })
+    }, user.timer)
+  })
+}
 
 /**
  * Process the list of 50,000 users with a concurrency of 20 items.
@@ -30,18 +30,17 @@ const fakePromise = (user, timeer) => {
  * as one of the active tasks in the pool finishes.
  */
 async function run(users) {
-    const { results, errors } = await PromisePool  
-        .for(users)
-        .withConcurrency(2)
-        .process(async data => {
-            const newData = await fakePromise(data);
-            console.log({ newData })
-            return newData
-        })
+  const { results, errors } = await PromisePool.for(users)
+    .withConcurrency(2)
+    .process(async (data) => {
+      const newData = await fakePromise(data)
+      console.log({ newData })
+      return newData
+    })
 
-    console.log({ results, errors });
+  console.log({ results, errors })
 }
 
 run(users)
-    .then(result => console.log({ result }))
-    .catch(err => console.log({ err }))
+  .then((result) => console.log({ result }))
+  .catch((err) => console.log({ err }))

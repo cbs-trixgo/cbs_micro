@@ -6,4 +6,4 @@
  * 3-Hiện trạng (task)
  * 4-Giải pháp (task)
  */
-exports.PCM_COMMENT_TYPE = [1, 2, 3, 4];
+exports.PCM_COMMENT_TYPE = [1, 2, 3, 4]

@@ -1,8 +1,7 @@
-**TÌM KIẾM TIN NHẮN**
-    - db.message_messages.find(
-        { $text: { $search: "TRX Khánh Duy" } },
-        { score: { $meta: "textScore" } }
-        ).sort( { score: { $meta: "textScore" } } )
+**TÌM KIẾM TIN NHẮN** - db.message_messages.find(
+{ $text: { $search: "TRX Khánh Duy" } },
+{ score: { $meta: "textScore" } }
+).sort( { score: { $meta: "textScore" } } )
 
         .projection({
             content: 1

@@ -1,13 +1,13 @@
-"use strict";
+'use strict'
 
-const DATABASE_MIDDLEWARE   = require('../../../tools/db/database.middleware');
-const Schema    = require('mongoose').Schema;
+const DATABASE_MIDDLEWARE = require('../../../tools/db/database.middleware')
+const Schema = require('mongoose').Schema
 
 /**
  *  PHÂN LOẠI KHÁC
  */
-module.exports  = DATABASE_MIDDLEWARE("doctype", {
-    /** PHÂN LOẠI
+module.exports = DATABASE_MIDDLEWARE('doctype', {
+  /** PHÂN LOẠI
     1-Văn Bản Lĩnh vực hồ sơ
     2-Văn Bản Tính chất hồ sơ
     3-Lĩnh vực kinh doanh
@@ -32,86 +32,88 @@ module.exports  = DATABASE_MIDDLEWARE("doctype", {
     23-Theo service (áp dụng cho message nps)(Không hài lòng)
     24-Kênh bán hàng
     */
-    type: { type: Number, default: 1 },
-    //_________Do hệ thống quy định hay không (giá trị 1 hoặc trường company = null)
-    belongSystem: { type: Number, default: 0 },
-    //_________Công ty
-    company: {
-        type: Schema.Types.ObjectId,
-        ref : "company"
+  type: { type: Number, default: 1 },
+  //_________Do hệ thống quy định hay không (giá trị 1 hoặc trường company = null)
+  belongSystem: { type: Number, default: 0 },
+  //_________Công ty
+  company: {
+    type: Schema.Types.ObjectId,
+    ref: 'company',
+  },
+  //_________Phòng ban/dự án
+  project: {
+    type: Schema.Types.ObjectId,
+    ref: 'department',
+  },
+  //_________Phần tử cha
+  parent: {
+    type: Schema.Types.ObjectId,
+    ref: 'doctype',
+  },
+  level: {
+    type: Number,
+    default: 1,
+  },
+  //_________Phần tử con (Sử dụng dụng cho phân loại của Message NPS)
+  childs: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'doctype',
     },
-    //_________Phòng ban/dự án
-    project: {
-        type: Schema.Types.ObjectId,
-        ref : "department"
-    },
-    //_________Phần tử cha
-    parent: {
-        type: Schema.Types.ObjectId,
-        ref: "doctype"
-    },
-    level: {
-        type: Number,
-        default: 1
-    },
-    //_________Phần tử con (Sử dụng dụng cho phân loại của Message NPS)
-    childs: [{
-        type: Schema.Types.ObjectId,
-        ref: "doctype"
-    }],
-    //_________Tên
-    name: String,
-    //_________Tên
-    namecv: String,
-    //_________Mã hiệu
-    sign: String,
-    //_________Đơn vị tính
-    unit: String,
-    //_________Mô tả
-    description: String,
-    //_________Giá trị
-    amount: {
-        type: Number,
-        default: 0
-    },
-    //_________Nhắc trước thời hạn (giờ)
-    alert: {
-        type: Number,
-        default: 0
-    },
-    /**
-     * Phân loại kênh bán hàng => Để mapping với data cũ
-     * 1-Offline
-     * 2-Grab
-     * 3-Shopee
-     * 4-Gojek
-     * 5-Baemin
-     * 6-Loship
-     * 7-Bee
-     */
-    salesChannel: {
-        type: Number,
-        default: 1
-    },
-    //_________Số phần tử con
-    amountChilds:  {
-        type: Number,
-        default : 0
-    },
-    //_________Link tới Item khác
-    linkItem: {
-        type: Schema.Types.ObjectId,
-        ref: "doctype"
-    },
-    /**
-     * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
-     */
-    userCreate: {
-        type: Schema.Types.ObjectId,
-        ref : 'user'
-    },
-    userUpdate: {
-        type: Schema.Types.ObjectId,
-        ref : 'user'
-    }
+  ],
+  //_________Tên
+  name: String,
+  //_________Tên
+  namecv: String,
+  //_________Mã hiệu
+  sign: String,
+  //_________Đơn vị tính
+  unit: String,
+  //_________Mô tả
+  description: String,
+  //_________Giá trị
+  amount: {
+    type: Number,
+    default: 0,
+  },
+  //_________Nhắc trước thời hạn (giờ)
+  alert: {
+    type: Number,
+    default: 0,
+  },
+  /**
+   * Phân loại kênh bán hàng => Để mapping với data cũ
+   * 1-Offline
+   * 2-Grab
+   * 3-Shopee
+   * 4-Gojek
+   * 5-Baemin
+   * 6-Loship
+   * 7-Bee
+   */
+  salesChannel: {
+    type: Number,
+    default: 1,
+  },
+  //_________Số phần tử con
+  amountChilds: {
+    type: Number,
+    default: 0,
+  },
+  //_________Link tới Item khác
+  linkItem: {
+    type: Schema.Types.ObjectId,
+    ref: 'doctype',
+  },
+  /**
+   * THÔNG TIN NGƯỜI TẠO/CẬP NHẬT
+   */
+  userCreate: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+  },
+  userUpdate: {
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+  },
 })
